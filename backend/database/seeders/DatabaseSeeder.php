@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
             TenantSeeder::class,
             CatalogSeeder::class,
             UserSeeder::class,
+            NotificationTemplateSeeder::class,
         ]);
     }
 }

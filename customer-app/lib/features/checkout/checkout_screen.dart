@@ -75,7 +75,13 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
             ),
           );
       await ref.read(cartProvider.notifier).clear();
-      if (mounted) context.go('/orders/${order.id}/complete');
+      if (mounted) {
+        context.go(
+          _payment.isMobileMoney
+              ? '/orders/${order.id}/pay'
+              : '/orders/${order.id}/complete',
+        );
+      }
     } catch (e) {
       if (mounted) showError(context, e);
     } finally {

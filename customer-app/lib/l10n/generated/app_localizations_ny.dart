@@ -529,4 +529,47 @@ class AppLocalizationsNy extends AppLocalizations {
 
   @override
   String get vehicle_car => 'Galimoto';
+
+  @override
+  String get payment_title => 'Kulipira';
+
+  @override
+  String get payment_amount => 'Ndalama zolipira';
+
+  @override
+  String get payment_phone_label => 'Nambala ya Mobile Money';
+
+  @override
+  String payment_pay_with(String method) {
+    return 'Lipirani ndi $method';
+  }
+
+  @override
+  String get payment_waiting =>
+      'Onani foni yanu ndipo vomerezani kulipira ndi PIN yanu.';
+
+  @override
+  String get payment_retry => 'Yesaninso';
+
+  @override
+  String get payment_received => 'Malipiro alandiridwa';
+
+  @override
+  String get payment_pay_now => 'Lipirani tsopano';
+
+  @override
+  String get payment_status_pending => 'Tikudikira malipiro';
+
+  @override
+  String get payment_status_paid => 'Zalipiridwa';
+
+  @override
+  String get payment_status_failed => 'Kulipira sikunatheke';
+
+  @override
+  String get payment_status_refunded => 'Ndalama zabwezedwa';
+
+  @override
+  String get error_payment_not_required =>
+      'Oda iyi sifunika kulipiridwa pa intaneti.';
 }

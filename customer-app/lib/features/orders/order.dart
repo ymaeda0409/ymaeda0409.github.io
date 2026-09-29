@@ -113,6 +113,10 @@ class Order {
 
   bool get isActive => !_finalStatuses.contains(status);
   bool get canCancel => _customerCancellable.contains(status);
+
+  /// Mobile money order still waiting for (or after a failed) payment.
+  bool get needsPayment =>
+      paymentMethod != 'CASH' && status == 'NEW' && paymentStatus != 'PAID';
 }
 
 /// Server-calculated totals for the current cart.

@@ -703,5 +703,62 @@
   "vehicle_car": "Car",
   "@vehicle_car": {
     "description": "Canonical key: vehicle.car"
+  },
+  "payment_title": "Payment",
+  "@payment_title": {
+    "description": "Canonical key: payment.title"
+  },
+  "payment_amount": "Amount to pay",
+  "@payment_amount": {
+    "description": "Canonical key: payment.amount"
+  },
+  "payment_phone_label": "Mobile money number",
+  "@payment_phone_label": {
+    "description": "Canonical key: payment.phone_label"
+  },
+  "payment_pay_with": "Pay with {method}",
+  "@payment_pay_with": {
+    "description": "Canonical key: payment.pay_with",
+    "placeholders": {
+      "method": {
+        "type": "String"
+      }
+    }
+  },
+  "payment_waiting": "Check your phone and approve the payment with your PIN.",
+  "@payment_waiting": {
+    "description": "Canonical key: payment.waiting"
+  },
+  "payment_retry": "Try again",
+  "@payment_retry": {
+    "description": "Canonical key: payment.retry"
+  },
+  "payment_received": "Payment received",
+  "@payment_received": {
+    "description": "Canonical key: payment.received"
+  },
+  "payment_pay_now": "Pay now",
+  "@payment_pay_now": {
+    "description": "Canonical key: payment.pay_now"
+  },
+  "payment_status_pending": "Waiting for payment",
+  "@payment_status_pending": {
+    "description": "Canonical key: payment.status_pending"
+  },
+  "payment_status_paid": "Paid",
+  "@payment_status_paid": {
+    "description": "Canonical key: payment.status_paid"
+  },
+  "payment_status_failed": "Payment failed",
+  "@payment_status_failed": {
+    "description": "Canonical key: payment.status_failed"
+  },
+  "payment_status_refunded": "Refunded",
+  "@payment_status_refunded": {
+    "description": "Canonical key: payment.status_refunded"
+  },
+  "error_payment_not_required": "This order does not need an online payment.",
+  "@error_payment_not_required": {
+    "description": "Canonical key: error.payment_not_required"
   }
 }

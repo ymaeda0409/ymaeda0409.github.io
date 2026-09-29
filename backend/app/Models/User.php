@@ -81,6 +81,11 @@ class User extends Authenticatable implements HasLocalePreference
         return $this->hasOne(Driver::class);
     }
 
+    public function deviceTokens(): HasMany
+    {
+        return $this->hasMany(DeviceToken::class);
+    }
+
     public function addresses(): HasMany
     {
         return $this->hasMany(UserAddress::class);

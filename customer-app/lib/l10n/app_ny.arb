@@ -158,5 +158,18 @@
   "tracking_updated": "Zasinthidwa {time}",
   "vehicle_motorbike": "Njinga yamoto",
   "vehicle_bicycle": "Njinga",
-  "vehicle_car": "Galimoto"
+  "vehicle_car": "Galimoto",
+  "payment_title": "Kulipira",
+  "payment_amount": "Ndalama zolipira",
+  "payment_phone_label": "Nambala ya Mobile Money",
+  "payment_pay_with": "Lipirani ndi {method}",
+  "payment_waiting": "Onani foni yanu ndipo vomerezani kulipira ndi PIN yanu.",
+  "payment_retry": "Yesaninso",
+  "payment_received": "Malipiro alandiridwa",
+  "payment_pay_now": "Lipirani tsopano",
+  "payment_status_pending": "Tikudikira malipiro",
+  "payment_status_paid": "Zalipiridwa",
+  "payment_status_failed": "Kulipira sikunatheke",
+  "payment_status_refunded": "Ndalama zabwezedwa",
+  "error_payment_not_required": "Oda iyi sifunika kulipiridwa pa intaneti."
 }

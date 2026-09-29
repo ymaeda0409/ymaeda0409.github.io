@@ -22,6 +22,9 @@ return [
     'DELIVERY_PIN_INVALID' => '受け取りPINが正しくありません。',
     'DELIVERY_PIN_LOCKED' => 'PINの入力ミスが多すぎます。店舗に連絡してください。',
     'OFFER_NOT_AVAILABLE' => 'この配達依頼は既に無効です。',
+    'PAYMENT_FAILED' => 'お支払いを完了できませんでした。',
+    'PAYMENT_NOT_REQUIRED' => 'この注文はオンライン決済の必要がありません。',
+    'INVALID_SIGNATURE' => '署名が正しくありません。',
     'TOO_MANY_REQUESTS' => '試行回数が多すぎます。しばらく待ってから再度お試しください。',
     'SERVER_ERROR' => 'エラーが発生しました。もう一度お試しください。',
 ];

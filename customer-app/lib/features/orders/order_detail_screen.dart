@@ -3,7 +3,9 @@ import 'dart:async';
 import 'package:bento_core/bento_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
+import '../../core/ui/code_labels.dart';
 import '../../core/ui/widgets.dart';
 import '../checkout/order_repository.dart';
 import 'order.dart';
@@ -166,6 +168,24 @@ class _OrderDetailScreenState extends ConsumerState<OrderDetailScreen> {
                       ),
                     ),
                   ),
+                  const SizedBox(height: 12),
+                  Wrap(
+                    spacing: 8,
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: [
+                      Text(paymentMethodText(l, order.paymentMethod)),
+                      Chip(
+                        label: Text(paymentStatusText(l, order.paymentStatus)),
+                      ),
+                    ],
+                  ),
+                  if (order.needsPayment) ...[
+                    const SizedBox(height: 12),
+                    FilledButton(
+                      onPressed: () => context.push('/orders/${order.id}/pay'),
+                      child: Text(l.payment_pay_now),
+                    ),
+                  ],
                   if (order.canCancel) ...[
                     const SizedBox(height: 16),
                     OutlinedButton(

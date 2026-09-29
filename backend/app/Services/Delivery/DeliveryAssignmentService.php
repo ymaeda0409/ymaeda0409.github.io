@@ -6,6 +6,7 @@ use App\Enums\AssignmentStatus;
 use App\Enums\DriverStatus;
 use App\Enums\ErrorCode;
 use App\Enums\OrderStatus;
+use App\Events\DeliveryOffered;
 use App\Exceptions\ApiException;
 use App\Models\DeliveryAssignment;
 use App\Models\Driver;
@@ -50,13 +51,16 @@ class DeliveryAssignmentService
 
             [$driver, $distance] = $candidate;
 
-            return $order->assignments()->create([
+            $offer = $order->assignments()->create([
                 'driver_id' => $driver->id,
                 'status' => AssignmentStatus::OFFERED,
                 'distance_km' => round($distance, 2),
                 'offered_at' => now(),
                 'expires_at' => now()->addSeconds((int) config('bento.dispatch.offer_ttl_seconds')),
             ]);
+            DeliveryOffered::dispatch($offer);
+
+            return $offer;
         });
     }
 

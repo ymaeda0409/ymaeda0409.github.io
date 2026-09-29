@@ -23,6 +23,9 @@ return [
     'DELIVERY_PIN_INVALID' => 'PIN yolandirira si yolondola.',
     'DELIVERY_PIN_LOCKED' => 'PIN yalakwika kambirimbiri. Chonde lumikizanani ndi sitolo.',
     'OFFER_NOT_AVAILABLE' => 'Pempho lobweretsa ili palibenso.',
+    'PAYMENT_FAILED' => 'Kulipira sikunatheke.',
+    'PAYMENT_NOT_REQUIRED' => 'Oda iyi sifunika kulipiridwa pa intaneti.',
+    'INVALID_SIGNATURE' => 'Siginecha si yolondola.',
     'TOO_MANY_REQUESTS' => 'Mwayesa kambirimbiri. Dikirani pang\'ono kenako yesaninso.',
     'SERVER_ERROR' => 'Pachitika vuto. Chonde yesaninso.',
 ];

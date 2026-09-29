@@ -21,6 +21,7 @@ import 'features/location/delivery_location_screen.dart';
 import 'features/orders/order_complete_screen.dart';
 import 'features/orders/order_detail_screen.dart';
 import 'features/orders/order_history_screen.dart';
+import 'features/payment/payment_screen.dart';
 import 'features/splash/splash_screen.dart';
 
 /// Routes that require a signed-in customer.
@@ -112,6 +113,11 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '/orders/:id',
         builder: (_, state) =>
             OrderDetailScreen(orderId: int.parse(state.pathParameters['id']!)),
+      ),
+      GoRoute(
+        path: '/orders/:id/pay',
+        builder: (_, state) =>
+            PaymentScreen(orderId: int.parse(state.pathParameters['id']!)),
       ),
       GoRoute(
         path: '/orders/:id/complete',

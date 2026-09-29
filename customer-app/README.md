@@ -36,6 +36,27 @@ flutter test
 | `test/core/api_client_test.dart` | 封筒形式の展開、Accept-Language / Bearer 付与、エラー→コード変換、GET 再試行 |
 | `test/features/cart_test.dart` | カート集計（minor units）、店舗切替、永続化 |
 | `test/features/app_flow_test.dart` | 初回言語選択、即時言語切替、3 言語 × 320dp × 文字 130% でオーバーフローなし、カート追加、要ログイン |
+| `test/features/order_flow_test.dart` | 注文 → 完了（PIN）→ 履歴/詳細、キャンセル、Mobile Money 決済（請求 → 確認待ち → 支払い済み → 完了画面） |
+| `test/core/push_registration_test.dart` | ログイン時の Push 端末登録、Firebase なしでの動作 |
+
+## 決済（PHASE 5）
+
+Checkout で Airtel Money / TNM Mpamba を選ぶと注文後に決済画面（`features/payment/`）へ。電話番号を確認して請求 →
+端末で承認 → 3 秒ごとに状態確認 → 支払い済みで注文完了画面。失敗時は再試行、注文詳細の「今すぐ支払う」からも再開できます。
+開発用 Fake ゲートウェイでは電話番号末尾 `0000` で拒否、`9999` で確認待ちのままになります。
+
+## Push 通知（Firebase）
+
+アプリは `PushTokenSource`（`packages/bento_core`）経由で端末トークンを取得し、ログイン後に `POST /devices`、
+ログアウト時に `DELETE /devices` します。既定の `NoPushTokenSource` はトークンを返さないため、
+**Firebase プロジェクトなしでもそのまま動作**します（通知が届かないだけ）。有効化する手順:
+
+1. `flutterfire configure` で Firebase を設定し、`firebase_core` / `firebase_messaging` を追加
+2. `PushTokenSource` を実装（`FirebaseMessaging.instance.getToken()` を返す）し、`main()` の
+   `ProviderScope` で `pushTokenSourceProvider.overrideWithValue(...)`
+3. バックエンドを `PUSH_DRIVER=fcm`, `FIREBASE_PROJECT_ID`, `FIREBASE_CREDENTIALS`（サービスアカウント JSON のパス）に設定
+
+通知の文面はサーバーが受信者の言語で作成済み。`data.code`（例 `ORDER_ON_THE_WAY`）と `data.order_id` も届きます。
 
 ## 多言語
 
@@ -50,7 +71,7 @@ flutter test
 ```
 lib/
 ├── core/        config, locale, network (ApiClient), format (money/date), storage, ui
-├── features/    splash, language, auth, location, catalog, cart, checkout, account
+├── features/    splash, language, auth, location, catalog, cart, checkout, orders, payment, account
 ├── l10n/        ARB + generated
 ├── app.dart     MaterialApp（locale は Riverpod state → 再起動なしで切替）
 └── router.dart  go_router（/checkout 等はログイン必須）

@@ -531,4 +531,47 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get vehicle_car => 'Car';
+
+  @override
+  String get payment_title => 'Payment';
+
+  @override
+  String get payment_amount => 'Amount to pay';
+
+  @override
+  String get payment_phone_label => 'Mobile money number';
+
+  @override
+  String payment_pay_with(String method) {
+    return 'Pay with $method';
+  }
+
+  @override
+  String get payment_waiting =>
+      'Check your phone and approve the payment with your PIN.';
+
+  @override
+  String get payment_retry => 'Try again';
+
+  @override
+  String get payment_received => 'Payment received';
+
+  @override
+  String get payment_pay_now => 'Pay now';
+
+  @override
+  String get payment_status_pending => 'Waiting for payment';
+
+  @override
+  String get payment_status_paid => 'Paid';
+
+  @override
+  String get payment_status_failed => 'Payment failed';
+
+  @override
+  String get payment_status_refunded => 'Refunded';
+
+  @override
+  String get error_payment_not_required =>
+      'This order does not need an online payment.';
 }

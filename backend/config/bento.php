@@ -99,11 +99,36 @@ return [
     |--------------------------------------------------------------------------
     */
     'payment' => [
+        // fake | paychangu
         'gateway' => env('PAYMENT_GATEWAY', 'fake'),
+        // Unpaid mobile-money orders are cancelled after this many minutes.
+        'unpaid_timeout_minutes' => (int) env('PAYMENT_UNPAID_TIMEOUT', 15),
+        'fake' => [
+            // Shared secret for simulated webhooks in development/tests.
+            'webhook_secret' => env('FAKE_PAYMENT_WEBHOOK_SECRET', 'fake-secret'),
+        ],
+        'paychangu' => [
+            'base_url' => env('PAYCHANGU_BASE_URL', 'https://api.paychangu.com'),
+            'secret_key' => env('PAYCHANGU_SECRET_KEY'),
+            'webhook_secret' => env('PAYCHANGU_WEBHOOK_SECRET'),
+            // Mobile money operator reference ids issued by PayChangu.
+            'operators' => [
+                'AIRTEL_MONEY' => env('PAYCHANGU_AIRTEL_REF_ID'),
+                'TNM_MPAMBA' => env('PAYCHANGU_TNM_REF_ID'),
+            ],
+        ],
     ],
 
     'google_maps' => [
         'api_key' => env('GOOGLE_MAPS_API_KEY'),
+    ],
+
+    /*
+    | Push notifications: log (development) | fcm (Firebase Cloud Messaging HTTP v1).
+    | FIREBASE_CREDENTIALS = path to the service-account JSON file.
+    */
+    'push' => [
+        'driver' => env('PUSH_DRIVER', 'log'),
     ],
 
     'firebase' => [

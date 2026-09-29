@@ -12,7 +12,7 @@ use Tests\TestCase;
  */
 class TranslationFilesTest extends TestCase
 {
-    private const FILES = ['errors', 'sms'];
+    private const FILES = ['errors', 'sms', 'notifications'];
 
     public function test_every_locale_has_the_same_keys_as_english(): void
     {
@@ -45,15 +45,17 @@ class TranslationFilesTest extends TestCase
 
     public function test_placeholders_are_preserved_in_translations(): void
     {
-        $reference = Arr::dot(require lang_path('en/sms.php'));
+        foreach (['sms', 'notifications'] as $file) {
+            $reference = Arr::dot(require lang_path("en/{$file}.php"));
 
-        foreach (['ny', 'ja'] as $locale) {
-            foreach (Arr::dot(require lang_path("{$locale}/sms.php")) as $key => $text) {
-                preg_match_all('/:\w+/', $reference[$key], $expected);
-                preg_match_all('/:\w+/', $text, $actual);
-                sort($expected[0]);
-                sort($actual[0]);
-                $this->assertSame($expected[0], $actual[0], "Placeholders differ in lang/{$locale}/sms.php [{$key}]");
+            foreach (['ny', 'ja'] as $locale) {
+                foreach (Arr::dot(require lang_path("{$locale}/{$file}.php")) as $key => $text) {
+                    preg_match_all('/:\w+/', $reference[$key], $expected);
+                    preg_match_all('/:\w+/', $text, $actual);
+                    sort($expected[0]);
+                    sort($actual[0]);
+                    $this->assertSame($expected[0], $actual[0], "Placeholders differ in lang/{$locale}/{$file}.php [{$key}]");
+                }
             }
         }
     }

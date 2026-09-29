@@ -158,5 +158,18 @@
   "tracking_updated": "{time} 更新",
   "vehicle_motorbike": "バイク",
   "vehicle_bicycle": "自転車",
-  "vehicle_car": "車"
+  "vehicle_car": "車",
+  "payment_title": "お支払い",
+  "payment_amount": "お支払い金額",
+  "payment_phone_label": "モバイルマネーの電話番号",
+  "payment_pay_with": "{method}で支払う",
+  "payment_waiting": "お使いの電話に届く確認画面で、PINを入力して支払いを承認してください。",
+  "payment_retry": "もう一度試す",
+  "payment_received": "お支払いを確認しました",
+  "payment_pay_now": "今すぐ支払う",
+  "payment_status_pending": "支払い待ち",
+  "payment_status_paid": "支払済み",
+  "payment_status_failed": "支払い失敗",
+  "payment_status_refunded": "返金済み",
+  "error_payment_not_required": "この注文はオンライン決済の必要がありません。"
 }

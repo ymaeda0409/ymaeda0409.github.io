@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:bento_core/bento_core.dart';
@@ -94,6 +95,7 @@ class SessionController extends Notifier<Session> {
         .read(sharedPreferencesProvider)
         .setString(_userKey, jsonEncode(user.toJson()));
     state = Session(token: token, user: user);
+    unawaited(ref.read(deviceRegistrarProvider).register());
   }
 
   Future<void> updateUser(AppUser user) async {
@@ -122,3 +124,18 @@ final apiClientProvider = Provider<ApiClient>((ref) {
     onUnauthorized: () => ref.read(sessionProvider.notifier).signOut(),
   );
 });
+
+// ---------------------------------------------------------------- Push
+
+/// Override with a firebase_messaging-backed source once a Firebase project is configured.
+final pushTokenSourceProvider = Provider<PushTokenSource>(
+  (ref) => const NoPushTokenSource(),
+);
+
+final deviceRegistrarProvider = Provider<DeviceRegistrar>(
+  (ref) => DeviceRegistrar(
+    ref.watch(apiClientProvider),
+    ref.watch(pushTokenSourceProvider),
+    app: 'customer',
+  ),
+);

@@ -27,6 +27,7 @@ String errorText(AppLocalizations l, Object? error) {
     'delivery_pin_invalid' => l.error_delivery_pin_invalid,
     'payment_failed' => l.error_payment_failed,
     'payment_required' => l.error_payment_required,
+    'payment_not_required' => l.error_payment_not_required,
     'too_many_requests' => l.error_too_many_requests,
     'server_error' => l.error_server_error,
     'network' => l.error_network,
@@ -49,5 +50,22 @@ String orderStatusText(AppLocalizations l, String status) {
     'cancelled' => l.order_status_cancelled,
     'failed_delivery' => l.order_status_failed_delivery,
     _ => l.order_status_unknown,
+  };
+}
+
+String paymentStatusText(AppLocalizations l, String status) {
+  return switch (status.toLowerCase()) {
+    'paid' => l.payment_status_paid,
+    'failed' => l.payment_status_failed,
+    'refunded' => l.payment_status_refunded,
+    _ => l.payment_status_pending,
+  };
+}
+
+String paymentMethodText(AppLocalizations l, String method) {
+  return switch (method) {
+    'AIRTEL_MONEY' => l.payment_airtel_money,
+    'TNM_MPAMBA' => l.payment_tnm_mpamba,
+    _ => l.payment_cash,
   };
 }

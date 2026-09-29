@@ -60,9 +60,11 @@ MySQL を使う場合は `DB_CONNECTION=mysql`, `DB_PORT=3306` に変更（DB �
 | `DEFAULT_CURRENCY` | `MWK` |
 | `OTP_TEST_MODE`, `OTP_TEST_CODE` | 開発用固定 OTP（`123456`）。**`APP_ENV=production` では常に無効** |
 | `SMS_DRIVER` | `log`（開発）。本番ドライバは `SmsGateway` 実装を追加 |
-| `PAYMENT_GATEWAY`, `PAYCHANGU_*` | 決済（PHASE 5, 開発は `fake`） |
+| `PAYMENT_GATEWAY`, `PAYCHANGU_*` | 決済。開発は `fake`、本番は `paychangu`（`PAYCHANGU_SECRET_KEY`, `PAYCHANGU_WEBHOOK_SECRET`, `PAYCHANGU_AIRTEL_REF_ID` / `PAYCHANGU_TNM_REF_ID`） |
+| `PAYMENT_UNPAID_TIMEOUT` | 未払い Mobile Money 注文を自動キャンセルするまでの分数（30） |
+| `PUSH_DRIVER` | `log`（開発, ログ出力）/ `fcm` |
 | `GOOGLE_MAPS_API_KEY` | Google Maps |
-| `FIREBASE_PROJECT_ID`, `FIREBASE_CREDENTIALS` | FCM（PHASE 5） |
+| `FIREBASE_PROJECT_ID`, `FIREBASE_CREDENTIALS` | FCM HTTP v1（サービスアカウント JSON のパス） |
 | `FILESYSTEM_DISK`, `AWS_*`, `AWS_ENDPOINT` | S3 互換ストレージ |
 | `SERVICE_FEE` | 注文ごとのサービス料（minor units, 既定 0） |
 | `DISPATCH_OFFER_TTL`, `DISPATCH_LOCATION_MAX_AGE` | 配達オファーの有効秒数（60）、割当対象とする GPS の鮮度（分, 10） |
@@ -130,7 +132,7 @@ npm test                         # 厨房画面（Vitest: 翻訳 JSON 整合性�
 
 GitHub Actions: `backend.yml`（Pint + SQLite + PostgreSQL + Vitest + Vite build）、`flutter.yml`（bento_core / customer-app / driver-app の gen-l10n 差分・format・analyze・test）。
 
-Backend テスト範囲（PHPUnit 138 tests + Vitest 12 tests）:
+Backend テスト範囲（PHPUnit 159 tests + Vitest 12 tests）:
 
 | 観点 | テスト |
 |---|---|
@@ -149,6 +151,8 @@ Backend テスト範囲（PHPUnit 138 tests + Vitest 12 tests）:
 | 厨房画面 UI | `resources/js/kitchen/kitchen.test.js` |
 | Driver 割当・Delivery PIN・GPS・配送追跡 | `Feature/DeliveryTest` |
 | 配達員管理（FC 分離） | `Feature/Admin/DriverManagementTest` |
+| 決済（Fake/再試行/二重請求防止/webhook 署名/返金/未払い失効/他人不可） | `Feature/PaymentTest`, `Unit/GatewayAdaptersTest`（PayChangu・FCM の HTTP 形式） |
+| 通知（受信者の言語・fallback・SMS 対象/通数・端末登録・テンプレート管理） | `Feature/NotificationTest` |
 
 ---
 
@@ -179,7 +183,7 @@ Backend テスト範囲（PHPUnit 138 tests + Vitest 12 tests）:
 cd customer-app
 flutter pub get
 flutter run --dart-define=API_BASE_URL=http://10.0.2.2:8000/api   # Android エミュレータ
-flutter test                                                       # 38 tests
+flutter test                                                       # 41 tests
 ```
 
 ## 5b. Rider App（Flutter）
@@ -191,7 +195,7 @@ flutter run --dart-define=API_BASE_URL=http://10.0.2.2:8000/api
 flutter test                                                       # 15 tests
 ```
 
-詳細は [driver-app/README.md](driver-app/README.md)。共通パッケージは `cd packages/bento_core && flutter test`（6 tests）。
+詳細は [driver-app/README.md](driver-app/README.md)。共通パッケージは `cd packages/bento_core && flutter test`（9 tests）。
 
 詳細は [customer-app/README.md](customer-app/README.md)。アプリの翻訳追加は `lib/l10n/app_en.arb` をコピーして `app_<code>.arb` を作成 → `flutter gen-l10n`。
 
@@ -199,6 +203,9 @@ flutter test                                                       # 15 tests
 
 ## 6. 開発フェーズ
 
-[docs/development-plan.md](docs/development-plan.md) 参照。現在 **PHASE 4 完了**（PHASE 1: Backend 基盤 / PHASE 2: Customer App / PHASE 3: 注文・厨房 / PHASE 4: 配達員アプリ・割当・GPS・Delivery PIN・配送追跡）。次は PHASE 5（決済・通知・多言語通知）。
+[docs/development-plan.md](docs/development-plan.md) 参照。現在 **PHASE 5 完了 = MVP 完成**（PHASE 1: Backend 基盤 / PHASE 2: Customer App / PHASE 3: 注文・厨房 / PHASE 4: 配達員アプリ・割当・GPS・Delivery PIN・配送追跡 / PHASE 5: 決済・多言語通知）。次は PHASE 6（管理画面・売上・翻訳管理 UI）。
+
+> **本番前に必要なこと**: PayChangu のアカウントとサンドボックスでの実結合確認（アダプタは公開ドキュメントに基づく実装で、実 API では未検証）、
+> Firebase プロジェクト作成とアプリへの `firebase_messaging` 組込み、本番 SMS ドライバ（`SmsGateway` 実装）の追加。
 
 > **Chichewa 訳について**: 同梱の Chichewa 文言は初版です。リリース前にネイティブ話者のレビューを受けてください（翻訳ファイル / 管理画面の修正のみで反映できます）。

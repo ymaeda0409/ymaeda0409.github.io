@@ -1053,6 +1053,84 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Car'**
   String get vehicle_car;
+
+  /// Canonical key: payment.title
+  ///
+  /// In en, this message translates to:
+  /// **'Payment'**
+  String get payment_title;
+
+  /// Canonical key: payment.amount
+  ///
+  /// In en, this message translates to:
+  /// **'Amount to pay'**
+  String get payment_amount;
+
+  /// Canonical key: payment.phone_label
+  ///
+  /// In en, this message translates to:
+  /// **'Mobile money number'**
+  String get payment_phone_label;
+
+  /// Canonical key: payment.pay_with
+  ///
+  /// In en, this message translates to:
+  /// **'Pay with {method}'**
+  String payment_pay_with(String method);
+
+  /// Canonical key: payment.waiting
+  ///
+  /// In en, this message translates to:
+  /// **'Check your phone and approve the payment with your PIN.'**
+  String get payment_waiting;
+
+  /// Canonical key: payment.retry
+  ///
+  /// In en, this message translates to:
+  /// **'Try again'**
+  String get payment_retry;
+
+  /// Canonical key: payment.received
+  ///
+  /// In en, this message translates to:
+  /// **'Payment received'**
+  String get payment_received;
+
+  /// Canonical key: payment.pay_now
+  ///
+  /// In en, this message translates to:
+  /// **'Pay now'**
+  String get payment_pay_now;
+
+  /// Canonical key: payment.status_pending
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for payment'**
+  String get payment_status_pending;
+
+  /// Canonical key: payment.status_paid
+  ///
+  /// In en, this message translates to:
+  /// **'Paid'**
+  String get payment_status_paid;
+
+  /// Canonical key: payment.status_failed
+  ///
+  /// In en, this message translates to:
+  /// **'Payment failed'**
+  String get payment_status_failed;
+
+  /// Canonical key: payment.status_refunded
+  ///
+  /// In en, this message translates to:
+  /// **'Refunded'**
+  String get payment_status_refunded;
+
+  /// Canonical key: error.payment_not_required
+  ///
+  /// In en, this message translates to:
+  /// **'This order does not need an online payment.'**
+  String get error_payment_not_required;
 }
 
 class _AppLocalizationsDelegate

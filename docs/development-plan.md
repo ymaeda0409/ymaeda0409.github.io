@@ -87,13 +87,26 @@ OTP ログイン → オンライン → 依頼受諾 → 受取 → 到着 → 
 
 **検出して直した問題**: 小画面・文字拡大時に依頼カード見出し（ny/en）が横にはみ出していた（テストで検出）。
 
-## PHASE 5 — Payment / Tracking / Notification
+## PHASE 5 — Payment / Tracking / Notification ✅
 
-* `PaymentGatewayInterface`（pay/verify/refund）、`FakePaymentGateway`、PayChangu 実装の雛形、webhook 署名検証
-* Cash / Airtel Money / TNM Mpamba
-* Order Tracking（ポーリング 10 秒; 将来 WebSocket）
-* notification_templates(+translations)、FCM、SMS（重要通知のみ, GSM-7/UCS-2 通数制御）
-* テスト: 決済フロー、通知 Locale 選択と fallback
+| 項目 | 内容 |
+|---|---|
+| DB | payments, notification_templates(+translations), device_tokens, notification_logs |
+| 決済 | `PaymentGatewayInterface`（pay/verify/refund/parseWebhook）、`FakePaymentGateway`（電話番号末尾で成功/拒否/保留）、`PayChanguGateway`（Airtel Money / TNM Mpamba, `PAYMENT_GATEWAY=paychangu` で切替） |
+| 決済フロー | `PaymentService`: 請求（PENDING の再利用で二重請求防止）→ 状態確認（ポーリング）/ webhook（HMAC 署名検証 → サーバー側 `verify()` で再確認）→ PAID で注文を支払い済みに。取消時の自動返金、未払い注文の自動失効（`orders:expire-unpaid`）。代引きは P4 のとおり配達完了で PAID |
+| 通知 | 注文/決済/配達オファーのイベント → `SendOrderNotifications` → キュー → `NotificationService`。**受信者の `preferred_language`** で DB テンプレート → en → lang ファイルの順に解決。Push（`log` / FCM HTTP v1）、SMS は重要 3 種のみ（注文受付・配達開始・到着）で通数超過時は en |
+| 端末 | `POST/DELETE /devices`、`bento_core` の `DeviceRegistrar` + `PushTokenSource`（既定は no-op、Firebase 導入時に差し替え）を両アプリでログイン/ログアウトに接続 |
+| 管理 | `GET/PUT /admin/notification-templates`（全言語の文面編集, 監査ログ） |
+| 顧客アプリ | 11 Payment 画面（請求・確認待ち・失敗/再試行・完了）、注文詳細に決済状態と「今すぐ支払う」 |
+| Tracking | P4 で実装済み（ポーリング。将来 WebSocket） |
+| テスト | Backend 159、Vue 12、Customer 41、Driver 15、bento_core 9 |
+
+**結果**: 159 tests green（SQLite / PostgreSQL）、Pint pass、Flutter analyze 0 件。実 API（PostgreSQL + Redis キュー）で
+「顧客（ny）が Airtel Money で注文 → 請求 → 確認 → 注文 PAID → キューワーカーが Push を送信（`Malipiro alandiridwa` = ny の文面、
+`notification_logs` に locale=ny / SENT）」を確認。
+
+**未検証・制約**: PayChangu アダプタは公開 API 仕様に基づくが実アカウントでの結合は未実施。FCM 送信は HTTP 形式をテストで確認済みだが、
+アプリ側は Firebase プロジェクトがないため既定で no-op（手順は customer-app/README）。実機での Push 受信は未確認。
 
 ## PHASE 6 — Admin Dashboard / Sales / FC / Translation Management
 
@@ -104,7 +117,7 @@ OTP ログイン → オンライン → 依頼受諾 → 受取 → 到着 → 
 
 ---
 
-## MVP 完成条件（PHASE 5 終了時）
+## MVP 完成条件（PHASE 5 終了時）— ✅ 達成（Push の実機受信・PayChangu 実結合を除く）
 
 Lilongwe 1 号店で「言語選択 → 商品閲覧 → 注文 → 決済 → 厨房確認 → 調理 → Driver 割当 → 配送 → リアルタイム位置確認 → PIN 確認 → 配達完了」を 3 言語いずれでも完走できること。
 

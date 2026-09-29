@@ -90,6 +90,7 @@ class AccountScreen extends ConsumerWidget {
               label: Text(l.auth_logout),
               onPressed: () async {
                 try {
+                  await ref.read(deviceRegistrarProvider).unregister();
                   await ref.read(authRepositoryProvider).logout();
                 } catch (_) {
                   // Offline: the local session is still cleared.

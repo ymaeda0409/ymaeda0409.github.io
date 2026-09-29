@@ -30,6 +30,9 @@ enum ErrorCode: string
     case DELIVERY_PIN_INVALID = 'DELIVERY_PIN_INVALID';
     case DELIVERY_PIN_LOCKED = 'DELIVERY_PIN_LOCKED';
     case OFFER_NOT_AVAILABLE = 'OFFER_NOT_AVAILABLE';
+    case PAYMENT_FAILED = 'PAYMENT_FAILED';
+    case PAYMENT_NOT_REQUIRED = 'PAYMENT_NOT_REQUIRED';
+    case INVALID_SIGNATURE = 'INVALID_SIGNATURE';
     case TOO_MANY_REQUESTS = 'TOO_MANY_REQUESTS';
     case SERVER_ERROR = 'SERVER_ERROR';
 
@@ -38,14 +41,14 @@ enum ErrorCode: string
         return match ($this) {
             self::BAD_REQUEST => 400,
             self::UNAUTHENTICATED, self::INVALID_CREDENTIALS => 401,
-            self::FORBIDDEN, self::ACCOUNT_DISABLED => 403,
+            self::FORBIDDEN, self::ACCOUNT_DISABLED, self::INVALID_SIGNATURE => 403,
             self::RESOURCE_NOT_FOUND, self::ROUTE_NOT_FOUND => 404,
             self::METHOD_NOT_ALLOWED => 405,
-            self::CONFLICT, self::OFFER_NOT_AVAILABLE => 409,
+            self::CONFLICT, self::OFFER_NOT_AVAILABLE, self::PAYMENT_NOT_REQUIRED => 409,
             self::VALIDATION_FAILED, self::OTP_INVALID, self::OTP_EXPIRED,
             self::LANGUAGE_NOT_SUPPORTED, self::STORE_NOT_AVAILABLE, self::OUT_OF_DELIVERY_AREA,
             self::PRODUCT_NOT_AVAILABLE, self::INVALID_STATUS_TRANSITION, self::PAYMENT_REQUIRED,
-            self::DELIVERY_PIN_INVALID, self::DELIVERY_PIN_LOCKED => 422,
+            self::DELIVERY_PIN_INVALID, self::DELIVERY_PIN_LOCKED, self::PAYMENT_FAILED => 422,
             self::TOO_MANY_REQUESTS => 429,
             self::SERVER_ERROR => 500,
         };

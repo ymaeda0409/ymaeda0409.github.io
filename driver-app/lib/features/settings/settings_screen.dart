@@ -50,6 +50,7 @@ class SettingsScreen extends ConsumerWidget {
             onPressed: () async {
               try {
                 await ref.read(driverControllerProvider.notifier).goOffline();
+                await ref.read(deviceRegistrarProvider).unregister();
                 await ref.read(authRepositoryProvider).logout();
               } catch (_) {
                 // Offline: the local session is cleared anyway.

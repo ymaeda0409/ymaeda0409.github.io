@@ -24,6 +24,9 @@ return [
     'DELIVERY_PIN_INVALID' => 'The delivery PIN is incorrect.',
     'DELIVERY_PIN_LOCKED' => 'Too many wrong PINs. Please contact the store.',
     'OFFER_NOT_AVAILABLE' => 'This delivery request is no longer available.',
+    'PAYMENT_FAILED' => 'The payment could not be completed.',
+    'PAYMENT_NOT_REQUIRED' => 'This order does not need an online payment.',
+    'INVALID_SIGNATURE' => 'Invalid signature.',
     'TOO_MANY_REQUESTS' => 'Too many attempts. Please wait a moment and try again.',
     'SERVER_ERROR' => 'Something went wrong. Please try again.',
 ];

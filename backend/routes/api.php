@@ -6,9 +6,11 @@ use App\Http\Controllers\Api\Admin;
 use App\Http\Controllers\Api\Auth\OtpController;
 use App\Http\Controllers\Api\Auth\SessionController;
 use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\DeviceController;
 use App\Http\Controllers\Api\Driver\DriverController;
 use App\Http\Controllers\Api\LanguageController;
 use App\Http\Controllers\Api\OrderController;
+use App\Http\Controllers\Api\PaymentController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\StoreController;
 use Illuminate\Support\Facades\Route;
@@ -37,12 +39,15 @@ Route::get('categories', [CategoryController::class, 'index']);
 Route::get('products', [ProductController::class, 'index']);
 Route::get('products/{product}', [ProductController::class, 'show'])->whereNumber('product');
 Route::post('orders/quote', [OrderController::class, 'quote'])->middleware('throttle:60,1');
+Route::post('payments/webhook', [PaymentController::class, 'webhook'])->middleware('throttle:120,1');
 
 // ACCOUNT (any authenticated user)
 Route::middleware(['auth:sanctum', 'role:CUSTOMER,DRIVER,staff'])->group(function () {
     Route::get('account', [AccountController::class, 'show']);
     Route::put('account', [AccountController::class, 'update']);
     Route::put('account/language', [AccountController::class, 'updateLanguage']);
+    Route::post('devices', [DeviceController::class, 'store']);
+    Route::delete('devices', [DeviceController::class, 'destroy']);
 });
 
 // CUSTOMER
@@ -54,6 +59,9 @@ Route::middleware(['auth:sanctum', 'role:CUSTOMER'])->group(function () {
     Route::get('orders/{order}', [OrderController::class, 'show'])->whereNumber('order');
     Route::post('orders/{order}/cancel', [OrderController::class, 'cancel'])->whereNumber('order');
     Route::get('orders/{order}/tracking', [OrderController::class, 'tracking'])->whereNumber('order');
+
+    Route::post('payments', [PaymentController::class, 'store'])->middleware('throttle:20,1');
+    Route::get('payments/{payment}', [PaymentController::class, 'show'])->whereNumber('payment');
 });
 
 // DRIVER
@@ -90,6 +98,8 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:sanctum', 'role:staff'
     Route::get('audit-logs', [Admin\AuditLogController::class, 'index']);
 
     Route::apiResource('drivers', Admin\DriverController::class)->except('destroy');
+    Route::get('notification-templates', [Admin\NotificationTemplateController::class, 'index']);
+    Route::put('notification-templates/{notificationTemplate}', [Admin\NotificationTemplateController::class, 'update']);
 
     // Orders + kitchen board actions
     Route::get('orders', [Admin\OrderController::class, 'index']);

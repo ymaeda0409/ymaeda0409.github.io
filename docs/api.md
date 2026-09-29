@@ -44,7 +44,9 @@
 | 422 | `DELIVERY_PIN_INVALID` | PIN 不一致 (P4) |
 | 422 | `DELIVERY_PIN_LOCKED` | PIN 失敗回数超過 (P4) |
 | 409 | `OFFER_NOT_AVAILABLE` | 配達オファー失効・他者受諾 (P4) |
-| 422 | `PAYMENT_FAILED` | 決済失敗 (P5) |
+| 422 | `PAYMENT_FAILED` | 決済失敗（ゲートウェイ拒否） (P5) |
+| 409 | `PAYMENT_NOT_REQUIRED` | 代引き・支払い済み・取消済み注文への決済開始 (P5) |
+| 403 | `INVALID_SIGNATURE` | 決済 webhook の署名不一致 (P5) |
 | 429 | `TOO_MANY_REQUESTS` | レート制限（OTP 再送待ち含む） |
 | 500 | `SERVER_ERROR` | サーバーエラー |
 
@@ -194,12 +196,39 @@
 
 厨房画面: `GET /kitchen`（Vue SPA, スタッフトークン認証, 10 秒ポーリング, 新規注文で通知音）。
 
-## PAYMENT (P5)
+## PAYMENT (P5) ✅
 
-| Method | Path | 説明 |
-|---|---|---|
-| POST | /payments | `{ order_id, method, phone? }` → `PaymentGatewayInterface::pay()` |
-| POST | /payments/webhook | ゲートウェイ callback（署名検証 → `verify()`） |
+| Method | Path | 権限 | 説明 |
+|---|---|---|---|
+| POST | /payments | CUSTOMER（自分の注文のみ, 20/分） | `{ order_id, phone? }` → 注文の `payment_method`（AIRTEL_MONEY / TNM_MPAMBA）で `PaymentGatewayInterface::pay()`。`phone` 省略時は配送先の電話。PENDING の決済があればそれを返す（二重請求防止）。代引き・支払い済み・取消済みは `PAYMENT_NOT_REQUIRED` |
+| GET | /payments/{id} | CUSTOMER（自分のみ, 他人は 404） | 状態確認。PENDING ならゲートウェイに `verify()` して更新（アプリは 3 秒ごとにポーリング） |
+| POST | /payments/webhook | 公開（120/分） | ゲートウェイ callback。**署名検証 → サーバーから `verify()` で再確認**してから反映（webhook 本文は信用しない）。不一致は `INVALID_SIGNATURE` |
+
+```json
+{ "id": 1, "order_id": 1, "method": "AIRTEL_MONEY", "status": "PENDING", "amount": 200000, "currency": "MWK",
+  "phone": "+265991234567", "reference": "MBPYIWDXILLEH6LLUJZEMS", "failure_code": null, "paid_at": null }
+```
+
+* 状態: `PENDING → PAID | FAILED`、`PAID → REFUNDED`。PAID で `orders.payment_status = PAID`（厨房が受付可能に）。
+* FAILED は再試行可（新しい決済を作成）。`failure_code` はゲートウェイのコード（例 `INSUFFICIENT_FUNDS`）でアプリが翻訳。
+* 支払い済み注文のキャンセルは自動返金（`refund()`、失敗時はログに残し手動対応）。
+* 未払い Mobile Money 注文は `PAYMENT_UNPAID_TIMEOUT`（分, 既定 30）で自動キャンセル（`orders:expire-unpaid`, 毎分）。
+* 代引き（CASH）は配達完了時に PAID（P4）。
+* ゲートウェイ: `PAYMENT_GATEWAY=fake`（開発）/ `paychangu`。Fake は電話番号末尾で挙動を切替:
+  `…0000` = 即時拒否（`INSUFFICIENT_FUNDS`）、`…9999` = PENDING のまま、それ以外 = 確認時に PAID。
+  Fake の webhook 署名は `X-Fake-Signature: hex(HMAC-SHA256(body, FAKE_PAYMENT_WEBHOOK_SECRET))`。
+
+## DEVICES / NOTIFICATIONS (P5) ✅
+
+| Method | Path | 権限 | 説明 |
+|---|---|---|---|
+| POST | /devices | ログイン済み | `{ token, platform: android\|ios\|web, app: customer\|driver }` Push トークン登録（同じトークンは付け替え） |
+| DELETE | /devices?token= | ログイン済み | ログアウト時に削除 |
+| GET | /admin/notification-templates | translations.manage | テンプレート一覧（全言語の文面） |
+| PUT | /admin/notification-templates/{id} | translations.manage | `{ is_active?, translations: { en: {title, body}, ny: {...} } }`（監査ログ） |
+
+通知は注文・決済・配達オファーのイベントから非同期（キュー）で送信。文面の言語は **受信者の `preferred_language`**
+（API リクエストの言語ではない）。詳細は [i18n.md §6–7](i18n.md#6-push-notificationphase-5)。
 
 ## DRIVER (P4) ✅
 

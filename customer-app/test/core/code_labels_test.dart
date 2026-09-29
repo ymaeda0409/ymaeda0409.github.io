@@ -28,6 +28,7 @@ const serverErrorCodes = [
   'DELIVERY_PIN_INVALID',
   'PAYMENT_FAILED',
   'PAYMENT_REQUIRED',
+  'PAYMENT_NOT_REQUIRED',
 ];
 
 const statuses = [

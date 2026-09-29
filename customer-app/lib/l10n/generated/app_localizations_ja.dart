@@ -516,4 +516,45 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get vehicle_car => '車';
+
+  @override
+  String get payment_title => 'お支払い';
+
+  @override
+  String get payment_amount => 'お支払い金額';
+
+  @override
+  String get payment_phone_label => 'モバイルマネーの電話番号';
+
+  @override
+  String payment_pay_with(String method) {
+    return '$methodで支払う';
+  }
+
+  @override
+  String get payment_waiting => 'お使いの電話に届く確認画面で、PINを入力して支払いを承認してください。';
+
+  @override
+  String get payment_retry => 'もう一度試す';
+
+  @override
+  String get payment_received => 'お支払いを確認しました';
+
+  @override
+  String get payment_pay_now => '今すぐ支払う';
+
+  @override
+  String get payment_status_pending => '支払い待ち';
+
+  @override
+  String get payment_status_paid => '支払済み';
+
+  @override
+  String get payment_status_failed => '支払い失敗';
+
+  @override
+  String get payment_status_refunded => '返金済み';
+
+  @override
+  String get error_payment_not_required => 'この注文はオンライン決済の必要がありません。';
 }

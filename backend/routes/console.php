@@ -10,3 +10,4 @@ Artisan::command('inspire', function () {
 
 // Expired delivery offers move on to the next driver; waiting orders are re-offered.
 Schedule::command('deliveries:dispatch')->everyMinute()->withoutOverlapping();
+Schedule::command('orders:expire-unpaid')->everyMinute()->withoutOverlapping();

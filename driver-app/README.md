@@ -27,6 +27,13 @@ flutter run --dart-define=API_BASE_URL=http://10.0.2.2:8000/api   # Android エ�
 | 12 | Delivery History | `features/delivery/history_screen.dart` |
 | 13 | Language Settings | `features/language/language_screen.dart`（`users.preferred_language` にも同期） |
 
+## Push 通知
+
+新しい配達依頼（`DRIVER_NEW_DELIVERY`）はライダーの言語で Push 送信されます。端末登録は顧客アプリと同じ
+`PushTokenSource` / `DeviceRegistrar`（ログイン後に登録、ログアウトで削除）。Firebase を使う手順は
+[customer-app/README.md](../customer-app/README.md#push-通知firebase) を参照（`pushTokenSourceProvider` を上書き）。
+依頼の取得はポーリング（10 秒）でも行うため、Push がなくても配達は可能です。
+
 ## 通信の弱い環境への対策
 
 * **現在の配送を端末に保存**（再起動・圏外でも表示を継続）。

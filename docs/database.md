@@ -260,17 +260,17 @@ index: (store_id, status), (franchise_id, created_at), (customer_id, created_at)
 `driver_id`, `order_id` nullable, `latitude`, `longitude`, `recorded_at`（端末時刻, オフライン再送対応）, `created_at`
 
 ### payments (P5)
-`order_id`, `method`, `gateway`（`fake`, `paychangu`）, `status`, `amount`, `currency`, `gateway_reference` unique nullable, `payload` json, `paid_at`
+`order_id`, `method`, `gateway`（`fake`, `paychangu`）, `status`（`PENDING/PAID/FAILED/REFUNDED`）, `amount`, `currency`, `phone`, `reference` unique（自社採番, ゲートウェイの tx_ref）, `gateway_reference` nullable, `failure_code`, `payload` json, `paid_at`, `refunded_at`
 
 ### notification_templates (P5)
 `code`（`ORDER_CONFIRMED`）, `channel`（`PUSH/SMS/EMAIL`）, unique(code, channel)
-→ `notification_template_translations(template_id, locale, title, body)`
+`is_active` → `notification_template_translations(template_id, locale FK, title, body)`
 
 ### device_tokens (P5)
 `user_id`, `token` unique, `platform`, `app`（`customer/driver`）, `last_seen_at`
 
 ### notification_logs (P5)
-`user_id`, `channel`, `template_code`, `locale`, `status`, `provider_message_id`, `error`, `created_at`
+`user_id`, `order_id` nullable, `channel`, `template_code`, `locale`（実際に使われた言語）, `status`（`SENT/QUEUED/FAILED`）, `error`, `created_at`
 
 ### settings (P6)
 `scope_type`（`GLOBAL/ORGANIZATION/FRANCHISE/STORE`）, `scope_id` nullable, `key`, `value` json, unique(scope_type, scope_id, key)

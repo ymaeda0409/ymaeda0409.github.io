@@ -8,6 +8,8 @@ import 'package:malawi_bento_customer/features/location/address.dart';
 import 'package:malawi_bento_customer/features/location/address_repository.dart';
 import 'package:malawi_bento_customer/features/orders/order.dart';
 import 'package:malawi_bento_customer/features/orders/tracking.dart';
+import 'package:malawi_bento_customer/features/payment/payment.dart';
+import 'package:malawi_bento_customer/features/payment/payment_screen.dart';
 
 import '../helpers.dart';
 
@@ -25,11 +27,14 @@ const _home = Address(
   isDefault: true,
 );
 
-Map<String, dynamic> _orderJson({String status = 'NEW'}) => {
+Map<String, dynamic> _orderJson({
+  String status = 'NEW',
+  String paymentMethod = 'CASH',
+}) => {
   'id': 42,
   'order_number': 'LLW-CENTRAL-260929-0001',
   'status': status,
-  'payment_method': 'CASH',
+  'payment_method': paymentMethod,
   'payment_status': 'PENDING',
   'currency': 'MWK',
   'subtotal': 700000,
@@ -74,8 +79,12 @@ class FakeOrderRepository implements OrderRepository {
   }
 
   @override
-  Future<Order> detail(int id) async =>
-      Order.fromJson(_orderJson(status: status));
+  Future<Order> detail(int id) async => Order.fromJson(
+    _orderJson(
+      status: status,
+      paymentMethod: placed?.paymentMethod.code ?? 'CASH',
+    ),
+  );
 
   @override
   Future<List<Order>> list() async => [
@@ -94,6 +103,30 @@ class FakeOrderRepository implements OrderRepository {
   @override
   Future<Order> cancel(int id) async =>
       Order.fromJson(_orderJson(status: status = 'CANCELLED'));
+}
+
+class FakePaymentRepository implements PaymentRepository {
+  final List<String> statuses = ['PENDING', 'PENDING', 'PAID'];
+  String? phone;
+
+  Payment _payment(String status) => Payment(
+    id: 5,
+    status: status,
+    method: 'AIRTEL_MONEY',
+    amount: 850000,
+    currency: 'MWK',
+    phone: phone,
+  );
+
+  @override
+  Future<Payment> start(int orderId, String? phone) async {
+    this.phone = phone;
+    return _payment(statuses.removeAt(0));
+  }
+
+  @override
+  Future<Payment> status(int paymentId) async =>
+      _payment(statuses.length > 1 ? statuses.removeAt(0) : statuses.first);
 }
 
 class FakeAddressRepository implements AddressRepository {
@@ -255,5 +288,74 @@ void main() {
     expect(find.text('配達状況'), findsOneWidget);
     expect(find.textContaining('バイク'), findsOneWidget);
     expect(find.textContaining('あと 1.0 km'), findsOneWidget);
+  });
+
+  testWidgets('mobile money: order → approve on phone → paid → PIN shown', (
+    tester,
+  ) async {
+    final payments = FakePaymentRepository();
+    final orders = FakeOrderRepository();
+    final container = await pumpApp(
+      tester,
+      prefs: {'locale': 'en', ..._located},
+      token: 'token',
+      overrides: [
+        orderRepositoryProvider.overrideWithValue(orders),
+        addressRepositoryProvider.overrideWithValue(FakeAddressRepository()),
+        paymentRepositoryProvider.overrideWithValue(payments),
+        paymentPollIntervalProvider.overrideWithValue(
+          const Duration(milliseconds: 100),
+        ),
+      ],
+    );
+    await container
+        .read(sessionProvider.notifier)
+        .signIn(
+          'token',
+          const AppUser(
+            id: 1,
+            phone: '+265991234567',
+            role: 'CUSTOMER',
+            preferredLanguage: 'en',
+          ),
+        );
+    final fake = FakeCatalogRepository(() => 'en');
+    await container
+        .read(cartProvider.notifier)
+        .add(
+          store: fake.store,
+          product: fake.productFor('en'),
+          options: const [],
+          quantity: 2,
+        );
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Cart'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Checkout'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Airtel Money'));
+    await tester.pumpAndSettle();
+    await tester.scrollUntilVisible(find.text('Place Order'), 200);
+    await tester.tap(find.text('Place Order'));
+    await tester.pumpAndSettle();
+
+    expect(orders.placed!.paymentMethod, PaymentMethod.airtelMoney);
+    expect(find.text('Payment'), findsOneWidget);
+    await tester.tap(find.text('Pay with Airtel Money'));
+    await tester.pump();
+    expect(
+      find.text('Check your phone and approve the payment with your PIN.'),
+      findsOneWidget,
+    );
+    expect(payments.phone, '0991234567');
+
+    await tester.pump(const Duration(milliseconds: 250));
+    await tester.pumpAndSettle();
+    expect(
+      find.text('4821'),
+      findsOneWidget,
+      reason: 'order complete screen with PIN after payment',
+    );
   });
 }
