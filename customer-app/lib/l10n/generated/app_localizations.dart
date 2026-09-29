@@ -927,6 +927,90 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{latitude}, {longitude}'**
   String location_coordinates(String latitude, String longitude);
+
+  /// Canonical key: nav.orders
+  ///
+  /// In en, this message translates to:
+  /// **'Orders'**
+  String get nav_orders;
+
+  /// Canonical key: order.complete_title
+  ///
+  /// In en, this message translates to:
+  /// **'Thank you! Your order has been placed.'**
+  String get order_complete_title;
+
+  /// Canonical key: order.number_label
+  ///
+  /// In en, this message translates to:
+  /// **'Order number'**
+  String get order_number_label;
+
+  /// Canonical key: order.pin_label
+  ///
+  /// In en, this message translates to:
+  /// **'Delivery PIN'**
+  String get order_pin_label;
+
+  /// Canonical key: order.pin_hint
+  ///
+  /// In en, this message translates to:
+  /// **'Tell this PIN to the rider when your food arrives.'**
+  String get order_pin_hint;
+
+  /// Canonical key: order.view
+  ///
+  /// In en, this message translates to:
+  /// **'View order'**
+  String get order_view;
+
+  /// Canonical key: order.history_title
+  ///
+  /// In en, this message translates to:
+  /// **'Orders'**
+  String get order_history_title;
+
+  /// Canonical key: order.history_empty
+  ///
+  /// In en, this message translates to:
+  /// **'No orders yet'**
+  String get order_history_empty;
+
+  /// Canonical key: order.detail_title
+  ///
+  /// In en, this message translates to:
+  /// **'Order details'**
+  String get order_detail_title;
+
+  /// Canonical key: order.cancel
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel order'**
+  String get order_cancel;
+
+  /// Canonical key: order.cancel_confirm
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel this order?'**
+  String get order_cancel_confirm;
+
+  /// Canonical key: order.ordered_at
+  ///
+  /// In en, this message translates to:
+  /// **'Ordered {time}'**
+  String order_ordered_at(String time);
+
+  /// Canonical key: order.status_title
+  ///
+  /// In en, this message translates to:
+  /// **'Status'**
+  String get order_status_title;
+
+  /// Canonical key: error.payment_required
+  ///
+  /// In en, this message translates to:
+  /// **'This order has not been paid yet.'**
+  String get error_payment_required;
 }
 
 class _AppLocalizationsDelegate

@@ -40,6 +40,7 @@
 | 422 | `OUT_OF_DELIVERY_AREA` | 配送エリア外 (P3) |
 | 422 | `PRODUCT_NOT_AVAILABLE` | 販売停止・在庫切れ (P3) |
 | 422 | `INVALID_STATUS_TRANSITION` | 注文ステータス遷移不可 (P3) |
+| 422 | `PAYMENT_REQUIRED` | Mobile Money 未払い注文の厨房受付 (P3) |
 | 422 | `DELIVERY_PIN_INVALID` | PIN 不一致 (P4) |
 | 422 | `PAYMENT_FAILED` | 決済失敗 (P5) |
 | 429 | `TOO_MANY_REQUESTS` | レート制限（OTP 再送待ち含む） |
@@ -149,23 +150,47 @@
 
 ## ORDER (P3)
 
-| Method | Path | 説明 |
-|---|---|---|
-| POST | /orders | `{ store_id, delivery_address_id, payment_method, scheduled_at?, items:[{product_id, quantity, option_ids:[]}] }` → Server 側で金額再計算・エリア判定・PIN 生成 |
-| GET | /orders | 自分の注文 |
-| GET | /orders/{id} | 詳細（snapshot） |
-| POST | /orders/{id}/cancel | NEW/CONFIRMED のみ |
-| GET | /orders/{id}/tracking | `{ status, driver: { latitude, longitude, updated_at }, timeline: [...] }` (P5) |
+| Method | Path | Auth | Phase | 説明 |
+|---|---|---|---|---|
+| POST | /orders/quote | 任意 | ✅ | `{ store_id, delivery_address_id \| latitude+longitude, items }` → サーバー計算の金額（注文と同じロジック） |
+| POST | /orders | CUSTOMER | ✅ | `{ store_id, delivery_address_id, payment_method, scheduled_at?, items:[{product_id, quantity, option_ids:[]}] }` → 金額再計算・エリア判定・在庫減算・PIN 生成 |
+| GET | /orders | CUSTOMER | ✅ | 自分の注文（新しい順, ページネーション） |
+| GET | /orders/{id} | CUSTOMER | ✅ | 詳細（snapshot 名称・金額、timeline、PIN は本人のみ） |
+| POST | /orders/{id}/cancel | CUSTOMER | ✅ | NEW / CONFIRMED のみ（在庫を戻す） |
+| GET | /orders/{id}/tracking | CUSTOMER | P5 | `{ status, driver: { latitude, longitude, updated_at }, timeline: [...] }` |
+
+```json
+// POST /orders  (Accept-Language: ja) → 201
+{ "success": true, "data": {
+  "id": 1, "order_number": "LLW-CENTRAL-260929-0001", "status": "NEW", "payment_status": "PENDING",
+  "payment_method": "CASH", "currency": "MWK", "subtotal": 800000, "delivery_fee": 150000,
+  "service_fee": 0, "discount": 0, "total": 950000, "delivery_pin": "7919",
+  "items": [ { "name": "チキン弁当", "quantity": 2, "unit_price": 350000, "option_amount": 50000, "total": 800000,
+               "options": [ { "name": "大盛り", "price": 50000 } ] } ],
+  "timeline": [ { "status": "NEW", "at": "2026-09-29T17:10:00+00:00" } ] } }
+```
+
+* 金額は常にサーバーで計算（クライアント送信の価格は無視）。店舗価格上書き（store_products.price）を適用。
+* オプションは商品に属し有効であること、グループの min/max を満たすこと（違反は `VALIDATION_FAILED` + `fields.items.N.option_ids`）。
+* 販売停止・在庫不足は `PRODUCT_NOT_AVAILABLE`（`fields.items.N.product_id`）、エリア外は `OUT_OF_DELIVERY_AREA`、
+  営業時間外（予約時は予約時刻で判定）は `STORE_NOT_AVAILABLE`。
+* 注文番号: `{店舗コード}-{yymmdd(店舗TZ)}-{当日連番4桁}`。
 
 ## KITCHEN / ADMIN ORDERS (P3)
 
-| Method | Path | 説明 |
-|---|---|---|
-| GET | /admin/orders?status= | スコープ内の注文 |
-| POST | /admin/orders/{id}/accept | NEW → CONFIRMED |
-| POST | /admin/orders/{id}/start-cooking | CONFIRMED → COOKING |
-| POST | /admin/orders/{id}/ready | COOKING → READY_FOR_PICKUP（→ Driver 割当開始） |
-| POST | /admin/orders/{id}/cancel | |
+| Method | Path | Permission | Phase | 説明 |
+|---|---|---|---|---|
+| GET | /admin/orders?status[]=&store_id= | orders.view | ✅ | スコープ内の注文（新しい順） |
+| GET | /admin/orders?board=kitchen | orders.view | ✅ | 厨房ボード: NEW / CONFIRMED / COOKING / READY_FOR_PICKUP を古い順 |
+| GET | /admin/orders/{id} | orders.view | ✅ | 詳細。商品名は **閲覧スタッフの言語** で返し、`name_snapshot` に注文時の名称 |
+| POST | /admin/orders/{id}/accept | kitchen.operate | ✅ | NEW → CONFIRMED（Mobile Money 未払いは `PAYMENT_REQUIRED`） |
+| POST | /admin/orders/{id}/start-cooking | kitchen.operate | ✅ | CONFIRMED → COOKING |
+| POST | /admin/orders/{id}/ready | kitchen.operate | ✅ | COOKING → READY_FOR_PICKUP（`OrderStatusChanged` イベント → P4 で Driver 割当） |
+| POST | /admin/orders/{id}/cancel | kitchen.operate | ✅ | `{ reason_code? }`（大文字コード）。在庫を戻す |
+
+遷移不可は `INVALID_STATUS_TRANSITION`（422）。二重タップ・複数スタッフ同時操作は行ロックで直列化。
+
+厨房画面: `GET /kitchen`（Vue SPA, スタッフトークン認証, 10 秒ポーリング, 新規注文で通知音）。
 
 ## PAYMENT (P5)
 

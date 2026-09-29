@@ -6,10 +6,12 @@ import '../../core/format/money.dart';
 import '../../core/providers.dart';
 import '../../core/ui/widgets.dart';
 import '../cart/cart.dart';
+import '../cart/cart_screen.dart';
 import '../cart/cart_summary.dart';
 import '../location/address.dart';
 import '../location/address_repository.dart';
 import '../location/delivery_location_controller.dart';
+import '../orders/order_providers.dart';
 import 'order_repository.dart';
 
 /// 10 Checkout: address, payment method, delivery time (ASAP / scheduled), summary.
@@ -45,14 +47,14 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
   Future<void> _placeOrder(Address address) async {
     setState(() => _busy = true);
     try {
-      final id = await ref.read(orderRepositoryProvider).place(PlaceOrderRequest(
+      final order = await ref.read(orderRepositoryProvider).place(PlaceOrderRequest(
             cart: ref.read(cartProvider),
             addressId: address.id,
             paymentMethod: _payment,
             scheduledAt: _scheduledAt,
           ));
       await ref.read(cartProvider.notifier).clear();
-      if (mounted) context.go('/orders/$id/complete?payment=${_payment.code}');
+      if (mounted) context.go('/orders/${order.id}/complete');
     } catch (e) {
       if (mounted) showError(context, e);
     } finally {
@@ -68,6 +70,9 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
     final addresses = ref.watch(addressesProvider);
     final address = _selectedAddress(addresses.value ?? const []);
     final phone = ref.watch(sessionProvider).user?.phone;
+    // Server-side validation + totals before the customer commits.
+    final quote = ref.watch(checkoutQuoteProvider(address?.id));
+    final quoteOk = address != null && quote.hasValue && quote.value != null;
 
     return Scaffold(
       appBar: AppBar(title: Text(l.checkout_title)),
@@ -125,13 +130,22 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
               for (final line in cart.lines)
                 ListTile(
                   dense: true,
-                  title: Text(line.name),
+                  title: Text(localizedLine(ref, line, cart.storeId!).name),
                   leading: Text('${line.quantity}×', style: theme.textTheme.titleMedium),
                   trailing: Text(formatMoney(line.total, cart.currency, context.locale)),
                 ),
             ]),
           ),
-          const CartSummary(),
+          quote.when(
+            loading: () => const LoadingView(),
+            error: (e, _) => ErrorView(error: e, onRetry: () => ref.invalidate(checkoutQuoteProvider(address?.id))),
+            data: (q) => q == null
+                ? const CartSummary()
+                : CartSummary(
+                    currency: q.currency,
+                    totals: CartTotals(subtotal: q.subtotal, deliveryFee: q.deliveryFee, serviceFee: q.serviceFee, discount: q.discount),
+                  ),
+          ),
           const SizedBox(height: 8),
           Text(l.checkout_estimate_note, style: theme.textTheme.bodySmall),
         ],
@@ -140,7 +154,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: FilledButton(
-            onPressed: _busy || address == null || cart.isEmpty ? null : () => _placeOrder(address),
+            onPressed: _busy || !quoteOk || cart.isEmpty ? null : () => _placeOrder(address),
             child: _busy
                 ? const SizedBox.square(dimension: 22, child: CircularProgressIndicator(strokeWidth: 2))
                 : Text(l.order_place_order),

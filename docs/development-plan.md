@@ -50,15 +50,22 @@
 **PHASE 3 で接続するもの**: Checkout の「注文する」は `POST /api/orders` を呼ぶ実装済みだが、API は PHASE 3 で追加。
 11 Payment / 12 Order Complete / 13 Tracking / 14–15 Order History・Detail は PHASE 3・5。
 
-## PHASE 3 — Order / Kitchen
+## PHASE 3 — Order / Kitchen ✅
 
-* orders, order_items, order_item_options, order_status_histories マイグレーション
-* `OrderPricingService`（小計・オプション・配送料・サービス料・割引・合計; サーバー側で再計算）
-* `OrderService::place()`（エリア判定、在庫減算、スナップショット、Delivery PIN 生成、order_number 採番）
-* `OrderStatus::canTransitionTo()` による遷移制御 + 履歴
-* Kitchen 画面（Laravel Blade + Vue 3, vue-i18n）: NEW / COOKING / READY、ACCEPT / START COOKING / READY
-* Customer App の Checkout/Order Complete/History を接続
-* テスト: 注文作成、金額計算、ステータス遷移、他 FC の注文不可視
+| 項目 | 内容 |
+|---|---|
+| DB | orders, order_items, order_item_options, order_status_histories（driver_id の FK は P4） |
+| 金額 | `OrderPricingService`: 店舗価格・オプション（所属/有効/min-max 検証）・配送料（ゾーン）・サービス料（`SERVICE_FEE`）・割引・合計。`POST /orders/quote` で事前表示 |
+| 注文 | `OrderService::place()`: 住所所有・エリア判定・営業時間（予約は予約時刻）・在庫ロック/減算・名称スナップショット（注文言語）・PIN・注文番号採番（店舗行ロック） |
+| 状態 | `OrderStatus::allowedTransitions()` を唯一の遷移表に、`OrderStatusService` がロック・タイムスタンプ・履歴・在庫戻し・`OrderStatusChanged` イベント |
+| 厨房 | `/kitchen` Vue 3 + vue-i18n（en/ny/ja JSON）。NEW / COOKING / READY の 3 列、ACCEPT ORDER / START COOKING / READY、スタッフ言語で商品名、10 秒ポーリング + 通知音 |
+| 顧客アプリ | Orders タブ、12 Order Complete（番号 + PIN）、14 History、15 Detail（タイムライン・20 秒更新・キャンセル）、Checkout はサーバー見積もりで検証 |
+| テスト | Backend 119（注文作成・金額・スナップショット・エリア外・在庫・オプション規則・遷移・支払い要件・他 FC 不可視・厨房言語）、Vue 12、Flutter 43 |
+
+**結果**: 実環境で「顧客アプリ（Web ビルド, ja）で OTP ログイン → 見積もり → 注文 → 注文完了（PIN 表示）→
+厨房画面（ny → ja 切替）で受付 → 調理開始 → 準備完了」を Chromium で確認。タイムライン `NEW → CONFIRMED → COOKING → READY_FOR_PICKUP`。
+
+**修正したバグ**: 予約日時（+02:00 付き）が UTC 変換されずに保存されていた（テストで検出）、チェックアウトの商品名が追加時の言語のままだった。
 
 ## PHASE 4 — Driver App / Assignment / GPS / Delivery
 

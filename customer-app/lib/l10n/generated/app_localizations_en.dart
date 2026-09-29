@@ -461,4 +461,49 @@ class AppLocalizationsEn extends AppLocalizations {
   String location_coordinates(String latitude, String longitude) {
     return '$latitude, $longitude';
   }
+
+  @override
+  String get nav_orders => 'Orders';
+
+  @override
+  String get order_complete_title => 'Thank you! Your order has been placed.';
+
+  @override
+  String get order_number_label => 'Order number';
+
+  @override
+  String get order_pin_label => 'Delivery PIN';
+
+  @override
+  String get order_pin_hint =>
+      'Tell this PIN to the rider when your food arrives.';
+
+  @override
+  String get order_view => 'View order';
+
+  @override
+  String get order_history_title => 'Orders';
+
+  @override
+  String get order_history_empty => 'No orders yet';
+
+  @override
+  String get order_detail_title => 'Order details';
+
+  @override
+  String get order_cancel => 'Cancel order';
+
+  @override
+  String get order_cancel_confirm => 'Cancel this order?';
+
+  @override
+  String order_ordered_at(String time) {
+    return 'Ordered $time';
+  }
+
+  @override
+  String get order_status_title => 'Status';
+
+  @override
+  String get error_payment_required => 'This order has not been paid yet.';
 }

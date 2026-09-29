@@ -15,26 +15,30 @@ final cartTotalsProvider = Provider<CartTotals>((ref) {
 });
 
 class CartSummary extends ConsumerWidget {
-  const CartSummary({super.key});
+  const CartSummary({super.key, this.totals, this.currency});
+
+  /// Server quote when available; otherwise the local estimate is shown.
+  final CartTotals? totals;
+  final String? currency;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l = context.l10n;
-    final totals = ref.watch(cartTotalsProvider);
-    final currency = ref.watch(cartProvider).currency;
-    String money(int v) => formatMoney(v, currency, context.locale);
+    final CartTotals shown = totals ?? ref.watch<CartTotals>(cartTotalsProvider);
+    final code = currency ?? ref.watch(cartProvider).currency;
+    String money(int v) => formatMoney(v, code, context.locale);
 
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            _Row(l.cart_subtotal, money(totals.subtotal)),
-            _Row(l.cart_delivery_fee, money(totals.deliveryFee)),
-            _Row(l.cart_service_fee, money(totals.serviceFee)),
-            if (totals.discount > 0) _Row(l.cart_discount, money(-totals.discount)),
+            _Row(l.cart_subtotal, money(shown.subtotal)),
+            _Row(l.cart_delivery_fee, money(shown.deliveryFee)),
+            _Row(l.cart_service_fee, money(shown.serviceFee)),
+            if (shown.discount > 0) _Row(l.cart_discount, money(-shown.discount)),
             const Divider(height: 24),
-            _Row(l.cart_total, money(totals.total), emphasize: true),
+            _Row(l.cart_total, money(shown.total), emphasize: true),
           ],
         ),
       ),

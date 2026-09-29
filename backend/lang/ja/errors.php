@@ -15,6 +15,10 @@ return [
     'OTP_EXPIRED' => '認証コードの有効期限が切れました。もう一度送信してください。',
     'LANGUAGE_NOT_SUPPORTED' => 'この言語には対応していません。',
     'STORE_NOT_AVAILABLE' => 'この店舗は現在注文を受け付けていません。',
+    'OUT_OF_DELIVERY_AREA' => 'この住所は店舗の配達エリア外です。',
+    'PRODUCT_NOT_AVAILABLE' => '一部の商品が現在ご注文いただけません。',
+    'INVALID_STATUS_TRANSITION' => '注文の現在の状態ではこの操作はできません。',
+    'PAYMENT_REQUIRED' => '支払いが完了するまで注文を受け付けられません。',
     'TOO_MANY_REQUESTS' => '試行回数が多すぎます。しばらく待ってから再度お試しください。',
     'SERVER_ERROR' => 'エラーが発生しました。もう一度お試しください。',
 ];

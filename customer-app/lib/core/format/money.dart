@@ -36,6 +36,9 @@ String formatDateTime(DateTime value, Locale locale) {
   return DateFormat.yMMMd(tag).add_Hm().format(value.toLocal());
 }
 
+String formatTime(DateTime value, Locale locale) =>
+    DateFormat.Hm(FormattingLocale.of(locale)).format(value.toLocal());
+
 String formatDecimal(num value, Locale locale, {int digits = 5}) =>
     NumberFormat.decimalPatternDigits(locale: FormattingLocale.of(locale), decimalDigits: digits)
         .format(value);

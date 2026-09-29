@@ -60,6 +60,18 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Order pricing (minor units)
+    |--------------------------------------------------------------------------
+    | Flat service fee per order; moves to per-store settings in PHASE 6.
+    */
+    'pricing' => [
+        'service_fee' => (int) env('SERVICE_FEE', 0),
+        'max_item_quantity' => 20,
+        'schedule_max_days' => 7,
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Geo / delivery
     |--------------------------------------------------------------------------
     | Upper bound used for the SQL bounding-box prefilter in store search.

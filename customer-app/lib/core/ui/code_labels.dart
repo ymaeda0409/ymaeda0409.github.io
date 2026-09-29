@@ -25,6 +25,7 @@ String errorText(AppLocalizations l, Object? error) {
     'invalid_status_transition' => l.error_invalid_status_transition,
     'delivery_pin_invalid' => l.error_delivery_pin_invalid,
     'payment_failed' => l.error_payment_failed,
+    'payment_required' => l.error_payment_required,
     'too_many_requests' => l.error_too_many_requests,
     'server_error' => l.error_server_error,
     'network' => l.error_network,

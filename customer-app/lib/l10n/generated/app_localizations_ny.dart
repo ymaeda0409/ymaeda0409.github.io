@@ -460,4 +460,48 @@ class AppLocalizationsNy extends AppLocalizations {
   String location_coordinates(String latitude, String longitude) {
     return '$latitude, $longitude';
   }
+
+  @override
+  String get nav_orders => 'Ma oda';
+
+  @override
+  String get order_complete_title => 'Zikomo! Oda yanu yatumizidwa.';
+
+  @override
+  String get order_number_label => 'Nambala ya oda';
+
+  @override
+  String get order_pin_label => 'PIN yolandirira';
+
+  @override
+  String get order_pin_hint => 'Uzani wobweretsa PIN iyi chakudya chikafika.';
+
+  @override
+  String get order_view => 'Onani oda';
+
+  @override
+  String get order_history_title => 'Ma oda';
+
+  @override
+  String get order_history_empty => 'Palibe ma oda pakadali pano';
+
+  @override
+  String get order_detail_title => 'Zambiri za oda';
+
+  @override
+  String get order_cancel => 'Letsani oda';
+
+  @override
+  String get order_cancel_confirm => 'Letsani oda iyi?';
+
+  @override
+  String order_ordered_at(String time) {
+    return 'Oda: $time';
+  }
+
+  @override
+  String get order_status_title => 'Momwe ilili';
+
+  @override
+  String get error_payment_required => 'Oda iyi sinalipiridwe.';
 }

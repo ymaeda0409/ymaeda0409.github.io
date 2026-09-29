@@ -16,6 +16,10 @@ return [
     'OTP_EXPIRED' => 'Nambala yotsimikizira yatha nthawi. Chonde pemphani ina.',
     'LANGUAGE_NOT_SUPPORTED' => 'Chilankhulo ichi sichikupezeka.',
     'STORE_NOT_AVAILABLE' => 'Sitolo iyi sikulandira ma oda pakali pano.',
+    'OUT_OF_DELIVERY_AREA' => 'Adilesi iyi ili kunja kwa dera lobweretsera la sitolo.',
+    'PRODUCT_NOT_AVAILABLE' => 'Zinthu zina sizikupezekanso.',
+    'INVALID_STATUS_TRANSITION' => 'Izi sizingatheke pa gawo lomwe oda ili pano.',
+    'PAYMENT_REQUIRED' => 'Oda singalandiridwe mpaka italipiridwa.',
     'TOO_MANY_REQUESTS' => 'Mwayesa kambirimbiri. Dikirani pang\'ono kenako yesaninso.',
     'SERVER_ERROR' => 'Pachitika vuto. Chonde yesaninso.',
 ];

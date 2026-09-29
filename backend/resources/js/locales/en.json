@@ -1,0 +1,69 @@
+{
+    "language_name": "English",
+    "common": {
+        "retry": "Retry",
+        "cancel": "Cancel",
+        "confirm": "Confirm",
+        "logout": "Sign out",
+        "language": "Language",
+        "last_updated": "Updated {time}",
+        "offline": "Connection lost. Retrying…"
+    },
+    "login": {
+        "title": "Staff sign in",
+        "email": "E-mail",
+        "password": "Password",
+        "submit": "Sign in"
+    },
+    "kitchen": {
+        "title": "Kitchen",
+        "column_new": "NEW",
+        "column_cooking": "COOKING",
+        "column_ready": "READY",
+        "accept": "ACCEPT ORDER",
+        "start_cooking": "START COOKING",
+        "ready": "READY",
+        "cancel_order": "Cancel order",
+        "cancel_confirm": "Cancel order {number}?",
+        "empty": "No orders",
+        "minutes_ago": "just now | {n} min ago | {n} min ago",
+        "scheduled_for": "Scheduled for {time}",
+        "awaiting_payment": "Waiting for payment",
+        "waiting_rider": "Waiting for rider",
+        "items": "no items | 1 item | {n} items",
+        "note": "Note",
+        "new_order_alert": "New order received"
+    },
+    "payment": {
+        "CASH": "Cash on delivery",
+        "AIRTEL_MONEY": "Airtel Money",
+        "TNM_MPAMBA": "TNM Mpamba",
+        "paid": "Paid"
+    },
+    "status": {
+        "NEW": "New",
+        "CONFIRMED": "Accepted",
+        "COOKING": "Cooking",
+        "READY_FOR_PICKUP": "Ready for pickup",
+        "RIDER_ASSIGNED": "Rider assigned",
+        "PICKED_UP": "Picked up",
+        "ON_THE_WAY": "On the way",
+        "ARRIVED": "Arrived",
+        "DELIVERED": "Delivered",
+        "CANCELLED": "Cancelled",
+        "FAILED_DELIVERY": "Delivery failed",
+        "UNKNOWN": "Unknown"
+    },
+    "errors": {
+        "INVALID_CREDENTIALS": "The e-mail or password is incorrect.",
+        "UNAUTHENTICATED": "Please sign in again.",
+        "FORBIDDEN": "You do not have permission to do this.",
+        "RESOURCE_NOT_FOUND": "This order no longer exists.",
+        "INVALID_STATUS_TRANSITION": "The order has already moved on. The board has been refreshed.",
+        "PAYMENT_REQUIRED": "This order has not been paid yet.",
+        "VALIDATION_FAILED": "Please check the information you entered.",
+        "TOO_MANY_REQUESTS": "Too many attempts. Please wait a moment.",
+        "NETWORK": "No connection to the server.",
+        "UNKNOWN": "Something went wrong. Please try again."
+    }
+}

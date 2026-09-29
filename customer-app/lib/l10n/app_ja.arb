@@ -137,5 +137,19 @@
   "order_status_cancelled": "キャンセル",
   "order_status_failed_delivery": "配達失敗",
   "order_status_unknown": "不明",
-  "location_coordinates": "{latitude}, {longitude}"
+  "location_coordinates": "{latitude}, {longitude}",
+  "nav_orders": "注文履歴",
+  "order_complete_title": "ありがとうございます！ご注文を受け付けました。",
+  "order_number_label": "注文番号",
+  "order_pin_label": "受け取りPIN",
+  "order_pin_hint": "商品を受け取る際に、このPINを配達員に伝えてください。",
+  "order_view": "注文を見る",
+  "order_history_title": "注文履歴",
+  "order_history_empty": "まだ注文はありません",
+  "order_detail_title": "注文詳細",
+  "order_cancel": "注文をキャンセル",
+  "order_cancel_confirm": "この注文をキャンセルしますか？",
+  "order_ordered_at": "注文日時：{time}",
+  "order_status_title": "ステータス",
+  "error_payment_required": "この注文はまだ支払われていません。"
 }

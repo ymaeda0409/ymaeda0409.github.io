@@ -219,7 +219,7 @@ Laravel 標準の `cache`, `jobs`, `failed_jobs`, `sessions`, `password_reset_to
 ### orders (P3)
 | column | type | note |
 |---|---|---|
-| order_number | varchar(20) unique | `LLW-260929-0001` 形式 |
+| order_number | varchar(40) unique | `{店舗コード}-{yymmdd}-{連番}` 例 `LLW-CENTRAL-260929-0001` |
 | organization_id, franchise_id, store_id, kitchen_id | FK | テナント |
 | customer_id | FK users | |
 | delivery_address_id | FK user_addresses nullable | 参照用（住所は下記にスナップショット） |
@@ -236,7 +236,7 @@ Laravel 標準の `cache`, `jobs`, `failed_jobs`, `sessions`, `password_reset_to
 | delivery_pin | varchar(4) | ハッシュ化不要（短命・顧客表示用）。検証試行回数を制限 |
 | locale | varchar(10) | 注文時の言語 |
 | scheduled_at | nullable | 予約注文 |
-| ordered_at, confirmed_at, accepted_at, cooking_started_at, ready_at, assigned_at, picked_up_at, arrived_at, delivered_at, cancelled_at | timestamp nullable | |
+| ordered_at, accepted_at (= CONFIRMED), cooking_started_at, ready_at, assigned_at, picked_up_at, arrived_at, delivered_at, cancelled_at | timestamp nullable | 遷移先ステータス → 列は `OrderStatus::timestampColumn()` |
 | cancel_reason_code | varchar(40) nullable | コードのみ |
 
 index: (store_id, status), (franchise_id, created_at), (customer_id, created_at)

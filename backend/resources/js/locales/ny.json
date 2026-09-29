@@ -1,0 +1,69 @@
+{
+    "language_name": "Chichewa",
+    "common": {
+        "retry": "Yesaninso",
+        "cancel": "Letsani",
+        "confirm": "Tsimikizirani",
+        "logout": "Tulukani",
+        "language": "Chilankhulo",
+        "last_updated": "Zasinthidwa {time}",
+        "offline": "Kulumikizana kwatha. Tikuyesanso…"
+    },
+    "login": {
+        "title": "Kulowa kwa ogwira ntchito",
+        "email": "Imelo",
+        "password": "Mawu achinsinsi",
+        "submit": "Lowani"
+    },
+    "kitchen": {
+        "title": "Khitchini",
+        "column_new": "ZATSOPANO",
+        "column_cooking": "ZIKUPHIKIDWA",
+        "column_ready": "ZAKONZEKA",
+        "accept": "LANDIRANI ODA",
+        "start_cooking": "YAMBANI KUPHIKA",
+        "ready": "ZAKONZEKA",
+        "cancel_order": "Letsani oda",
+        "cancel_confirm": "Letsani oda {number}?",
+        "empty": "Palibe ma oda",
+        "minutes_ago": "pompano | mphindi {n} zapitazo | mphindi {n} zapitazo",
+        "scheduled_for": "Nthawi yokonzedwa: {time}",
+        "awaiting_payment": "Tikudikira malipiro",
+        "waiting_rider": "Tikudikira wobweretsa",
+        "items": "palibe chinthu | chinthu 1 | zinthu {n}",
+        "note": "Uthenga",
+        "new_order_alert": "Oda yatsopano yafika"
+    },
+    "payment": {
+        "CASH": "Ndalama pofika",
+        "AIRTEL_MONEY": "Airtel Money",
+        "TNM_MPAMBA": "TNM Mpamba",
+        "paid": "Yalipiridwa"
+    },
+    "status": {
+        "NEW": "Yatsopano",
+        "CONFIRMED": "Yalandiridwa",
+        "COOKING": "Ikuphikidwa",
+        "READY_FOR_PICKUP": "Yakonzeka kutengedwa",
+        "RIDER_ASSIGNED": "Wobweretsa wapezeka",
+        "PICKED_UP": "Yatengedwa",
+        "ON_THE_WAY": "Ili pa njira",
+        "ARRIVED": "Wafika",
+        "DELIVERED": "Yaperekedwa",
+        "CANCELLED": "Yathetsedwa",
+        "FAILED_DELIVERY": "Kubweretsa sikunatheke",
+        "UNKNOWN": "Sizikudziwika"
+    },
+    "errors": {
+        "INVALID_CREDENTIALS": "Imelo kapena mawu achinsinsi si olondola.",
+        "UNAUTHENTICATED": "Chonde lowaninso.",
+        "FORBIDDEN": "Mulibe chilolezo chochita izi.",
+        "RESOURCE_NOT_FOUND": "Oda iyi palibenso.",
+        "INVALID_STATUS_TRANSITION": "Oda yasintha kale. Tasinthanso mndandanda.",
+        "PAYMENT_REQUIRED": "Oda iyi sinalipiridwe.",
+        "VALIDATION_FAILED": "Chonde onaninso zomwe mwalemba.",
+        "TOO_MANY_REQUESTS": "Mwayesa kambirimbiri. Dikirani pang'ono.",
+        "NETWORK": "Palibe kulumikizana ndi seva.",
+        "UNKNOWN": "Pachitika vuto. Chonde yesaninso."
+    }
+}

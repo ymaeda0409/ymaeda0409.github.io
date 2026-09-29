@@ -52,6 +52,21 @@ class CartScreen extends ConsumerWidget {
   }
 }
 
+/// Names follow the current UI language: re-resolved from the (cached) product detail;
+/// the name stored when the item was added is the offline fallback.
+({String name, List<String> options}) localizedLine(WidgetRef ref, CartLine line, int storeId) {
+  final product = ref.watch(productDetailProvider((storeId: storeId, productId: line.productId))).value;
+  if (product == null) return (name: line.name, options: line.optionNames);
+  return (
+    name: product.name,
+    options: [
+      for (final g in product.optionGroups)
+        for (final o in g.options)
+          if (line.optionIds.contains(o.id)) o.name,
+    ],
+  );
+}
+
 class CartLineTile extends ConsumerWidget {
   const CartLineTile({super.key, required this.line, required this.storeId});
 
@@ -60,17 +75,7 @@ class CartLineTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // Names follow the current UI language: re-resolved from the (cached) product
-    // detail; the name stored at add-time is the offline fallback.
-    final product = ref.watch(productDetailProvider((storeId: storeId, productId: line.productId))).value;
-    final name = product?.name ?? line.name;
-    final options = product == null
-        ? line.optionNames
-        : [
-            for (final g in product.optionGroups)
-              for (final o in g.options)
-                if (line.optionIds.contains(o.id)) o.name,
-          ];
+    final (:name, :options) = localizedLine(ref, line, storeId);
     final cart = ref.read(cartProvider.notifier);
     final currency = ref.watch(cartProvider).currency;
 

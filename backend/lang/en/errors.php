@@ -17,6 +17,10 @@ return [
     'OTP_EXPIRED' => 'The verification code has expired. Please request a new one.',
     'LANGUAGE_NOT_SUPPORTED' => 'This language is not supported.',
     'STORE_NOT_AVAILABLE' => 'This store is not accepting orders right now.',
+    'OUT_OF_DELIVERY_AREA' => 'This address is outside the store\'s delivery area.',
+    'PRODUCT_NOT_AVAILABLE' => 'One or more items are no longer available.',
+    'INVALID_STATUS_TRANSITION' => 'This action is not possible for the order\'s current status.',
+    'PAYMENT_REQUIRED' => 'The order cannot be accepted until it has been paid.',
     'TOO_MANY_REQUESTS' => 'Too many attempts. Please wait a moment and try again.',
     'SERVER_ERROR' => 'Something went wrong. Please try again.',
 ];

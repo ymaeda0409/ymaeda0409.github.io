@@ -447,4 +447,48 @@ class AppLocalizationsJa extends AppLocalizations {
   String location_coordinates(String latitude, String longitude) {
     return '$latitude, $longitude';
   }
+
+  @override
+  String get nav_orders => '注文履歴';
+
+  @override
+  String get order_complete_title => 'ありがとうございます！ご注文を受け付けました。';
+
+  @override
+  String get order_number_label => '注文番号';
+
+  @override
+  String get order_pin_label => '受け取りPIN';
+
+  @override
+  String get order_pin_hint => '商品を受け取る際に、このPINを配達員に伝えてください。';
+
+  @override
+  String get order_view => '注文を見る';
+
+  @override
+  String get order_history_title => '注文履歴';
+
+  @override
+  String get order_history_empty => 'まだ注文はありません';
+
+  @override
+  String get order_detail_title => '注文詳細';
+
+  @override
+  String get order_cancel => '注文をキャンセル';
+
+  @override
+  String get order_cancel_confirm => 'この注文をキャンセルしますか？';
+
+  @override
+  String order_ordered_at(String time) {
+    return '注文日時：$time';
+  }
+
+  @override
+  String get order_status_title => 'ステータス';
+
+  @override
+  String get error_payment_required => 'この注文はまだ支払われていません。';
 }

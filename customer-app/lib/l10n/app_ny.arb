@@ -137,5 +137,19 @@
   "order_status_cancelled": "Yathetsedwa",
   "order_status_failed_delivery": "Kubweretsa sikunatheke",
   "order_status_unknown": "Sizikudziwika",
-  "location_coordinates": "{latitude}, {longitude}"
+  "location_coordinates": "{latitude}, {longitude}",
+  "nav_orders": "Ma oda",
+  "order_complete_title": "Zikomo! Oda yanu yatumizidwa.",
+  "order_number_label": "Nambala ya oda",
+  "order_pin_label": "PIN yolandirira",
+  "order_pin_hint": "Uzani wobweretsa PIN iyi chakudya chikafika.",
+  "order_view": "Onani oda",
+  "order_history_title": "Ma oda",
+  "order_history_empty": "Palibe ma oda pakadali pano",
+  "order_detail_title": "Zambiri za oda",
+  "order_cancel": "Letsani oda",
+  "order_cancel_confirm": "Letsani oda iyi?",
+  "order_ordered_at": "Oda: {time}",
+  "order_status_title": "Momwe ilili",
+  "error_payment_required": "Oda iyi sinalipiridwe."
 }

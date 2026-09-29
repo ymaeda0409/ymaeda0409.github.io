@@ -5,8 +5,8 @@
 
 | ディレクトリ | 内容 | 状態 |
 |---|---|---|
-| [`backend/`](backend) | Laravel 13 REST API（+ 将来の Admin / Kitchen Web） | ✅ PHASE 1 |
-| [`customer-app/`](customer-app) | Flutter 顧客アプリ（en / ny / ja） | ✅ PHASE 2 |
+| [`backend/`](backend) | Laravel 13 REST API + Kitchen Web（Vue）（Admin Web は PHASE 6） | ✅ PHASE 1・3 |
+| [`customer-app/`](customer-app) | Flutter 顧客アプリ（en / ny / ja） | ✅ PHASE 2・3 |
 | [`driver-app/`](driver-app) | Flutter 配達員アプリ | PHASE 4 |
 | [`docs/`](docs) | 設計ドキュメント | ✅ |
 
@@ -25,7 +25,8 @@ docker compose up -d --build
 docker compose exec app composer install
 docker compose exec app php artisan key:generate
 docker compose exec app php artisan migrate --seed
-# API: http://localhost:8080/api/languages
+(cd backend && npm install && npm run build)   # 厨房画面の JS/CSS
+# API: http://localhost:8080/api/languages   厨房画面: http://localhost:8080/kitchen
 ```
 
 サービス: `app`（php-fpm）, `nginx`（:8080）, `queue`（Redis queue worker）, `postgres`（:5432）, `redis`（:6379）。
@@ -40,7 +41,8 @@ php artisan key:generate
 # .env の DB_* / REDIS_* を環境に合わせて編集
 createdb malawi_bento           # 例: PostgreSQL
 php artisan migrate --seed
-php artisan serve               # http://127.0.0.1:8000
+npm install && npm run build    # 厨房画面（Vue）のビルド
+php artisan serve               # http://127.0.0.1:8000  厨房画面: /kitchen
 php artisan queue:work          # SMS 等のキュー（別ターミナル）
 ```
 
@@ -60,6 +62,7 @@ MySQL を使う場合は `DB_CONNECTION=mysql`, `DB_PORT=3306` に変更（DB �
 | `GOOGLE_MAPS_API_KEY` | Google Maps |
 | `FIREBASE_PROJECT_ID`, `FIREBASE_CREDENTIALS` | FCM（PHASE 5） |
 | `FILESYSTEM_DISK`, `AWS_*`, `AWS_ENDPOINT` | S3 互換ストレージ |
+| `SERVICE_FEE` | 注文ごとのサービス料（minor units, 既定 0） |
 
 ---
 
@@ -99,7 +102,11 @@ curl -s $B/languages
 curl -s "$B/stores/available?latitude=-13.97&longitude=33.78" -H 'Accept-Language: ny'
 curl -s "$B/products?store_id=1" -H 'Accept-Language: ja'
 curl -s -X POST $B/auth/send-otp -H 'Content-Type: application/json' -d '{"phone":"0991234567"}'
-curl -s -X POST $B/auth/verify-otp -H 'Content-Type: application/json' -d '{"phone":"0991234567","code":"123456"}'
+TOKEN=$(curl -s -X POST $B/auth/verify-otp -H 'Content-Type: application/json' \
+  -d '{"phone":"0991234567","code":"123456"}' | php -r 'echo json_decode(stream_get_contents(STDIN))->data->token;')
+curl -s -X POST $B/orders -H "Authorization: Bearer $TOKEN" -H 'Content-Type: application/json' -H 'Accept-Language: ja' \
+  -d '{"store_id":1,"delivery_address_id":1,"payment_method":"CASH","items":[{"product_id":1,"quantity":2,"option_ids":[2]}]}'
+# → 厨房画面 http://127.0.0.1:8000/kitchen に kitchen@malawibento.test / password でログインして受付・調理・準備完了
 ```
 
 ---
@@ -114,11 +121,13 @@ vendor/bin/pint --test           # コードスタイル
 # PostgreSQL で実行（例: DB malawi_bento_test を作成済み）
 DB_CONNECTION=pgsql DB_HOST=127.0.0.1 DB_DATABASE=malawi_bento_test \
 DB_USERNAME=bento DB_PASSWORD=secret php artisan test
+
+npm test                         # 厨房画面（Vitest: 翻訳 JSON 整合性・ボタン/状態・エラー表示）
 ```
 
-GitHub Actions: `backend.yml`（Pint + SQLite + PostgreSQL）、`customer-app.yml`（gen-l10n 差分・analyze・test）。
+GitHub Actions: `backend.yml`（Pint + SQLite + PostgreSQL + Vitest + Vite build）、`customer-app.yml`（gen-l10n 差分・analyze・test）。
 
-PHASE 1 のテスト範囲（90 tests）:
+Backend テスト範囲（PHPUnit 119 tests + Vitest 12 tests）:
 
 | 観点 | テスト |
 |---|---|
@@ -131,8 +140,12 @@ PHASE 1 のテスト範囲（90 tests）:
 | 商品翻訳取得 | `Feature/CatalogTest`, `Feature/Admin/CatalogManagementTest` |
 | 翻訳ファイル整合性 | `Unit/TranslationFilesTest`, `Unit/SmsMessageTest` |
 | 営業時間（タイムゾーン） | `Unit/StoreHoursTest` |
+| 注文作成・金額計算・在庫・スナップショット | `Feature/OrderTest` |
+| 注文ステータス遷移 | `Unit/OrderStatusTest`, `Feature/Admin/KitchenOrderTest` |
+| 厨房の FC 分離・スタッフ言語表示 | `Feature/Admin/KitchenOrderTest` |
+| 厨房画面 UI | `resources/js/kitchen/kitchen.test.js` |
 
-注文作成・金額計算・ステータス遷移・Driver 割当・Delivery PIN のテストは、それぞれの機能を実装する PHASE 3〜4 で追加する。
+Driver 割当・Delivery PIN のテストは PHASE 4 で追加する。
 
 ---
 
@@ -149,6 +162,7 @@ PHASE 1 のテスト範囲（90 tests）:
    （`errors.php`, `sms.php` は必須、`validation.php` は未訳キーが英語にフォールバック）。
    `php artisan test --filter=TranslationFilesTest` でキー欠落を検出。
 3. **アプリ翻訳**: `customer-app/lib/l10n/app_en.arb` → `app_tum.arb` を作成し `flutter gen-l10n`（`language_native_name` に自言語名を入れる）。`flutter test` の ARB 整合性テストで欠落を検出。
+   厨房画面は `backend/resources/js/locales/en.json` → `tum.json` を作成し `resources/js/shared/i18n.js` の `messages` に登録（`npm test` で欠落検出）。
 4. **DB コンテンツ**: 管理 API / 管理画面で商品・カテゴリ・オプションの `translations.tum` を入力。
 5. アプリ配布後に `PUT /api/admin/languages/{id}` で `is_active: true`。
 
@@ -162,7 +176,7 @@ PHASE 1 のテスト範囲（90 tests）:
 cd customer-app
 flutter pub get
 flutter run --dart-define=API_BASE_URL=http://10.0.2.2:8000/api   # Android エミュレータ
-flutter test                                                       # 39 tests
+flutter test                                                       # 43 tests
 ```
 
 詳細は [customer-app/README.md](customer-app/README.md)。アプリの翻訳追加は `lib/l10n/app_en.arb` をコピーして `app_<code>.arb` を作成 → `flutter gen-l10n`。
@@ -171,6 +185,6 @@ flutter test                                                       # 39 tests
 
 ## 6. 開発フェーズ
 
-[docs/development-plan.md](docs/development-plan.md) 参照。現在 **PHASE 2 完了**（PHASE 1: Backend 基盤 / PHASE 2: Customer App の言語選択〜商品〜カート〜チェックアウト画面）。
+[docs/development-plan.md](docs/development-plan.md) 参照。現在 **PHASE 3 完了**（PHASE 1: Backend 基盤 / PHASE 2: Customer App / PHASE 3: 注文・厨房画面・注文ステータス・注文履歴）。次は PHASE 4（Driver App・配達員割当・GPS・Delivery PIN）。
 
 > **Chichewa 訳について**: 同梱の Chichewa 文言は初版です。リリース前にネイティブ話者のレビューを受けてください（翻訳ファイル / 管理画面の修正のみで反映できます）。

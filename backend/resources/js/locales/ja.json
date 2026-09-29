@@ -1,0 +1,69 @@
+{
+    "language_name": "日本語",
+    "common": {
+        "retry": "再試行",
+        "cancel": "キャンセル",
+        "confirm": "確定",
+        "logout": "ログアウト",
+        "language": "言語",
+        "last_updated": "{time} 更新",
+        "offline": "接続が切れました。再接続しています…"
+    },
+    "login": {
+        "title": "スタッフログイン",
+        "email": "メールアドレス",
+        "password": "パスワード",
+        "submit": "ログイン"
+    },
+    "kitchen": {
+        "title": "厨房",
+        "column_new": "新規",
+        "column_cooking": "調理中",
+        "column_ready": "準備完了",
+        "accept": "注文を受け付ける",
+        "start_cooking": "調理開始",
+        "ready": "準備完了",
+        "cancel_order": "注文をキャンセル",
+        "cancel_confirm": "注文 {number} をキャンセルしますか？",
+        "empty": "注文はありません",
+        "minutes_ago": "たった今 | {n}分前 | {n}分前",
+        "scheduled_for": "予約：{time}",
+        "awaiting_payment": "支払い待ち",
+        "waiting_rider": "配達員待ち",
+        "items": "0点 | 1点 | {n}点",
+        "note": "メモ",
+        "new_order_alert": "新しい注文が入りました"
+    },
+    "payment": {
+        "CASH": "代金引換",
+        "AIRTEL_MONEY": "Airtel Money",
+        "TNM_MPAMBA": "TNM Mpamba",
+        "paid": "支払済み"
+    },
+    "status": {
+        "NEW": "新規",
+        "CONFIRMED": "受付済み",
+        "COOKING": "調理中",
+        "READY_FOR_PICKUP": "受け取り待ち",
+        "RIDER_ASSIGNED": "配達員決定",
+        "PICKED_UP": "受け取り済み",
+        "ON_THE_WAY": "配達中",
+        "ARRIVED": "到着",
+        "DELIVERED": "配達完了",
+        "CANCELLED": "キャンセル",
+        "FAILED_DELIVERY": "配達失敗",
+        "UNKNOWN": "不明"
+    },
+    "errors": {
+        "INVALID_CREDENTIALS": "メールアドレスまたはパスワードが正しくありません。",
+        "UNAUTHENTICATED": "もう一度ログインしてください。",
+        "FORBIDDEN": "この操作を行う権限がありません。",
+        "RESOURCE_NOT_FOUND": "この注文は存在しません。",
+        "INVALID_STATUS_TRANSITION": "注文の状態が既に変わっています。一覧を更新しました。",
+        "PAYMENT_REQUIRED": "この注文はまだ支払われていません。",
+        "VALIDATION_FAILED": "入力内容を確認してください。",
+        "TOO_MANY_REQUESTS": "試行回数が多すぎます。しばらくお待ちください。",
+        "NETWORK": "サーバーに接続できません。",
+        "UNKNOWN": "エラーが発生しました。もう一度お試しください。"
+    }
+}

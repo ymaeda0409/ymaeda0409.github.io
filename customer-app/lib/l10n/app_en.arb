@@ -604,5 +604,66 @@
         "type": "String"
       }
     }
+  },
+  "nav_orders": "Orders",
+  "@nav_orders": {
+    "description": "Canonical key: nav.orders"
+  },
+  "order_complete_title": "Thank you! Your order has been placed.",
+  "@order_complete_title": {
+    "description": "Canonical key: order.complete_title"
+  },
+  "order_number_label": "Order number",
+  "@order_number_label": {
+    "description": "Canonical key: order.number_label"
+  },
+  "order_pin_label": "Delivery PIN",
+  "@order_pin_label": {
+    "description": "Canonical key: order.pin_label"
+  },
+  "order_pin_hint": "Tell this PIN to the rider when your food arrives.",
+  "@order_pin_hint": {
+    "description": "Canonical key: order.pin_hint"
+  },
+  "order_view": "View order",
+  "@order_view": {
+    "description": "Canonical key: order.view"
+  },
+  "order_history_title": "Orders",
+  "@order_history_title": {
+    "description": "Canonical key: order.history_title"
+  },
+  "order_history_empty": "No orders yet",
+  "@order_history_empty": {
+    "description": "Canonical key: order.history_empty"
+  },
+  "order_detail_title": "Order details",
+  "@order_detail_title": {
+    "description": "Canonical key: order.detail_title"
+  },
+  "order_cancel": "Cancel order",
+  "@order_cancel": {
+    "description": "Canonical key: order.cancel"
+  },
+  "order_cancel_confirm": "Cancel this order?",
+  "@order_cancel_confirm": {
+    "description": "Canonical key: order.cancel_confirm"
+  },
+  "order_ordered_at": "Ordered {time}",
+  "@order_ordered_at": {
+    "description": "Canonical key: order.ordered_at",
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "order_status_title": "Status",
+  "@order_status_title": {
+    "description": "Canonical key: order.status_title"
+  },
+  "error_payment_required": "This order has not been paid yet.",
+  "@error_payment_required": {
+    "description": "Canonical key: error.payment_required"
   }
 }

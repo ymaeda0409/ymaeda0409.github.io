@@ -18,10 +18,13 @@ import 'features/checkout/checkout_screen.dart';
 import 'features/language/language_selection_screen.dart';
 import 'features/location/address_form_screen.dart';
 import 'features/location/delivery_location_screen.dart';
+import 'features/orders/order_complete_screen.dart';
+import 'features/orders/order_detail_screen.dart';
+import 'features/orders/order_history_screen.dart';
 import 'features/splash/splash_screen.dart';
 
 /// Routes that require a signed-in customer.
-const _protected = ['/checkout', '/account/addresses', '/location/new'];
+const _protected = ['/checkout', '/account/addresses', '/location/new', '/orders/'];
 
 final routerProvider = Provider<GoRouter>((ref) {
   final refresh = ValueNotifier<int>(0);
@@ -46,6 +49,7 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (context, state, shell) => _MainShell(shell: shell),
         branches: [
           StatefulShellBranch(routes: [GoRoute(path: '/home', builder: (_, _) => const HomeScreen())]),
+          StatefulShellBranch(routes: [GoRoute(path: '/orders', builder: (_, _) => const OrderHistoryScreen())]),
           StatefulShellBranch(routes: [GoRoute(path: '/cart', builder: (_, _) => const CartScreen())]),
           StatefulShellBranch(routes: [GoRoute(path: '/account', builder: (_, _) => const AccountScreen())]),
         ],
@@ -61,6 +65,14 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (_, state) => ProductDetailScreen(productId: int.parse(state.pathParameters['id']!)),
       ),
       GoRoute(path: '/checkout', builder: (_, _) => const CheckoutScreen()),
+      GoRoute(
+        path: '/orders/:id',
+        builder: (_, state) => OrderDetailScreen(orderId: int.parse(state.pathParameters['id']!)),
+      ),
+      GoRoute(
+        path: '/orders/:id/complete',
+        builder: (_, state) => OrderCompleteScreen(orderId: int.parse(state.pathParameters['id']!)),
+      ),
       GoRoute(
         path: '/login',
         builder: (_, state) => PhoneScreen(from: state.uri.queryParameters['from']),
@@ -94,6 +106,7 @@ class _MainShell extends ConsumerWidget {
         onDestinationSelected: (i) => shell.goBranch(i, initialLocation: i == shell.currentIndex),
         destinations: [
           NavigationDestination(icon: const Icon(Icons.storefront_outlined), label: l.nav_home),
+          NavigationDestination(icon: const Icon(Icons.receipt_long_outlined), label: l.nav_orders),
           NavigationDestination(
             icon: Badge(isLabelVisible: count > 0, label: Text('$count'), child: const Icon(Icons.shopping_bag_outlined)),
             label: l.nav_cart,
