@@ -30,6 +30,7 @@
 | 403 | `ACCOUNT_DISABLED` | 無効化されたユーザー |
 | 404 | `RESOURCE_NOT_FOUND` | 存在しない / 他テナント |
 | 404 | `ROUTE_NOT_FOUND` | 不明な URL |
+| 405 | `METHOD_NOT_ALLOWED` | 許可されていない HTTP メソッド |
 | 409 | `CONFLICT` | 状態競合 |
 | 422 | `VALIDATION_FAILED` | バリデーション（`fields` にフィールド別メッセージ） |
 | 422 | `OTP_INVALID` | OTP 不一致 |
@@ -88,7 +89,7 @@
 | GET | /languages | — | ✅ | 有効言語一覧 |
 | GET | /account | ✔ | ✅ | プロフィール |
 | PUT | /account | ✔ | ✅ | `{ name?, email? }` |
-| PUT | /account/language | ✔ | ✅ | `{ language: "ja" }` → preferred_language 更新（監査ログ） |
+| PUT | /account/language | ✔ | ✅ | `{ language: "ja" }` → preferred_language 更新（監査ログ）。無効な言語は 422 `LANGUAGE_NOT_SUPPORTED` |
 
 ```json
 // GET /languages
@@ -235,4 +236,5 @@ POST /admin/products
   ]
 }
 ```
-`translations.<default locale>.name` は必須。未知の Locale キーは `LANGUAGE_NOT_SUPPORTED`（422）。
+`translations.<default locale>.name` は必須。未知の Locale キーは `VALIDATION_FAILED`（`fields.translations`）。
+管理系の書き込みは **バリデーションより先に認可** を行う（権限なし → 403、他テナントのレコード → 404）。

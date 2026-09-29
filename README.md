@@ -1,0 +1,163 @@
+# Malawi Bento — Delivery Platform
+
+マラウイ向け Uber Eats 型の弁当デリバリーサービス。1 店舗（Lilongwe）から始め、FC 方式で全国・多業態へ拡張できる
+**マルチテナント（Organization → Franchise → Store → Kitchen → Delivery Zone）** かつ **多言語（en / ny / ja）前提** の設計。
+
+| ディレクトリ | 内容 | 状態 |
+|---|---|---|
+| [`backend/`](backend) | Laravel 13 REST API（+ 将来の Admin / Kitchen Web） | ✅ PHASE 1 |
+| [`customer-app/`](customer-app) | Flutter 顧客アプリ | PHASE 2 |
+| [`driver-app/`](driver-app) | Flutter 配達員アプリ | PHASE 4 |
+| [`docs/`](docs) | 設計ドキュメント | ✅ |
+
+設計ドキュメント: [architecture](docs/architecture.md) · [database](docs/database.md) · [i18n](docs/i18n.md) ·
+[screens](docs/screens.md) · [api](docs/api.md) · [development-plan](docs/development-plan.md) · [design-review](docs/design-review.md)
+
+---
+
+## 1. 環境構築
+
+### A. Docker（推奨）
+
+```bash
+cp backend/.env.example backend/.env
+docker compose up -d --build
+docker compose exec app composer install
+docker compose exec app php artisan key:generate
+docker compose exec app php artisan migrate --seed
+# API: http://localhost:8080/api/languages
+```
+
+サービス: `app`（php-fpm）, `nginx`（:8080）, `queue`（Redis queue worker）, `postgres`（:5432）, `redis`（:6379）。
+
+### B. ローカル（PHP 8.3+ / Composer / PostgreSQL 16 / Redis）
+
+```bash
+cd backend
+composer install
+cp .env.example .env
+php artisan key:generate
+# .env の DB_* / REDIS_* を環境に合わせて編集
+createdb malawi_bento           # 例: PostgreSQL
+php artisan migrate --seed
+php artisan serve               # http://127.0.0.1:8000
+php artisan queue:work          # SMS 等のキュー（別ターミナル）
+```
+
+MySQL を使う場合は `DB_CONNECTION=mysql`, `DB_PORT=3306` に変更（DB 固有 SQL は使っていない）。
+
+### 主な `.env` 項目
+
+| Key | 説明 |
+|---|---|
+| `DB_*` | PostgreSQL / MySQL 接続 |
+| `REDIS_*`, `CACHE_STORE`, `QUEUE_CONNECTION` | Redis キャッシュ / キュー |
+| `DEFAULT_LOCALE` | 既定・フォールバック言語（`en`） |
+| `DEFAULT_CURRENCY` | `MWK` |
+| `OTP_TEST_MODE`, `OTP_TEST_CODE` | 開発用固定 OTP（`123456`）。**`APP_ENV=production` では常に無効** |
+| `SMS_DRIVER` | `log`（開発）。本番ドライバは `SmsGateway` 実装を追加 |
+| `PAYMENT_GATEWAY`, `PAYCHANGU_*` | 決済（PHASE 5, 開発は `fake`） |
+| `GOOGLE_MAPS_API_KEY` | Google Maps |
+| `FIREBASE_PROJECT_ID`, `FIREBASE_CREDENTIALS` | FCM（PHASE 5） |
+| `FILESYSTEM_DISK`, `AWS_*`, `AWS_ENDPOINT` | S3 互換ストレージ |
+
+---
+
+## 2. Migration / Seed
+
+```bash
+cd backend
+php artisan migrate              # マイグレーション
+php artisan db:seed              # シード（冪等: 何度実行しても重複しない）
+php artisan migrate:fresh --seed # 全削除して作り直し（開発用）
+```
+
+Seed 内容:
+
+* Organization **Malawi Bento** → Franchise **Lilongwe Franchise** → Store **Lilongwe Central Store** → Kitchen **Lilongwe Central Kitchen** → Delivery Zone（10 km, 基本 MK 1,500 / 3 km, 以降 MK 300/km）
+* Languages: English（既定）, Chichewa, 日本語
+* 商品: Chicken / Beef / Fish / Vegetarian Bento, Water, Coke（en / ny / ja 翻訳、弁当は「ご飯の量」オプション付き）
+
+### テストアカウント（開発専用）
+
+| Role | ログイン |
+|---|---|
+| SUPER_ADMIN | `superadmin@malawibento.test` / `password` |
+| FRANCHISE_ADMIN | `franchise.admin@malawibento.test` / `password` |
+| STORE_MANAGER | `store.manager@malawibento.test` / `password` |
+| KITCHEN_STAFF | `kitchen@malawibento.test` / `password`（preferred_language = ny） |
+| DRIVER ×3 | `+265990000001` (en), `+265990000002` (ny), `+265990000003` (ja) — OTP `123456` |
+| CUSTOMER | `+265991234567` — OTP `123456`（住所 1 件登録済み） |
+
+スタッフは `POST /api/auth/login`、電話番号ユーザーは `POST /api/auth/send-otp` → `POST /api/auth/verify-otp`。
+
+### 動作確認例
+
+```bash
+B=http://127.0.0.1:8000/api
+curl -s $B/languages
+curl -s "$B/stores/available?latitude=-13.97&longitude=33.78" -H 'Accept-Language: ny'
+curl -s "$B/products?store_id=1" -H 'Accept-Language: ja'
+curl -s -X POST $B/auth/send-otp -H 'Content-Type: application/json' -d '{"phone":"0991234567"}'
+curl -s -X POST $B/auth/verify-otp -H 'Content-Type: application/json' -d '{"phone":"0991234567","code":"123456"}'
+```
+
+---
+
+## 3. テスト
+
+```bash
+cd backend
+php artisan test                 # SQLite in-memory（高速, 既定）
+vendor/bin/pint --test           # コードスタイル
+
+# PostgreSQL で実行（例: DB malawi_bento_test を作成済み）
+DB_CONNECTION=pgsql DB_HOST=127.0.0.1 DB_DATABASE=malawi_bento_test \
+DB_USERNAME=bento DB_PASSWORD=secret php artisan test
+```
+
+GitHub Actions（`.github/workflows/backend.yml`）で Pint + SQLite + PostgreSQL の両方を実行。
+
+PHASE 1 のテスト範囲（90 tests）:
+
+| 観点 | テスト |
+|---|---|
+| 認証 / OTP | `Feature/OtpAuthTest`（登録、試行回数制限、期限切れ、再送制限、本番で固定コード無効、スタッフログイン） |
+| 配送エリア判定・配送料 | `Unit/DeliveryFeeTest`, `Feature/StoreLocatorTest` |
+| 店舗検索 | `Feature/StoreLocatorTest`（距離順、Kitchen 起点、停止中の除外） |
+| 権限 | `Feature/Admin/PermissionTest` |
+| 他 FC データへのアクセス禁止 | `Feature/Admin/TenantIsolationTest` |
+| 言語切替 / Fallback / Accept-Language | `Feature/LocaleTest` |
+| 商品翻訳取得 | `Feature/CatalogTest`, `Feature/Admin/CatalogManagementTest` |
+| 翻訳ファイル整合性 | `Unit/TranslationFilesTest`, `Unit/SmsMessageTest` |
+| 営業時間（タイムゾーン） | `Unit/StoreHoursTest` |
+
+注文作成・金額計算・ステータス遷移・Driver 割当・Delivery PIN のテストは、それぞれの機能を実装する PHASE 3〜4 で追加する。
+
+---
+
+## 4. 多言語ファイルの追加方法
+
+詳細は [docs/i18n.md §10](docs/i18n.md#10-言語追加手順例-tumbuka-tum)。例: Tumbuka (`tum`)
+
+1. **言語を登録**（無効状態で）
+   ```bash
+   curl -X POST $B/admin/languages -H "Authorization: Bearer <SUPER_ADMIN token>" -H 'Content-Type: application/json' \
+     -d '{"code":"tum","name":"Tumbuka","native_name":"Chitumbuka","is_active":false,"sort_order":4}'
+   ```
+2. **Backend 翻訳ファイル**: `backend/lang/en/` を `backend/lang/tum/` にコピーして翻訳
+   （`errors.php`, `sms.php` は必須、`validation.php` は未訳キーが英語にフォールバック）。
+   `php artisan test --filter=TranslationFilesTest` でキー欠落を検出。
+3. **アプリ翻訳**（PHASE 2 以降）: `lib/l10n/app_en.arb` → `app_tum.arb` を作成し `flutter gen-l10n`。
+4. **DB コンテンツ**: 管理 API / 管理画面で商品・カテゴリ・オプションの `translations.tum` を入力。
+5. アプリ配布後に `PUT /api/admin/languages/{id}` で `is_active: true`。
+
+コード中に言語コードを書いた分岐は存在しないため、上記以外の変更は不要。
+
+---
+
+## 5. 開発フェーズ
+
+[docs/development-plan.md](docs/development-plan.md) 参照。現在 **PHASE 1 完了**（Backend 基盤・DB・認証・FC 階層・言語/翻訳・商品・顧客・住所・管理 API）。
+
+> **Chichewa 訳について**: 同梱の Chichewa 文言は初版です。リリース前にネイティブ話者のレビューを受けてください（翻訳ファイル / 管理画面の修正のみで反映できます）。

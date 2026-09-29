@@ -25,6 +25,12 @@
 
 **完了条件**: `php artisan migrate:fresh --seed` が PostgreSQL で成功し、`php artisan test` が全件 green。
 
+**結果**: ✅ migrate:fresh --seed（PostgreSQL 16）成功、90 tests green（SQLite / PostgreSQL 両方）、Pint pass。
+手動確認: `php artisan serve` 上で languages / stores/available / products / OTP ログイン / 管理 API を 3 言語で curl 確認。
+
+**PHASE 1 で意図的に対象外としたもの**: スタッフユーザー管理 API（Seeder で作成、管理画面は PHASE 6）、
+本番 SMS ドライバ（`SmsGateway` 実装の追加のみで対応）、`drivers` テーブル（PHASE 4。DRIVER ロールのユーザーは作成済み）。
+
 ## PHASE 2 — Customer App（Flutter）
 
 * プロジェクト雛形、flavor（dev/prod）、`API_BASE_URL`
