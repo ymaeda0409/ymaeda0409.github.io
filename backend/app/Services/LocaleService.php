@@ -42,6 +42,19 @@ class LocaleService
         return $codes === [] ? [config('bento.default_locale')] : $codes;
     }
 
+    /**
+     * Every registered language, active or not. Content can be translated into a language
+     * before it is switched on for customers.
+     *
+     * @return list<string>
+     */
+    public function registeredLocales(): array
+    {
+        $codes = Language::query()->orderBy('sort_order')->orderBy('id')->pluck('code')->all();
+
+        return $codes === [] ? [config('bento.default_locale')] : $codes;
+    }
+
     public function isSupported(?string $locale): bool
     {
         return $locale !== null && in_array($locale, $this->supportedLocales(), true);

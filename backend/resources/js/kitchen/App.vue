@@ -3,9 +3,9 @@ import { onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { createApi, getToken, setToken } from '../shared/api';
 import { isSupported, rememberLocale } from '../shared/i18n';
-import LoginForm from './components/LoginForm.vue';
+import LoginForm from '../shared/components/LoginForm.vue';
 import KitchenBoard from './components/KitchenBoard.vue';
-import LanguageSwitcher from './components/LanguageSwitcher.vue';
+import LanguageSwitcher from '../shared/components/LanguageSwitcher.vue';
 
 const { locale, t } = useI18n();
 const user = ref(null);

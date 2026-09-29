@@ -1,9 +1,12 @@
 <script setup>
 import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { errorKey } from '../../shared/i18n';
+import { errorKey } from '../i18n';
 
-const props = defineProps({ api: { type: Object, required: true } });
+const props = defineProps({
+    api: { type: Object, required: true },
+    deviceName: { type: String, default: 'kitchen-web' },
+});
 const emit = defineEmits(['logged-in']);
 
 const { t, te } = useI18n();
@@ -19,7 +22,7 @@ async function submit() {
         const { data } = await props.api.post('/auth/login', {
             email: email.value,
             password: password.value,
-            device_name: 'kitchen-web',
+            device_name: props.deviceName,
         });
         emit('logged-in', data);
     } catch (e) {

@@ -90,4 +90,12 @@ class User extends Authenticatable implements HasLocalePreference
     {
         return $this->hasMany(UserAddress::class);
     }
+
+    /**
+     * Orders placed by this user as a customer.
+     */
+    public function orders(): HasMany
+    {
+        return $this->hasMany(Order::class, 'customer_id');
+    }
 }

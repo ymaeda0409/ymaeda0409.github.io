@@ -1,6 +1,6 @@
 <script setup>
 import { useI18n } from 'vue-i18n';
-import { messages } from '../../shared/i18n';
+import { messages } from '../i18n';
 
 defineProps({ modelValue: { type: String, required: true } });
 defineEmits(['update:modelValue']);

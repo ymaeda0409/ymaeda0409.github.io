@@ -28,7 +28,7 @@
 **結果**: ✅ migrate:fresh --seed（PostgreSQL 16）成功、90 tests green（SQLite / PostgreSQL 両方）、Pint pass。
 手動確認: `php artisan serve` 上で languages / stores/available / products / OTP ログイン / 管理 API を 3 言語で curl 確認。
 
-**PHASE 1 で意図的に対象外としたもの**: スタッフユーザー管理 API（Seeder で作成、管理画面は PHASE 6）、
+**PHASE 1 で意図的に対象外としたもの**: スタッフユーザー管理 API（Seeder で作成、PHASE 6 で追加済み）、
 本番 SMS ドライバ（`SmsGateway` 実装の追加のみで対応）、`drivers` テーブル（PHASE 4。DRIVER ロールのユーザーは作成済み）。
 
 ## PHASE 2 — Customer App（Flutter）✅
@@ -108,12 +108,29 @@ OTP ログイン → オンライン → 依頼受諾 → 受取 → 到着 → 
 **未検証・制約**: PayChangu アダプタは公開 API 仕様に基づくが実アカウントでの結合は未実施。FCM 送信は HTTP 形式をテストで確認済みだが、
 アプリ側は Firebase プロジェクトがないため既定で no-op（手順は customer-app/README）。実機での Push 受信は未確認。
 
-## PHASE 6 — Admin Dashboard / Sales / FC / Translation Management
+## PHASE 6 — Admin Dashboard / Sales / FC / Translation Management ✅
 
-* Admin SPA（Laravel + Vue 3 + vue-i18n）: Dashboard, Orders, Products（言語タブ）, Categories, Stores, Kitchens,
-  Franchises, Drivers, Customers, Delivery Zones, Sales, Translations, Languages, Settings
-* Sales 集計（期間・商品別・店舗別・FC 別）、スコープ別 Dashboard
-* テスト: 集計値、スコープ
+| 項目 | 内容 |
+|---|---|
+| Admin SPA | `/admin`（Vue 3 + vue-i18n, ハッシュルーティング, 厨房画面とログイン・API クライアント・言語切替を共有）。権限に応じてメニューを出し分け（同じアプリで本部・FC・店舗・厨房スタッフ） |
+| 画面 | Dashboard, Orders（一覧・詳細・取消）, Sales（期間・日/店舗/FC/商品/支払別・CSV）, Products（言語タブ + オプション編集）, Categories, Store menu & stock（売切れ・店舗価格・在庫）, Stores（営業時間・言語別文言）, Kitchens, Delivery Zones, Riders, Franchises, Staff, Customers, Translations, Languages, Settings, Audit log |
+| CRUD | `resources.js` にフィールド定義（型・必須・権限・表示条件）を置き、一覧/フォームは汎用コンポーネントで描画。ラベルはすべて `admin.fields.*` の翻訳キー |
+| 売上 | `SalesService`: DELIVERED かつ PAID、組織タイムゾーンの注文日で集計（DB 非依存）、FC 別ロイヤリティ、商品名は閲覧者の言語、CSV |
+| Dashboard | 本日の注文・売上、進行中の状態別件数、支払い待ち、オンライン配達員、営業中店舗、7 日推移、売れ筋（金額は sales.view のみ） |
+| FC / 人 | スタッフ管理（下位の役割のみ・自スコープのみ・無効化で即ログアウト）、顧客（スコープ内で注文した人だけ見える）|
+| 設定 | `settings` テーブル + `SettingsService`（STORE → FRANCHISE → ORGANIZATION → GLOBAL → config）。`service_fee` を注文金額、`delivery_offer_ttl_seconds` を配達オファーに接続 |
+| 翻訳管理 | 種類 × 言語のカバレッジ、未翻訳一覧、言語単位の更新（他言語は保持、既定言語の必須は空にできない） |
+| 権限 | `staff.manage`, `customers.view`, `settings.manage` を追加（FRANCHISE_ADMIN: 3 つとも、STORE_MANAGER: staff/customers） |
+| テスト | Backend 179（売上集計・日付境界・ロイヤリティ・商品名の言語・FC/店舗スコープ・CSV・Dashboard・スタッフ権限・顧客スコープ・設定の解決順・翻訳）、Vue 29（翻訳ファイル整合・ラベル網羅・メニュー権限・一覧/作成/エラー表示・言語タブ・売上・設定） |
+
+**結果**: 179 tests green（SQLite / PostgreSQL）、Vitest 29、Pint pass、Vite build。Chromium で実 API に接続し、本部管理者（ja）でダッシュボード・売上（商品別 = 「水」）、
+商品編集（ny, 言語タブ + オプション）、翻訳カバレッジ（ny）、設定を確認。FC 管理者でメニュー 15 項目（翻訳・言語なし）とスタッフ作成、厨房スタッフ（ny, 360px）で 6 項目・横スクロールなしを確認。
+コンソールエラーなし。
+
+**検出して直した問題**: 言語切替後もサーバー翻訳済みの商品名が前の言語のまま（ダッシュボード等で再取得するよう修正）、
+スタッフ API が `is_active` を返さず、編集画面で保存すると無効化されうる状態だった（レスポンスに追加しテストで固定）、作成直後の「保存しました」が消える。
+
+**制約**: 売上の日別集計はアプリ側で集計（数万件/期間までを想定。増えたら日次集計テーブルへ）、商品画像はURL入力（S3 アップロードは今後）。
 
 ---
 

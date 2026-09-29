@@ -98,6 +98,20 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:sanctum', 'role:staff'
     Route::get('audit-logs', [Admin\AuditLogController::class, 'index']);
 
     Route::apiResource('drivers', Admin\DriverController::class)->except('destroy');
+    Route::get('dashboard', Admin\DashboardController::class);
+    Route::get('sales', [Admin\SalesController::class, 'index']);
+    Route::get('customers', [Admin\CustomerController::class, 'index']);
+    Route::get('customers/{customer}', [Admin\CustomerController::class, 'show'])->whereNumber('customer');
+    Route::get('staff', [Admin\StaffController::class, 'index']);
+    Route::post('staff', [Admin\StaffController::class, 'store']);
+    Route::get('staff/{staff}', [Admin\StaffController::class, 'show'])->whereNumber('staff');
+    Route::put('staff/{staff}', [Admin\StaffController::class, 'update'])->whereNumber('staff');
+    Route::get('settings', [Admin\SettingController::class, 'index']);
+    Route::put('settings', [Admin\SettingController::class, 'update']);
+    Route::get('translations', [Admin\TranslationController::class, 'summary']);
+    Route::get('translations/{type}', [Admin\TranslationController::class, 'index']);
+    Route::put('translations/{type}/{id}', [Admin\TranslationController::class, 'update'])->whereNumber('id');
+
     Route::get('notification-templates', [Admin\NotificationTemplateController::class, 'index']);
     Route::put('notification-templates/{notificationTemplate}', [Admin\NotificationTemplateController::class, 'update']);
 

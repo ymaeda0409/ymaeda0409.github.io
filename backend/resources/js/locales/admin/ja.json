@@ -1,0 +1,278 @@
+{
+    "admin": {
+        "title": "Malawi Bento 管理画面",
+        "menu": "メニュー",
+        "no_access": "このアカウントで表示できる管理ページはありません。",
+        "yes": "はい",
+        "no": "いいえ",
+        "choose": "— 選択 —",
+        "all": "すべて",
+        "empty": "まだデータがありません。",
+        "back": "戻る",
+        "create": "新規作成",
+        "save": "保存",
+        "saved": "保存しました",
+        "delete": "削除",
+        "confirm_delete": "このデータを削除しますか？元に戻せません。",
+        "new_record": "新規: {name}",
+        "previous": "前へ",
+        "next": "次へ",
+        "page_of": "{page} / {total} ページ",
+        "nav_groups": {
+            "overview": "概要",
+            "catalog": "メニュー",
+            "operations": "運営",
+            "business": "FC・人",
+            "system": "システム"
+        },
+        "nav": {
+            "dashboard": "ダッシュボード",
+            "orders": "注文",
+            "sales": "売上",
+            "products": "商品",
+            "categories": "カテゴリ",
+            "store_products": "店舗メニュー・在庫",
+            "stores": "店舗",
+            "kitchens": "キッチン",
+            "delivery_zones": "配送エリア",
+            "drivers": "配達員",
+            "franchises": "フランチャイズ",
+            "staff": "スタッフ",
+            "customers": "顧客",
+            "translations": "翻訳",
+            "languages": "言語",
+            "settings": "設定",
+            "audit_logs": "監査ログ"
+        },
+        "fields": {
+            "code": "コード",
+            "name": "名前",
+            "translations": "名前",
+            "region": "地域",
+            "owner_name": "オーナー",
+            "phone": "電話番号",
+            "email": "メールアドレス",
+            "status": "状態",
+            "commission_rate": "ロイヤリティ率（%）",
+            "franchise_id": "フランチャイズ",
+            "city": "都市",
+            "address": "住所",
+            "latitude": "緯度",
+            "longitude": "経度",
+            "timezone": "タイムゾーン",
+            "is_accepting_orders": "注文受付中",
+            "is_active": "有効",
+            "is_open": "営業中",
+            "opening_hours": "営業時間",
+            "description": "説明",
+            "announcement": "お知らせ",
+            "title": "タイトル",
+            "body": "本文",
+            "store_id": "店舗",
+            "kitchen_id": "キッチン",
+            "base_fee": "基本配送料",
+            "base_distance_km": "基本料金に含む距離（km）",
+            "additional_fee_per_km": "追加 1km あたりの料金",
+            "max_delivery_distance_km": "最大配送距離（km）",
+            "image_url": "画像 URL",
+            "sort_order": "表示順",
+            "sku": "SKU",
+            "category_id": "カテゴリ",
+            "price": "価格",
+            "preparation_minutes": "調理時間（分）",
+            "is_featured": "おすすめ",
+            "option_groups": "オプション",
+            "min_select": "最小選択数",
+            "max_select": "最大選択数",
+            "preferred_language": "言語",
+            "vehicle_type": "車両",
+            "vehicle_number": "ナンバー",
+            "is_online": "オンライン",
+            "password": "パスワード",
+            "role": "役割",
+            "native_name": "その言語での名前",
+            "direction": "文字の向き",
+            "is_default": "既定の言語",
+            "order_number": "注文番号",
+            "ordered_at": "注文日時",
+            "customer": "顧客",
+            "payment": "支払い",
+            "total": "合計",
+            "subtotal": "商品小計",
+            "delivery_fee": "配送料",
+            "service_fee": "サービス料",
+            "gross_sales": "売上",
+            "orders": "注文数",
+            "average_order_value": "平均注文額",
+            "delivery_fees": "配送料",
+            "quantity": "数量",
+            "sales": "売上",
+            "commission": "ロイヤリティ",
+            "is_available": "販売中",
+            "base_price": "標準価格",
+            "store_price": "店舗価格",
+            "stock_quantity": "在庫",
+            "total_spent": "利用総額",
+            "last_order_at": "最終注文",
+            "created_at": "作成日時"
+        },
+        "enums": {
+            "role": {
+                "SUPER_ADMIN": "本部管理者",
+                "FRANCHISE_ADMIN": "FC 管理者",
+                "STORE_MANAGER": "店長",
+                "KITCHEN_STAFF": "キッチンスタッフ",
+                "DRIVER": "配達員",
+                "CUSTOMER": "顧客"
+            },
+            "franchise_status": {
+                "PENDING": "審査中",
+                "ACTIVE": "稼働中",
+                "SUSPENDED": "停止中"
+            },
+            "driver_status": {
+                "ACTIVE": "稼働中",
+                "SUSPENDED": "停止中"
+            },
+            "vehicle_type": {
+                "MOTORBIKE": "バイク",
+                "BICYCLE": "自転車",
+                "CAR": "車"
+            },
+            "direction": {
+                "ltr": "左から右",
+                "rtl": "右から左"
+            },
+            "payment_method": {
+                "CASH": "現金",
+                "AIRTEL_MONEY": "Airtel Money",
+                "TNM_MPAMBA": "TNM Mpamba"
+            },
+            "payment_status": {
+                "PENDING": "未払い",
+                "PAID": "支払い済み",
+                "FAILED": "失敗",
+                "REFUNDED": "返金済み"
+            }
+        },
+        "translations": {
+            "default": "既定",
+            "missing": "未翻訳",
+            "fallback_hint": "空欄の場合、お客様には既定の言語で表示されます。",
+            "content": "対象",
+            "target": "翻訳先の言語",
+            "missing_only": "未翻訳のみ",
+            "all_done": "すべて翻訳済みです。",
+            "types": {
+                "categories": "カテゴリ",
+                "products": "商品",
+                "option_groups": "オプショングループ",
+                "options": "オプション",
+                "stores": "店舗の文章",
+                "notification_templates": "通知（Push / SMS）"
+            },
+            "inactive": "未公開"
+        },
+        "hours": {
+            "always_open": "営業時間が未設定のため、常に営業中として扱われます。",
+            "opens": "開店",
+            "closes": "閉店",
+            "closed": "定休日",
+            "days": {
+                "mon": "月曜日",
+                "tue": "火曜日",
+                "wed": "水曜日",
+                "thu": "木曜日",
+                "fri": "金曜日",
+                "sat": "土曜日",
+                "sun": "日曜日"
+            }
+        },
+        "options": {
+            "none": "オプションはありません。",
+            "add_group": "オプショングループを追加",
+            "remove_group": "グループを削除",
+            "add_option": "オプションを追加",
+            "remove_option": "削除"
+        },
+        "dashboard": {
+            "sales_today": "本日の売上",
+            "completed_orders": "配達完了 {n} 件",
+            "orders_today": "本日の注文",
+            "in_progress": "{n} 件が進行中",
+            "drivers_online": "オンラインの配達員",
+            "awaiting_payment": "{n} 件が支払い待ち",
+            "stores_open": "営業中の店舗",
+            "active_orders": "進行中の注文",
+            "last_7_days": "過去 7 日間の売上",
+            "top_products": "売れ筋（7 日間）"
+        },
+        "sales": {
+            "quantity_n": "{n} 個",
+            "export_csv": "CSV 出力",
+            "from": "開始日",
+            "to": "終了日",
+            "last_n_days": "{n} 日間",
+            "group_by": "集計単位",
+            "groups": {
+                "day": "日別",
+                "store": "店舗別",
+                "franchise": "FC 別",
+                "product": "商品別",
+                "payment_method": "支払い方法別"
+            },
+            "cancelled": "キャンセル数",
+            "share": "構成比",
+            "definition": "売上 = 配達完了かつ支払い済みの注文（注文日基準、{timezone}）。"
+        },
+        "orders": {
+            "cancel": "注文をキャンセル",
+            "cancel_confirm": "注文 {number} をキャンセルしますか？支払い済みの場合は自動で返金されます。",
+            "timeline": "経過"
+        },
+        "store_products": {
+            "hint": "変更はすぐに反映されます。店舗価格が空欄なら標準価格、在庫が空欄なら無制限です。",
+            "on_sale": "販売中",
+            "sold_out": "売り切れ",
+            "unlimited": "無制限"
+        },
+        "customers": {
+            "search": "名前・電話番号で検索",
+            "recent_orders": "最近の注文"
+        },
+        "settings": {
+            "scope": "適用範囲",
+            "scopes": {
+                "GLOBAL": "全店舗",
+                "ORGANIZATION": "組織",
+                "FRANCHISE": "フランチャイズ",
+                "STORE": "店舗",
+                "DEFAULT": "システム既定値"
+            },
+            "keys": {
+                "service_fee": {
+                    "label": "注文ごとのサービス料",
+                    "help": "すべての注文の合計に加算されます。"
+                },
+                "delivery_offer_ttl_seconds": {
+                    "label": "配達依頼の応答時間（秒）",
+                    "help": "配達員がこの時間内に受けないと、次の配達員に依頼が移ります。"
+                }
+            },
+            "in_effect": "適用中: {value}（{source}）",
+            "clear_hint": "空欄にすると、より広い範囲の設定が使われます。"
+        },
+        "audit": {
+            "action": "操作",
+            "target": "対象",
+            "user": "実行者",
+            "before": "変更前",
+            "after": "変更後"
+        }
+    },
+    "errors": {
+        "RESOURCE_NOT_FOUND": "このデータは存在しません。",
+        "CONFLICT": "このデータは使用中のため、この操作はできません。",
+        "ACCOUNT_DISABLED": "このアカウントは無効になっています。"
+    }
+}

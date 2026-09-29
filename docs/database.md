@@ -273,7 +273,8 @@ index: (store_id, status), (franchise_id, created_at), (customer_id, created_at)
 `user_id`, `order_id` nullable, `channel`, `template_code`, `locale`（実際に使われた言語）, `status`（`SENT/QUEUED/FAILED`）, `error`, `created_at`
 
 ### settings (P6)
-`scope_type`（`GLOBAL/ORGANIZATION/FRANCHISE/STORE`）, `scope_id` nullable, `key`, `value` json, unique(scope_type, scope_id, key)
+`scope_type`（`GLOBAL/ORGANIZATION/FRANCHISE/STORE`）, `scope_id` nullable, `key`, `value` json, unique(scope_type, scope_id, key)。
+解決順 STORE → FRANCHISE → ORGANIZATION → GLOBAL → config（`SettingsService`）。キーは `SettingsService::DEFINITIONS` に登録したもののみ
 
 ---
 

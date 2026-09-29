@@ -289,7 +289,7 @@ READY_FOR_PICKUP になった注文を、同じ FC の配達員のうち
 
 ---
 
-## ADMIN (PHASE 1 実装分: 管理 API。Web UI は PHASE 6)
+## ADMIN ✅（管理 API。Web UI = `/admin`, PHASE 6）
 
 全て `auth:sanctum` + スタッフロール。Permission + テナントスコープで制御（他 FC は 404）。
 管理系レスポンスの翻訳可能項目は `translations: { "<locale>": { ... } }` 形式。
@@ -313,8 +313,51 @@ READY_FOR_PICKUP になった注文を、同じ FC の配達員のうち
 | GET/POST | /admin/languages | languages.manage | ✅ |
 | PUT | /admin/languages/{id} | 同上 | ✅ |
 | GET | /admin/audit-logs | audit_logs.view | ✅ |
-| GET | /admin/dashboard | (P6) | |
-| GET | /admin/sales | (P6) | |
+| GET | /admin/dashboard | orders.view（金額は sales.view のみ） | ✅ P6 |
+| GET | /admin/sales | sales.view | ✅ P6 |
+| GET | /admin/customers?search= | customers.view | ✅ P6 |
+| GET | /admin/customers/{id} | 同上（直近 20 件の注文。スコープ内のみ） | ✅ P6 |
+| GET/POST | /admin/staff | staff.manage | ✅ P6 |
+| GET/PUT | /admin/staff/{id} | 同上 | ✅ P6 |
+| GET/PUT | /admin/settings | settings.manage | ✅ P6 |
+| GET | /admin/translations | translations.manage | ✅ P6 |
+| GET | /admin/translations/{type}?locale=&missing=1 | 同上 | ✅ P6 |
+| PUT | /admin/translations/{type}/{id} | 同上 | ✅ P6 |
+
+### 売上（`GET /admin/sales`）
+
+`from`, `to`（YYYY-MM-DD, 組織タイムゾーンの暦日, 最大 366 日, 既定は直近 7 日）, `group_by`（`day` / `store` / `franchise` / `product` / `payment_method`）,
+`franchise_id?`, `store_id?`（スコープ外 ID は 422）, `format=csv`（UTF-8 BOM 付き, 金額は主単位, 列名は安定コード）。
+
+* **売上 = DELIVERED かつ PAID の注文**、日付は `ordered_at` の現地日付。`day` は空の日も 0 で返す。
+* `franchise` 行には `commission_rate` と `commission`（= 商品小計 × 率。配送料・サービス料は除外）。
+* `product` 行の名前は閲覧者の言語（現在の商品翻訳 → 注文時スナップショット）。
+* 集計は常に閲覧者のテナント内（FC 管理者は自 FC、店長は自店舗のみ）。
+
+```json
+{ "from": "2026-03-04", "to": "2026-03-10", "timezone": "Africa/Blantyre", "currency": "MWK", "group_by": "day",
+  "summary": { "orders": 42, "gross_sales": 12600000, "subtotal": 11000000, "delivery_fees": 1600000, "service_fees": 0,
+               "discounts": 0, "average_order_value": 300000, "cancelled": 3, "failed_deliveries": 0 },
+  "rows": [ { "key": "2026-03-04", "label": "2026-03-04", "orders": 5, "gross_sales": 1500000, "...": "..." } ] }
+```
+
+### スタッフ（`/admin/staff`）
+
+`{ name, email, password, role, preferred_language?, is_active?, franchise_id?(FRANCHISE_ADMIN), store_id?(STORE_MANAGER / KITCHEN_STAFF) }`。
+作成できる役割は自分より下のみ（SUPER_ADMIN → 全スタッフ役割, FRANCHISE_ADMIN → 店長・キッチン, STORE_MANAGER → キッチン）、
+店舗/FC は自分のスコープ内のみ。組織・FC の ID は選んだ店舗から自動設定。`is_active: false` で即時に全トークン失効。
+
+### 設定（`/admin/settings`）
+
+`GET ?scope_type=GLOBAL|ORGANIZATION|FRANCHISE|STORE&scope_id=`、`PUT { scope_type, scope_id, values: { key: value | null } }`（null = 上書き解除）。
+解決順は **STORE → FRANCHISE → ORGANIZATION → GLOBAL → config**。キー: `service_fee`（minor units, 注文金額に反映）、
+`delivery_offer_ttl_seconds`（配達オファーの有効秒数）。GLOBAL / ORGANIZATION は本部のみ、FC/店舗は自スコープのみ（他は 404）。
+
+### 翻訳管理（`/admin/translations`）
+
+種類: `categories`, `products`, `option_groups`, `options`, `stores`（description / announcement）, `notification_templates`。
+一覧はカバレッジ（既定言語の文面がある件数に対する各言語の翻訳済み件数）、`{type}?locale=ny&missing=1` で未翻訳のみ、
+`PUT { locale, values: { name, description } }` は **その言語だけ** を更新（送らなかった属性は保持。既定言語の必須項目は空にできない）。
 
 ### 例: 商品作成
 ```json

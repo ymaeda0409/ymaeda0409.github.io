@@ -5,7 +5,7 @@
 
 | ディレクトリ | 内容 | 状態 |
 |---|---|---|
-| [`backend/`](backend) | Laravel 13 REST API + Kitchen Web（Vue）（Admin Web は PHASE 6） | ✅ PHASE 1・3・4 |
+| [`backend/`](backend) | Laravel 13 REST API + Kitchen Web + Admin Web（Vue） | ✅ PHASE 1・3・4・5・6 |
 | [`customer-app/`](customer-app) | Flutter 顧客アプリ（en / ny / ja） | ✅ PHASE 2・3 |
 | [`driver-app/`](driver-app) | Flutter 配達員アプリ（en / ny / ja） | ✅ PHASE 4 |
 | [`packages/bento_core`](packages/bento_core) | 両アプリ共通の Dart パッケージ（API クライアント・Locale フォールバック・書式） | ✅ |
@@ -27,7 +27,7 @@ docker compose exec app composer install
 docker compose exec app php artisan key:generate
 docker compose exec app php artisan migrate --seed
 (cd backend && npm install && npm run build)   # 厨房画面の JS/CSS
-# API: http://localhost:8080/api/languages   厨房画面: http://localhost:8080/kitchen
+# API: http://localhost:8080/api/languages   厨房画面: http://localhost:8080/kitchen   管理画面: http://localhost:8080/admin
 ```
 
 サービス: `app`（php-fpm）, `nginx`（:8080）, `queue`（Redis queue worker）, `scheduler`（`deliveries:dispatch` 毎分）, `postgres`（:5432）, `redis`（:6379）。
@@ -43,7 +43,7 @@ php artisan key:generate
 createdb malawi_bento           # 例: PostgreSQL
 php artisan migrate --seed
 npm install && npm run build    # 厨房画面（Vue）のビルド
-php artisan serve               # http://127.0.0.1:8000  厨房画面: /kitchen
+php artisan serve               # http://127.0.0.1:8000  厨房画面: /kitchen  管理画面: /admin
 php artisan queue:work          # SMS 等のキュー（別ターミナル）
 php artisan schedule:work       # 配達オファーの失効・再割当（毎分, 別ターミナル）
 ```
@@ -98,6 +98,7 @@ Seed 内容:
 | CUSTOMER | `+265991234567` — OTP `123456`（住所 1 件登録済み） |
 
 スタッフは `POST /api/auth/login`、電話番号ユーザーは `POST /api/auth/send-otp` → `POST /api/auth/verify-otp`。
+管理画面 `/admin` にはスタッフ 4 アカウントのどれでもログインでき、役割に応じてメニューが変わります（厨房スタッフは閲覧中心、店長は自店舗、FC 管理者は自 FC、本部は全体 + 翻訳・言語）。
 
 ### 動作確認例
 
@@ -127,12 +128,12 @@ vendor/bin/pint --test           # コードスタイル
 DB_CONNECTION=pgsql DB_HOST=127.0.0.1 DB_DATABASE=malawi_bento_test \
 DB_USERNAME=bento DB_PASSWORD=secret php artisan test
 
-npm test                         # 厨房画面（Vitest: 翻訳 JSON 整合性・ボタン/状態・エラー表示）
+npm test                         # 厨房・管理画面（Vitest: 翻訳 JSON 整合性・ラベル網羅・権限別メニュー・フォーム・売上）
 ```
 
 GitHub Actions: `backend.yml`（Pint + SQLite + PostgreSQL + Vitest + Vite build）、`flutter.yml`（bento_core / customer-app / driver-app の gen-l10n 差分・format・analyze・test）。
 
-Backend テスト範囲（PHPUnit 159 tests + Vitest 12 tests）:
+Backend テスト範囲（PHPUnit 179 tests + Vitest 29 tests）:
 
 | 観点 | テスト |
 |---|---|
@@ -149,6 +150,10 @@ Backend テスト範囲（PHPUnit 159 tests + Vitest 12 tests）:
 | 注文ステータス遷移 | `Unit/OrderStatusTest`, `Feature/Admin/KitchenOrderTest` |
 | 厨房の FC 分離・スタッフ言語表示 | `Feature/Admin/KitchenOrderTest` |
 | 厨房画面 UI | `resources/js/kitchen/kitchen.test.js` |
+| 売上集計・Dashboard（日付境界・ロイヤリティ・言語・スコープ・CSV） | `Feature/Admin/SalesReportTest` |
+| スタッフ・顧客管理（下位役割のみ・スコープ・無効化） | `Feature/Admin/BackOfficeManagementTest` |
+| 設定の解決順・翻訳管理 | `Feature/Admin/SettingsAndTranslationsTest` |
+| 管理画面 UI | `resources/js/admin/admin.test.js` |
 | Driver 割当・Delivery PIN・GPS・配送追跡 | `Feature/DeliveryTest` |
 | 配達員管理（FC 分離） | `Feature/Admin/DriverManagementTest` |
 | 決済（Fake/再試行/二重請求防止/webhook 署名/返金/未払い失効/他人不可） | `Feature/PaymentTest`, `Unit/GatewayAdaptersTest`（PayChangu・FCM の HTTP 形式） |
@@ -169,9 +174,9 @@ Backend テスト範囲（PHPUnit 159 tests + Vitest 12 tests）:
    （`errors.php`, `sms.php` は必須、`validation.php` は未訳キーが英語にフォールバック）。
    `php artisan test --filter=TranslationFilesTest` でキー欠落を検出。
 3. **アプリ翻訳**: `customer-app/lib/l10n/app_en.arb` → `app_tum.arb` を作成し `flutter gen-l10n`（`language_native_name` に自言語名を入れる）。`flutter test` の ARB 整合性テストで欠落を検出。
-   配達員アプリも `driver-app/lib/l10n/` に同様に追加。厨房画面は `backend/resources/js/locales/en.json` → `tum.json` を作成し `resources/js/shared/i18n.js` の `messages` に登録（`npm test` で欠落検出）。
-4. **DB コンテンツ**: 管理 API / 管理画面で商品・カテゴリ・オプションの `translations.tum` を入力。
-5. アプリ配布後に `PUT /api/admin/languages/{id}` で `is_active: true`。
+   配達員アプリも `driver-app/lib/l10n/` に同様に追加。厨房・管理画面は `backend/resources/js/locales/en.json` → `tum.json` と `locales/admin/en.json` → `admin/tum.json` を作成し、`resources/js/shared/i18n.js` の `messages` と `resources/js/admin/messages.js` に登録（`npm test` で欠落検出）。
+4. **DB コンテンツ**: 管理画面「翻訳」で「Chitumbuka（未公開）」を選び、未翻訳の商品・カテゴリ・オプション・店舗文言・通知を入力（無効な言語にも入力できる）。
+5. アプリ配布後に管理画面「言語」（または `PUT /api/admin/languages/{id}`）で `is_active: true`。
 
 コード中に言語コードを書いた分岐は存在しないため、上記以外の変更は不要。
 
@@ -203,7 +208,7 @@ flutter test                                                       # 15 tests
 
 ## 6. 開発フェーズ
 
-[docs/development-plan.md](docs/development-plan.md) 参照。現在 **PHASE 5 完了 = MVP 完成**（PHASE 1: Backend 基盤 / PHASE 2: Customer App / PHASE 3: 注文・厨房 / PHASE 4: 配達員アプリ・割当・GPS・Delivery PIN・配送追跡 / PHASE 5: 決済・多言語通知）。次は PHASE 6（管理画面・売上・翻訳管理 UI）。
+[docs/development-plan.md](docs/development-plan.md) 参照。現在 **PHASE 6 完了**（PHASE 1: Backend 基盤 / PHASE 2: Customer App / PHASE 3: 注文・厨房 / PHASE 4: 配達員アプリ・割当・GPS・Delivery PIN・配送追跡 / PHASE 5: 決済・多言語通知 / PHASE 6: 管理画面・売上・FC・翻訳管理）。
 
 > **本番前に必要なこと**: PayChangu のアカウントとサンドボックスでの実結合確認（アダプタは公開ドキュメントに基づく実装で、実 API では未検証）、
 > Firebase プロジェクト作成とアプリへの `firebase_messaging` 組込み、本番 SMS ドライバ（`SmsGateway` 実装）の追加。

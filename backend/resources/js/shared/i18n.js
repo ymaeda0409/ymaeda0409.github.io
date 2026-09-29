@@ -5,7 +5,7 @@ import ja from '../locales/ja.json';
 
 /**
  * Bundled UI messages (switching language needs no network). Adding a language =
- * adding resources/js/locales/<code>.json and registering it here.
+ * adding resources/js/locales/<code>.json (and locales/admin/<code>.json) and registering it here.
  */
 export const messages = { en, ny, ja };
 export const FALLBACK = 'en';
@@ -42,8 +42,20 @@ export function formattingLocale(code) {
     }
 }
 
-export function makeI18n(locale = initialLocale()) {
-    return createI18n({ legacy: false, locale, fallbackLocale: FALLBACK, messages });
+/** Recursively merges message objects; values in `extra` win. */
+export function mergeMessages(base, extra) {
+    const out = { ...base };
+    for (const [key, value] of Object.entries(extra ?? {})) {
+        out[key] = value && typeof value === 'object' && !Array.isArray(value) && typeof base?.[key] === 'object'
+            ? mergeMessages(base[key], value)
+            : value;
+    }
+    return out;
+}
+
+/** `bundle` lets an app add its own messages on top of the shared ones. */
+export function makeI18n(locale = initialLocale(), bundle = messages) {
+    return createI18n({ legacy: false, locale, fallbackLocale: FALLBACK, messages: bundle });
 }
 
 /** API error code → translation key, generic fallback for unknown codes. */

@@ -1,0 +1,278 @@
+{
+    "admin": {
+        "title": "Malawi Bento Admin",
+        "menu": "Menu",
+        "no_access": "Your account has no pages in the back office.",
+        "yes": "Yes",
+        "no": "No",
+        "choose": "— Choose —",
+        "all": "All",
+        "empty": "Nothing here yet.",
+        "back": "Back",
+        "create": "New",
+        "save": "Save",
+        "saved": "Saved",
+        "delete": "Delete",
+        "confirm_delete": "Delete this record? This cannot be undone.",
+        "new_record": "New: {name}",
+        "previous": "Previous",
+        "next": "Next",
+        "page_of": "Page {page} of {total}",
+        "nav_groups": {
+            "overview": "Overview",
+            "catalog": "Menu",
+            "operations": "Operations",
+            "business": "Franchise & people",
+            "system": "System"
+        },
+        "nav": {
+            "dashboard": "Dashboard",
+            "orders": "Orders",
+            "sales": "Sales",
+            "products": "Products",
+            "categories": "Categories",
+            "store_products": "Store menu & stock",
+            "stores": "Stores",
+            "kitchens": "Kitchens",
+            "delivery_zones": "Delivery zones",
+            "drivers": "Riders",
+            "franchises": "Franchises",
+            "staff": "Staff",
+            "customers": "Customers",
+            "translations": "Translations",
+            "languages": "Languages",
+            "settings": "Settings",
+            "audit_logs": "Audit log"
+        },
+        "fields": {
+            "code": "Code",
+            "name": "Name",
+            "translations": "Name",
+            "region": "Region",
+            "owner_name": "Owner",
+            "phone": "Phone",
+            "email": "E-mail",
+            "status": "Status",
+            "commission_rate": "Franchise fee (%)",
+            "franchise_id": "Franchise",
+            "city": "City",
+            "address": "Address",
+            "latitude": "Latitude",
+            "longitude": "Longitude",
+            "timezone": "Time zone",
+            "is_accepting_orders": "Accepting orders",
+            "is_active": "Active",
+            "is_open": "Open now",
+            "opening_hours": "Opening hours",
+            "description": "Description",
+            "announcement": "Announcement",
+            "title": "Title",
+            "body": "Message",
+            "store_id": "Store",
+            "kitchen_id": "Kitchen",
+            "base_fee": "Base delivery fee",
+            "base_distance_km": "Distance included (km)",
+            "additional_fee_per_km": "Fee per extra km",
+            "max_delivery_distance_km": "Maximum distance (km)",
+            "image_url": "Image URL",
+            "sort_order": "Sort order",
+            "sku": "SKU",
+            "category_id": "Category",
+            "price": "Price",
+            "preparation_minutes": "Preparation time (min)",
+            "is_featured": "Featured",
+            "option_groups": "Options",
+            "min_select": "Minimum choices",
+            "max_select": "Maximum choices",
+            "preferred_language": "Language",
+            "vehicle_type": "Vehicle",
+            "vehicle_number": "Plate number",
+            "is_online": "Online",
+            "password": "Password",
+            "role": "Role",
+            "native_name": "Name in the language",
+            "direction": "Text direction",
+            "is_default": "Default language",
+            "order_number": "Order",
+            "ordered_at": "Ordered at",
+            "customer": "Customer",
+            "payment": "Payment",
+            "total": "Total",
+            "subtotal": "Items",
+            "delivery_fee": "Delivery fee",
+            "service_fee": "Service fee",
+            "gross_sales": "Sales",
+            "orders": "Orders",
+            "average_order_value": "Average order",
+            "delivery_fees": "Delivery fees",
+            "quantity": "Quantity",
+            "sales": "Sales",
+            "commission": "Franchise fee",
+            "is_available": "On sale",
+            "base_price": "Standard price",
+            "store_price": "Store price",
+            "stock_quantity": "Stock",
+            "total_spent": "Total spent",
+            "last_order_at": "Last order",
+            "created_at": "Created"
+        },
+        "enums": {
+            "role": {
+                "SUPER_ADMIN": "Platform admin",
+                "FRANCHISE_ADMIN": "Franchise admin",
+                "STORE_MANAGER": "Store manager",
+                "KITCHEN_STAFF": "Kitchen staff",
+                "DRIVER": "Rider",
+                "CUSTOMER": "Customer"
+            },
+            "franchise_status": {
+                "PENDING": "Pending",
+                "ACTIVE": "Active",
+                "SUSPENDED": "Suspended"
+            },
+            "driver_status": {
+                "ACTIVE": "Active",
+                "SUSPENDED": "Suspended"
+            },
+            "vehicle_type": {
+                "MOTORBIKE": "Motorbike",
+                "BICYCLE": "Bicycle",
+                "CAR": "Car"
+            },
+            "direction": {
+                "ltr": "Left to right",
+                "rtl": "Right to left"
+            },
+            "payment_method": {
+                "CASH": "Cash",
+                "AIRTEL_MONEY": "Airtel Money",
+                "TNM_MPAMBA": "TNM Mpamba"
+            },
+            "payment_status": {
+                "PENDING": "Unpaid",
+                "PAID": "Paid",
+                "FAILED": "Failed",
+                "REFUNDED": "Refunded"
+            }
+        },
+        "translations": {
+            "default": "default",
+            "missing": "Not translated yet",
+            "fallback_hint": "Empty: customers see the default language.",
+            "content": "Content",
+            "target": "Translate into",
+            "missing_only": "Only missing",
+            "all_done": "Everything is translated.",
+            "types": {
+                "categories": "Categories",
+                "products": "Products",
+                "option_groups": "Option groups",
+                "options": "Options",
+                "stores": "Store texts",
+                "notification_templates": "Notifications (push / SMS)"
+            },
+            "inactive": "not live yet"
+        },
+        "hours": {
+            "always_open": "No hours set: the store is treated as always open.",
+            "opens": "Opens",
+            "closes": "Closes",
+            "closed": "Closed",
+            "days": {
+                "mon": "Monday",
+                "tue": "Tuesday",
+                "wed": "Wednesday",
+                "thu": "Thursday",
+                "fri": "Friday",
+                "sat": "Saturday",
+                "sun": "Sunday"
+            }
+        },
+        "options": {
+            "none": "No options.",
+            "add_group": "Add option group",
+            "remove_group": "Remove group",
+            "add_option": "Add option",
+            "remove_option": "Remove"
+        },
+        "dashboard": {
+            "sales_today": "Sales today",
+            "completed_orders": "{n} delivered orders",
+            "orders_today": "Orders today",
+            "in_progress": "{n} in progress",
+            "drivers_online": "Riders online",
+            "awaiting_payment": "{n} waiting for payment",
+            "stores_open": "Stores open",
+            "active_orders": "Orders in progress",
+            "last_7_days": "Sales, last 7 days",
+            "top_products": "Best sellers (7 days)"
+        },
+        "sales": {
+            "quantity_n": "{n} sold",
+            "export_csv": "Export CSV",
+            "from": "From",
+            "to": "To",
+            "last_n_days": "{n} days",
+            "group_by": "Group by",
+            "groups": {
+                "day": "Day",
+                "store": "Store",
+                "franchise": "Franchise",
+                "product": "Product",
+                "payment_method": "Payment method"
+            },
+            "cancelled": "Cancelled orders",
+            "share": "Share",
+            "definition": "Sales = delivered and paid orders, by order date ({timezone})."
+        },
+        "orders": {
+            "cancel": "Cancel order",
+            "cancel_confirm": "Cancel order {number}? Paid orders are refunded automatically.",
+            "timeline": "Timeline"
+        },
+        "store_products": {
+            "hint": "Changes apply immediately. Leave the store price empty to use the standard price, and stock empty for unlimited.",
+            "on_sale": "On sale",
+            "sold_out": "Sold out",
+            "unlimited": "Unlimited"
+        },
+        "customers": {
+            "search": "Search name or phone",
+            "recent_orders": "Recent orders"
+        },
+        "settings": {
+            "scope": "Apply to",
+            "scopes": {
+                "GLOBAL": "All stores",
+                "ORGANIZATION": "Organization",
+                "FRANCHISE": "Franchise",
+                "STORE": "Store",
+                "DEFAULT": "System default"
+            },
+            "keys": {
+                "service_fee": {
+                    "label": "Service fee per order",
+                    "help": "Added to every order total."
+                },
+                "delivery_offer_ttl_seconds": {
+                    "label": "Rider offer time (seconds)",
+                    "help": "How long a rider has to accept a delivery before it goes to the next rider."
+                }
+            },
+            "in_effect": "In effect: {value} (from {source})",
+            "clear_hint": "Leave a value empty to use the setting of the wider scope."
+        },
+        "audit": {
+            "action": "Action",
+            "target": "Record",
+            "user": "By",
+            "before": "Before",
+            "after": "After"
+        }
+    },
+    "errors": {
+        "RESOURCE_NOT_FOUND": "This record no longer exists.",
+        "CONFLICT": "This record is in use and cannot be changed this way.",
+        "ACCOUNT_DISABLED": "This account has been deactivated."
+    }
+}

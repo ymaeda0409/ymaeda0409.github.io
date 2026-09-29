@@ -33,6 +33,9 @@ enum UserRole: string
                 Permission::KITCHEN_OPERATE,
                 Permission::DRIVERS_MANAGE,
                 Permission::SALES_VIEW,
+                Permission::STAFF_MANAGE,
+                Permission::CUSTOMERS_VIEW,
+                Permission::SETTINGS_MANAGE,
             ],
             self::STORE_MANAGER => [
                 Permission::STORES_VIEW,
@@ -46,6 +49,8 @@ enum UserRole: string
                 Permission::KITCHEN_OPERATE,
                 Permission::DRIVERS_MANAGE,
                 Permission::SALES_VIEW,
+                Permission::STAFF_MANAGE,
+                Permission::CUSTOMERS_VIEW,
             ],
             self::KITCHEN_STAFF => [
                 Permission::STORES_VIEW,
@@ -75,6 +80,21 @@ enum UserRole: string
             self::FRANCHISE_ADMIN => TenantLevel::FRANCHISE,
             self::STORE_MANAGER, self::KITCHEN_STAFF => TenantLevel::STORE,
             self::DRIVER, self::CUSTOMER => TenantLevel::NONE,
+        };
+    }
+
+    /**
+     * Staff roles this role may create and manage (always inside its own tenant scope).
+     *
+     * @return list<self>
+     */
+    public function manageableRoles(): array
+    {
+        return match ($this) {
+            self::SUPER_ADMIN => [self::SUPER_ADMIN, self::FRANCHISE_ADMIN, self::STORE_MANAGER, self::KITCHEN_STAFF],
+            self::FRANCHISE_ADMIN => [self::STORE_MANAGER, self::KITCHEN_STAFF],
+            self::STORE_MANAGER => [self::KITCHEN_STAFF],
+            default => [],
         };
     }
 

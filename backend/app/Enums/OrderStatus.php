@@ -77,4 +77,14 @@ enum OrderStatus: string
     {
         return [self::NEW, self::CONFIRMED, self::COOKING, self::READY_FOR_PICKUP];
     }
+
+    /**
+     * Orders still in progress (everything that is not final), in flow order.
+     *
+     * @return list<self>
+     */
+    public static function activeStatuses(): array
+    {
+        return array_values(array_filter(self::cases(), fn (self $s) => ! $s->isFinal()));
+    }
 }

@@ -22,6 +22,7 @@ class UserResource extends JsonResource
                 'organization_id' => $this->organization_id,
                 'franchise_id' => $this->franchise_id,
                 'store_id' => $this->store_id,
+                'is_active' => $this->is_active,
                 'permissions' => array_map(fn ($p) => $p->value, $this->role->permissions()),
             ]),
         ];

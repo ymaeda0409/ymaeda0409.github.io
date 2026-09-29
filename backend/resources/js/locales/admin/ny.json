@@ -1,0 +1,278 @@
+{
+    "admin": {
+        "title": "Oyang'anira Malawi Bento",
+        "menu": "Mndandanda",
+        "no_access": "Akaunti yanu ilibe masamba oyang'anira.",
+        "yes": "Inde",
+        "no": "Ayi",
+        "choose": "— Sankhani —",
+        "all": "Zonse",
+        "empty": "Palibe kanthu pano.",
+        "back": "Bwererani",
+        "create": "Chatsopano",
+        "save": "Sungani",
+        "saved": "Zasungidwa",
+        "delete": "Chotsani",
+        "confirm_delete": "Chotsani izi? Simungathe kuzibwezeretsa.",
+        "new_record": "Chatsopano: {name}",
+        "previous": "Kumbuyo",
+        "next": "Kutsogolo",
+        "page_of": "Tsamba {page} mwa {total}",
+        "nav_groups": {
+            "overview": "Chidule",
+            "catalog": "Menyu",
+            "operations": "Ntchito",
+            "business": "Ma franchise ndi anthu",
+            "system": "Dongosolo"
+        },
+        "nav": {
+            "dashboard": "Chidule cha lero",
+            "orders": "Ma oda",
+            "sales": "Malonda",
+            "products": "Zakudya",
+            "categories": "Magulu",
+            "store_products": "Menyu ya sitolo ndi katundu",
+            "stores": "Masitolo",
+            "kitchens": "Makhitchini",
+            "delivery_zones": "Madera obweretsera",
+            "drivers": "Obweretsa",
+            "franchises": "Ma franchise",
+            "staff": "Ogwira ntchito",
+            "customers": "Makasitomala",
+            "translations": "Kumasulira",
+            "languages": "Zilankhulo",
+            "settings": "Makonzedwe",
+            "audit_logs": "Mbiri ya zosintha"
+        },
+        "fields": {
+            "code": "Khodi",
+            "name": "Dzina",
+            "translations": "Dzina",
+            "region": "Chigawo",
+            "owner_name": "Mwini",
+            "phone": "Foni",
+            "email": "Imelo",
+            "status": "Mkhalidwe",
+            "commission_rate": "Chindapusa cha franchise (%)",
+            "franchise_id": "Franchise",
+            "city": "Mzinda",
+            "address": "Adilesi",
+            "latitude": "Latitude",
+            "longitude": "Longitude",
+            "timezone": "Nthawi ya dera",
+            "is_accepting_orders": "Ikulandira ma oda",
+            "is_active": "Ikugwira ntchito",
+            "is_open": "Yatsegula tsopano",
+            "opening_hours": "Nthawi yotsegula",
+            "description": "Kufotokozera",
+            "announcement": "Chilengezo",
+            "title": "Mutu",
+            "body": "Uthenga",
+            "store_id": "Sitolo",
+            "kitchen_id": "Khitchini",
+            "base_fee": "Mtengo woyambira wobweretsa",
+            "base_distance_km": "Mtunda wophatikizidwa (km)",
+            "additional_fee_per_km": "Mtengo pa km iliyonse yowonjezera",
+            "max_delivery_distance_km": "Mtunda wautali kwambiri (km)",
+            "image_url": "Ulalo wa chithunzi",
+            "sort_order": "Ndondomeko",
+            "sku": "SKU",
+            "category_id": "Gulu",
+            "price": "Mtengo",
+            "preparation_minutes": "Nthawi yophika (mphindi)",
+            "is_featured": "Zosankhidwa",
+            "option_groups": "Zosankha",
+            "min_select": "Zosankha zochepa",
+            "max_select": "Zosankha zambiri",
+            "preferred_language": "Chilankhulo",
+            "vehicle_type": "Galimoto",
+            "vehicle_number": "Nambala ya galimoto",
+            "is_online": "Ali pa intaneti",
+            "password": "Mawu achinsinsi",
+            "role": "Udindo",
+            "native_name": "Dzina m'chilankhulocho",
+            "direction": "Kalembedwe",
+            "is_default": "Chilankhulo choyambirira",
+            "order_number": "Oda",
+            "ordered_at": "Nthawi yoyitanitsa",
+            "customer": "Kasitomala",
+            "payment": "Malipiro",
+            "total": "Zonse pamodzi",
+            "subtotal": "Zakudya",
+            "delivery_fee": "Mtengo wobweretsa",
+            "service_fee": "Mtengo wa ntchito",
+            "gross_sales": "Malonda",
+            "orders": "Ma oda",
+            "average_order_value": "Pafupifupi pa oda",
+            "delivery_fees": "Mitengo yobweretsa",
+            "quantity": "Kuchuluka",
+            "sales": "Malonda",
+            "commission": "Chindapusa cha franchise",
+            "is_available": "Ikugulitsidwa",
+            "base_price": "Mtengo wamba",
+            "store_price": "Mtengo wa sitolo",
+            "stock_quantity": "Katundu",
+            "total_spent": "Ndalama zonse",
+            "last_order_at": "Oda yomaliza",
+            "created_at": "Tsiku lopangidwa"
+        },
+        "enums": {
+            "role": {
+                "SUPER_ADMIN": "Oyang'anira wamkulu",
+                "FRANCHISE_ADMIN": "Oyang'anira franchise",
+                "STORE_MANAGER": "Mkulu wa sitolo",
+                "KITCHEN_STAFF": "Ogwira ntchito ku khitchini",
+                "DRIVER": "Wobweretsa",
+                "CUSTOMER": "Kasitomala"
+            },
+            "franchise_status": {
+                "PENDING": "Ikudikira",
+                "ACTIVE": "Ikugwira ntchito",
+                "SUSPENDED": "Yayimitsidwa"
+            },
+            "driver_status": {
+                "ACTIVE": "Akugwira ntchito",
+                "SUSPENDED": "Wayimitsidwa"
+            },
+            "vehicle_type": {
+                "MOTORBIKE": "Njinga yamoto",
+                "BICYCLE": "Njinga",
+                "CAR": "Galimoto"
+            },
+            "direction": {
+                "ltr": "Kuchokera kumanzere",
+                "rtl": "Kuchokera kumanja"
+            },
+            "payment_method": {
+                "CASH": "Ndalama",
+                "AIRTEL_MONEY": "Airtel Money",
+                "TNM_MPAMBA": "TNM Mpamba"
+            },
+            "payment_status": {
+                "PENDING": "Sinalipiridwe",
+                "PAID": "Yalipiridwa",
+                "FAILED": "Yalephera",
+                "REFUNDED": "Ndalama zabwezedwa"
+            }
+        },
+        "translations": {
+            "default": "choyambirira",
+            "missing": "Sichinamasuliridwe",
+            "fallback_hint": "Ngati mulibe kanthu, makasitomala adzawona chilankhulo choyambirira.",
+            "content": "Zomwe zili",
+            "target": "Masulirani ku",
+            "missing_only": "Zosamasuliridwa zokha",
+            "all_done": "Zonse zamasuliridwa.",
+            "types": {
+                "categories": "Magulu",
+                "products": "Zakudya",
+                "option_groups": "Magulu a zosankha",
+                "options": "Zosankha",
+                "stores": "Mawu a sitolo",
+                "notification_templates": "Mauthenga (push / SMS)"
+            },
+            "inactive": "sichinayambe"
+        },
+        "hours": {
+            "always_open": "Palibe nthawi: sitolo imaonedwa ngati yotsegula nthawi zonse.",
+            "opens": "Imatsegula",
+            "closes": "Imatseka",
+            "closed": "Yatseka",
+            "days": {
+                "mon": "Lolemba",
+                "tue": "Lachiwiri",
+                "wed": "Lachitatu",
+                "thu": "Lachinayi",
+                "fri": "Lachisanu",
+                "sat": "Loweruka",
+                "sun": "Lamlungu"
+            }
+        },
+        "options": {
+            "none": "Palibe zosankha.",
+            "add_group": "Onjezani gulu la zosankha",
+            "remove_group": "Chotsani gulu",
+            "add_option": "Onjezani chosankha",
+            "remove_option": "Chotsani"
+        },
+        "dashboard": {
+            "sales_today": "Malonda a lero",
+            "completed_orders": "Ma oda {n} aperekedwa",
+            "orders_today": "Ma oda a lero",
+            "in_progress": "{n} akupitilira",
+            "drivers_online": "Obweretsa ali pa intaneti",
+            "awaiting_payment": "{n} akudikira malipiro",
+            "stores_open": "Masitolo otsegula",
+            "active_orders": "Ma oda omwe akupitilira",
+            "last_7_days": "Malonda a masiku 7 apitawa",
+            "top_products": "Zogulitsidwa kwambiri (masiku 7)"
+        },
+        "sales": {
+            "quantity_n": "{n} zagulitsidwa",
+            "export_csv": "Tsitsani CSV",
+            "from": "Kuyambira",
+            "to": "Mpaka",
+            "last_n_days": "Masiku {n}",
+            "group_by": "Gawani malinga ndi",
+            "groups": {
+                "day": "Tsiku",
+                "store": "Sitolo",
+                "franchise": "Franchise",
+                "product": "Chakudya",
+                "payment_method": "Njira yolipira"
+            },
+            "cancelled": "Ma oda othetsedwa",
+            "share": "Gawo",
+            "definition": "Malonda = ma oda operekedwa ndi olipiridwa, malinga ndi tsiku la oda ({timezone})."
+        },
+        "orders": {
+            "cancel": "Letsani oda",
+            "cancel_confirm": "Letsani oda {number}? Ma oda olipiridwa adzabwezeredwa ndalama zokha.",
+            "timeline": "Mbiri ya oda"
+        },
+        "store_products": {
+            "hint": "Zosintha zimagwira ntchito nthawi yomweyo. Siyani mtengo wa sitolo wopanda kanthu kuti mugwiritse mtengo wamba, ndi katundu wopanda kanthu kuti asathe.",
+            "on_sale": "Ikugulitsidwa",
+            "sold_out": "Zatha",
+            "unlimited": "Zopanda malire"
+        },
+        "customers": {
+            "search": "Sakani dzina kapena foni",
+            "recent_orders": "Ma oda aposachedwa"
+        },
+        "settings": {
+            "scope": "Gwiritsani ntchito ku",
+            "scopes": {
+                "GLOBAL": "Masitolo onse",
+                "ORGANIZATION": "Bungwe",
+                "FRANCHISE": "Franchise",
+                "STORE": "Sitolo",
+                "DEFAULT": "Makonzedwe oyambirira"
+            },
+            "keys": {
+                "service_fee": {
+                    "label": "Mtengo wa ntchito pa oda iliyonse",
+                    "help": "Umawonjezeredwa pa oda iliyonse."
+                },
+                "delivery_offer_ttl_seconds": {
+                    "label": "Nthawi yoyankha pempho (masekondi)",
+                    "help": "Nthawi imene wobweretsa ali nayo yolandira pempho lisanapite kwa wina."
+                }
+            },
+            "in_effect": "Zikugwira ntchito: {value} (kuchokera ku {source})",
+            "clear_hint": "Siyani wopanda kanthu kuti mugwiritse makonzedwe a gawo lalikulu."
+        },
+        "audit": {
+            "action": "Chochitika",
+            "target": "Chinthu",
+            "user": "Wochita",
+            "before": "Kale",
+            "after": "Pambuyo"
+        }
+    },
+    "errors": {
+        "RESOURCE_NOT_FOUND": "Izi palibenso.",
+        "CONFLICT": "Izi zikugwiritsidwa ntchito, simungazisinthe motere.",
+        "ACCOUNT_DISABLED": "Akaunti iyi yayimitsidwa."
+    }
+}

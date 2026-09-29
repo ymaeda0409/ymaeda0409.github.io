@@ -12,6 +12,7 @@ use App\Models\DeliveryAssignment;
 use App\Models\Driver;
 use App\Models\Order;
 use App\Services\Order\OrderStatusService;
+use App\Services\SettingsService;
 use App\Support\Geo;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -23,7 +24,10 @@ use Illuminate\Support\Facades\Log;
  */
 class DeliveryAssignmentService
 {
-    public function __construct(private readonly OrderStatusService $statuses) {}
+    public function __construct(
+        private readonly OrderStatusService $statuses,
+        private readonly SettingsService $settings,
+    ) {}
 
     /**
      * Creates the next offer for an order if it still needs a driver. Returns null when
@@ -56,7 +60,7 @@ class DeliveryAssignmentService
                 'status' => AssignmentStatus::OFFERED,
                 'distance_km' => round($distance, 2),
                 'offered_at' => now(),
-                'expires_at' => now()->addSeconds((int) config('bento.dispatch.offer_ttl_seconds')),
+                'expires_at' => now()->addSeconds((int) $this->settings->forStore('delivery_offer_ttl_seconds', $order->store)),
             ]);
             DeliveryOffered::dispatch($offer);
 

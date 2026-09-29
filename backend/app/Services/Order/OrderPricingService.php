@@ -8,10 +8,13 @@ use App\Models\Product;
 use App\Models\ProductOption;
 use App\Models\StoreProduct;
 use App\Services\Delivery\AvailableStore;
+use App\Services\SettingsService;
 use Illuminate\Support\Collection;
 
 class OrderPricingService
 {
+    public function __construct(private readonly SettingsService $settings) {}
+
     /**
      * @param  list<array{product_id: int, quantity: int, option_ids?: list<int>}>  $items
      * @param  bool  $lockStock  lock store_products rows (used while placing an order)
@@ -72,7 +75,7 @@ class OrderPricingService
             lines: $lines,
             subtotal: array_sum(array_map(fn (QuoteLine $l) => $l->total(), $lines)),
             deliveryFee: $delivery->deliveryFee,
-            serviceFee: (int) config('bento.pricing.service_fee'),
+            serviceFee: (int) $this->settings->forStore('service_fee', $store),
             discount: 0,
         );
     }

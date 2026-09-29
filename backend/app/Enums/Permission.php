@@ -30,4 +30,7 @@ enum Permission: string
     case SALES_VIEW = 'sales.view';
     case DELIVERY_OPERATE = 'delivery.operate';
     case CUSTOMER_ORDER = 'customer.order';
+    case STAFF_MANAGE = 'staff.manage';
+    case CUSTOMERS_VIEW = 'customers.view';
+    case SETTINGS_MANAGE = 'settings.manage';
 }
