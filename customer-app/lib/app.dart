@@ -1,10 +1,10 @@
+import 'package:bento_core/bento_core.dart';
 import 'package:flutter/cupertino.dart' show CupertinoLocalizations;
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'core/locale/app_locales.dart';
-import 'core/locale/fallback_localizations_delegate.dart';
 import 'core/providers.dart';
 import 'core/ui/theme.dart';
 import 'l10n/generated/app_localizations.dart';
@@ -24,9 +24,15 @@ class BentoApp extends ConsumerWidget {
       supportedLocales: AppLocales.supported,
       localizationsDelegates: const [
         AppLocalizations.delegate,
-        FallbackLocalizationsDelegate<MaterialLocalizations>(GlobalMaterialLocalizations.delegate),
-        FallbackLocalizationsDelegate<CupertinoLocalizations>(GlobalCupertinoLocalizations.delegate),
-        FallbackLocalizationsDelegate<WidgetsLocalizations>(GlobalWidgetsLocalizations.delegate),
+        FallbackLocalizationsDelegate<MaterialLocalizations>(
+          GlobalMaterialLocalizations.delegate,
+        ),
+        FallbackLocalizationsDelegate<CupertinoLocalizations>(
+          GlobalCupertinoLocalizations.delegate,
+        ),
+        FallbackLocalizationsDelegate<WidgetsLocalizations>(
+          GlobalWidgetsLocalizations.delegate,
+        ),
       ],
     );
   }

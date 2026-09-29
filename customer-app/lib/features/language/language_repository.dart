@@ -8,9 +8,14 @@ import '../../core/providers.dart';
 /// in this app build, in server order. Offline → bundled list.
 final availableLocalesProvider = FutureProvider<List<Locale>>((ref) async {
   try {
-    final data = await ref.read(apiClientProvider).get<List<dynamic>>('/languages');
+    final data = await ref
+        .read(apiClientProvider)
+        .get<List<dynamic>>('/languages');
     final locales = data
-        .map((l) => AppLocales.parse((l as Map<String, dynamic>)['code'] as String))
+        .map(
+          (l) =>
+              AppLocales.parse((l as Map<String, dynamic>)['code'] as String),
+        )
         .whereType<Locale>()
         .toList();
     return locales.isEmpty ? AppLocales.supported : locales;

@@ -7,7 +7,9 @@ import 'address.dart';
 
 /// Current delivery point, persisted so the app opens where the customer left off.
 final deliveryLocationProvider =
-    NotifierProvider<DeliveryLocationController, DeliveryLocation?>(DeliveryLocationController.new);
+    NotifierProvider<DeliveryLocationController, DeliveryLocation?>(
+      DeliveryLocationController.new,
+    );
 
 class DeliveryLocationController extends Notifier<DeliveryLocation?> {
   static const _key = 'delivery_location';
@@ -15,11 +17,15 @@ class DeliveryLocationController extends Notifier<DeliveryLocation?> {
   @override
   DeliveryLocation? build() {
     final raw = ref.read(sharedPreferencesProvider).getString(_key);
-    return raw == null ? null : DeliveryLocation.fromJson(jsonDecode(raw) as Map<String, dynamic>);
+    return raw == null
+        ? null
+        : DeliveryLocation.fromJson(jsonDecode(raw) as Map<String, dynamic>);
   }
 
   Future<void> set(DeliveryLocation location) async {
     state = location;
-    await ref.read(sharedPreferencesProvider).setString(_key, jsonEncode(location.toJson()));
+    await ref
+        .read(sharedPreferencesProvider)
+        .setString(_key, jsonEncode(location.toJson()));
   }
 }

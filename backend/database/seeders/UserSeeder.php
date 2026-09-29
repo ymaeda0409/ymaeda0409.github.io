@@ -2,7 +2,10 @@
 
 namespace Database\Seeders;
 
+use App\Enums\DriverStatus;
 use App\Enums\UserRole;
+use App\Enums\VehicleType;
+use App\Models\Driver;
 use App\Models\Franchise;
 use App\Models\Organization;
 use App\Models\Store;
@@ -42,14 +45,13 @@ class UserSeeder extends Seeder
             ]);
         }
 
-        // Driver profiles (vehicle, online status) are added in PHASE 4.
         $drivers = [
             ['+265990000001', 'Driver One', 'en'],
             ['+265990000002', 'Driver Two', 'ny'],
             ['+265990000003', 'Driver Three', 'ja'],
         ];
-        foreach ($drivers as [$phone, $name, $language]) {
-            User::updateOrCreate(['phone' => $phone], [
+        foreach ($drivers as $i => [$phone, $name, $language]) {
+            $user = User::updateOrCreate(['phone' => $phone], [
                 'name' => $name,
                 'role' => UserRole::DRIVER,
                 'organization_id' => $organization->id,
@@ -57,6 +59,15 @@ class UserSeeder extends Seeder
                 'preferred_language' => $language,
                 'is_active' => true,
                 'phone_verified_at' => now(),
+            ]);
+            Driver::updateOrCreate(['user_id' => $user->id], [
+                'organization_id' => $organization->id,
+                'franchise_id' => $franchise->id,
+                'store_id' => null,
+                'vehicle_type' => [VehicleType::MOTORBIKE, VehicleType::BICYCLE, VehicleType::CAR][$i],
+                'vehicle_number' => sprintf('LL %04d', 1001 + $i),
+                'status' => DriverStatus::ACTIVE,
+                'is_online' => false,
             ]);
         }
 

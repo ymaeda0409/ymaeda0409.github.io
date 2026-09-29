@@ -1,8 +1,8 @@
+import 'package:bento_core/bento_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../core/format/money.dart';
 import '../../core/ui/widgets.dart';
 import '../catalog/catalog_providers.dart';
 import 'cart.dart';
@@ -23,7 +23,10 @@ class CartScreen extends ConsumerWidget {
           ? MessageView(
               icon: Icons.shopping_bag_outlined,
               message: l.cart_empty,
-              action: FilledButton(onPressed: () => context.go('/home'), child: Text(l.cart_browse)),
+              action: FilledButton(
+                onPressed: () => context.go('/home'),
+                child: Text(l.cart_browse),
+              ),
             )
           : ListView(
               padding: const EdgeInsets.all(16),
@@ -31,11 +34,17 @@ class CartScreen extends ConsumerWidget {
                 if (cart.storeName != null)
                   Padding(
                     padding: const EdgeInsets.only(bottom: 8),
-                    child: Text(cart.storeName!, style: Theme.of(context).textTheme.titleMedium),
+                    child: Text(
+                      cart.storeName!,
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
                   ),
                 Text(l.cart_item_count(cart.itemCount)),
                 const SizedBox(height: 12),
-                for (final line in cart.lines) ...[CartLineTile(line: line, storeId: cart.storeId!), const SizedBox(height: 10)],
+                for (final line in cart.lines) ...[
+                  CartLineTile(line: line, storeId: cart.storeId!),
+                  const SizedBox(height: 10),
+                ],
                 const SizedBox(height: 8),
                 const CartSummary(),
               ],
@@ -45,7 +54,10 @@ class CartScreen extends ConsumerWidget {
           : SafeArea(
               child: Padding(
                 padding: const EdgeInsets.all(16),
-                child: FilledButton(onPressed: () => context.push('/checkout'), child: Text(l.cart_checkout)),
+                child: FilledButton(
+                  onPressed: () => context.push('/checkout'),
+                  child: Text(l.cart_checkout),
+                ),
               ),
             ),
     );
@@ -54,8 +66,16 @@ class CartScreen extends ConsumerWidget {
 
 /// Names follow the current UI language: re-resolved from the (cached) product detail;
 /// the name stored when the item was added is the offline fallback.
-({String name, List<String> options}) localizedLine(WidgetRef ref, CartLine line, int storeId) {
-  final product = ref.watch(productDetailProvider((storeId: storeId, productId: line.productId))).value;
+({String name, List<String> options}) localizedLine(
+  WidgetRef ref,
+  CartLine line,
+  int storeId,
+) {
+  final product = ref
+      .watch(
+        productDetailProvider((storeId: storeId, productId: line.productId)),
+      )
+      .value;
   if (product == null) return (name: line.name, options: line.optionNames);
   return (
     name: product.name,
@@ -90,7 +110,8 @@ class CartLineTile extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(name, style: Theme.of(context).textTheme.titleMedium),
-                  for (final option in options) Text(option, style: Theme.of(context).textTheme.bodySmall),
+                  for (final option in options)
+                    Text(option, style: Theme.of(context).textTheme.bodySmall),
                   const SizedBox(height: 6),
                   Text(formatMoney(line.total, currency, context.locale)),
                 ],
@@ -101,12 +122,20 @@ class CartLineTile extends ConsumerWidget {
               children: [
                 IconButton(
                   tooltip: line.quantity == 1 ? context.l10n.cart_remove : null,
-                  onPressed: () => cart.setQuantity(line.key, line.quantity - 1),
-                  icon: Icon(line.quantity == 1 ? Icons.delete_outline : Icons.remove),
+                  onPressed: () =>
+                      cart.setQuantity(line.key, line.quantity - 1),
+                  icon: Icon(
+                    line.quantity == 1 ? Icons.delete_outline : Icons.remove,
+                  ),
                 ),
-                Text('${line.quantity}', style: Theme.of(context).textTheme.titleMedium),
+                Text(
+                  '${line.quantity}',
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
                 IconButton(
-                  onPressed: line.quantity < 20 ? () => cart.setQuantity(line.key, line.quantity + 1) : null,
+                  onPressed: line.quantity < 20
+                      ? () => cart.setQuantity(line.key, line.quantity + 1)
+                      : null,
                   icon: const Icon(Icons.add),
                 ),
               ],

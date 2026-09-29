@@ -1,7 +1,7 @@
+import 'package:bento_core/bento_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../core/format/money.dart';
 import '../../core/ui/widgets.dart';
 import '../catalog/catalog_providers.dart';
 import 'cart.dart';
@@ -10,8 +10,13 @@ import 'cart.dart';
 final cartTotalsProvider = Provider<CartTotals>((ref) {
   final cart = ref.watch(cartProvider);
   final store = ref.watch(currentStoreProvider).value;
-  final fee = store != null && store.store.id == cart.storeId ? store.deliveryFee : 0;
-  return CartTotals(subtotal: cart.subtotal, deliveryFee: cart.isEmpty ? 0 : fee);
+  final fee = store != null && store.store.id == cart.storeId
+      ? store.deliveryFee
+      : 0;
+  return CartTotals(
+    subtotal: cart.subtotal,
+    deliveryFee: cart.isEmpty ? 0 : fee,
+  );
 });
 
 class CartSummary extends ConsumerWidget {
@@ -24,7 +29,8 @@ class CartSummary extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l = context.l10n;
-    final CartTotals shown = totals ?? ref.watch<CartTotals>(cartTotalsProvider);
+    final CartTotals shown =
+        totals ?? ref.watch<CartTotals>(cartTotalsProvider);
     final code = currency ?? ref.watch(cartProvider).currency;
     String money(int v) => formatMoney(v, code, context.locale);
 
@@ -36,7 +42,8 @@ class CartSummary extends ConsumerWidget {
             _Row(l.cart_subtotal, money(shown.subtotal)),
             _Row(l.cart_delivery_fee, money(shown.deliveryFee)),
             _Row(l.cart_service_fee, money(shown.serviceFee)),
-            if (shown.discount > 0) _Row(l.cart_discount, money(-shown.discount)),
+            if (shown.discount > 0)
+              _Row(l.cart_discount, money(-shown.discount)),
             const Divider(height: 24),
             _Row(l.cart_total, money(shown.total), emphasize: true),
           ],
@@ -55,7 +62,9 @@ class _Row extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final style = emphasize ? Theme.of(context).textTheme.titleLarge : Theme.of(context).textTheme.bodyLarge;
+    final style = emphasize
+        ? Theme.of(context).textTheme.titleLarge
+        : Theme.of(context).textTheme.bodyLarge;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4),
       child: Row(

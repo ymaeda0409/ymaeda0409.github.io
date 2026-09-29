@@ -1,0 +1,31 @@
+name: flutter
+
+on:
+  push:
+    paths: ['customer-app/**', 'driver-app/**', 'packages/**', '.github/workflows/flutter.yml']
+  pull_request:
+    paths: ['customer-app/**', 'driver-app/**', 'packages/**', '.github/workflows/flutter.yml']
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        project: [packages/bento_core, customer-app, driver-app]
+    defaults:
+      run:
+        working-directory: ${{ matrix.project }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: '3.47.5'
+      - run: flutter pub get
+      - name: Generated localizations are up to date
+        if: matrix.project != 'packages/bento_core'
+        run: flutter gen-l10n && git diff --exit-code -- lib/l10n/generated
+      - run: dart format --output=none --set-exit-if-changed lib test
+      - run: flutter analyze
+      - run: flutter test

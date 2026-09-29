@@ -8,23 +8,35 @@ class AppTheme {
   static const accent = Color(0xFFF2A541);
 
   static ThemeData light() {
-    final scheme = ColorScheme.fromSeed(seedColor: green, primary: green, secondary: accent);
+    final scheme = ColorScheme.fromSeed(
+      seedColor: green,
+      primary: green,
+      secondary: accent,
+    );
     final base = ThemeData(colorScheme: scheme, useMaterial3: true);
     return base.copyWith(
       scaffoldBackgroundColor: const Color(0xFFF7F8F6),
-      appBarTheme: const AppBarTheme(centerTitle: false, backgroundColor: Colors.white, elevation: 0),
+      appBarTheme: const AppBarTheme(
+        centerTitle: false,
+        backgroundColor: Colors.white,
+        elevation: 0,
+      ),
       filledButtonTheme: FilledButtonThemeData(
         style: FilledButton.styleFrom(
           // Height grows with text (translations vary in length); only a minimum is set.
           minimumSize: const Size.fromHeight(52),
           textStyle: const TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(14),
+          ),
         ),
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
           minimumSize: const Size.fromHeight(52),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(14),
+          ),
         ),
       ),
       inputDecorationTheme: InputDecorationTheme(

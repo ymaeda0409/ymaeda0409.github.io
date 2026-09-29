@@ -21,6 +21,9 @@ return [
     'PRODUCT_NOT_AVAILABLE' => 'One or more items are no longer available.',
     'INVALID_STATUS_TRANSITION' => 'This action is not possible for the order\'s current status.',
     'PAYMENT_REQUIRED' => 'The order cannot be accepted until it has been paid.',
+    'DELIVERY_PIN_INVALID' => 'The delivery PIN is incorrect.',
+    'DELIVERY_PIN_LOCKED' => 'Too many wrong PINs. Please contact the store.',
+    'OFFER_NOT_AVAILABLE' => 'This delivery request is no longer available.',
     'TOO_MANY_REQUESTS' => 'Too many attempts. Please wait a moment and try again.',
     'SERVER_ERROR' => 'Something went wrong. Please try again.',
 ];

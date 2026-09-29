@@ -5,35 +5,12 @@ namespace Tests\Feature\Admin;
 use App\Enums\OrderStatus;
 use App\Enums\UserRole;
 use App\Events\OrderStatusChanged;
-use App\Models\Order;
-use App\Models\Store;
-use App\Models\UserAddress;
 use Illuminate\Support\Facades\Event;
 use Laravel\Sanctum\Sanctum;
 use Tests\FeatureTestCase;
 
 class KitchenOrderTest extends FeatureTestCase
 {
-    private function placeOrder(Store $store, string $paymentMethod = 'CASH', string $locale = 'en'): Order
-    {
-        $product = $store->storeProducts()->first()?->product ?? $this->createProduct($store);
-        $customer = $this->actingAsRole(UserRole::CUSTOMER);
-        $address = UserAddress::factory()->create([
-            'user_id' => $customer->id,
-            'latitude' => $store->latitude - 0.005,
-            'longitude' => $store->longitude,
-        ]);
-
-        $id = $this->postJson('/api/orders', [
-            'store_id' => $store->id,
-            'delivery_address_id' => $address->id,
-            'payment_method' => $paymentMethod,
-            'items' => [['product_id' => $product->id, 'quantity' => 1]],
-        ], ['Accept-Language' => $locale])->assertCreated()->json('data.id');
-
-        return Order::findOrFail($id);
-    }
-
     public function test_kitchen_flow_accept_cook_ready(): void
     {
         Event::fake([OrderStatusChanged::class]);

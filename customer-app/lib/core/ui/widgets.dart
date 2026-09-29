@@ -13,10 +13,12 @@ class LoadingView extends StatelessWidget {
   const LoadingView({super.key});
 
   @override
-  Widget build(BuildContext context) => const Center(child: Padding(
-        padding: EdgeInsets.all(24),
-        child: CircularProgressIndicator(),
-      ));
+  Widget build(BuildContext context) => const Center(
+    child: Padding(
+      padding: EdgeInsets.all(24),
+      child: CircularProgressIndicator(),
+    ),
+  );
 }
 
 /// Translated error with a retry button (codes → text via [errorText]).
@@ -39,7 +41,10 @@ class ErrorView extends StatelessWidget {
             Text(errorText(context.l10n, error), textAlign: TextAlign.center),
             if (onRetry != null) ...[
               const SizedBox(height: 16),
-              OutlinedButton(onPressed: onRetry, child: Text(context.l10n.common_retry)),
+              OutlinedButton(
+                onPressed: onRetry,
+                child: Text(context.l10n.common_retry),
+              ),
             ],
           ],
         ),
@@ -49,7 +54,12 @@ class ErrorView extends StatelessWidget {
 }
 
 class MessageView extends StatelessWidget {
-  const MessageView({super.key, required this.icon, required this.message, this.action});
+  const MessageView({
+    super.key,
+    required this.icon,
+    required this.message,
+    this.action,
+  });
 
   final IconData icon;
   final String message;
@@ -65,7 +75,11 @@ class MessageView extends StatelessWidget {
           children: [
             Icon(icon, size: 56, color: Theme.of(context).colorScheme.primary),
             const SizedBox(height: 12),
-            Text(message, textAlign: TextAlign.center, style: Theme.of(context).textTheme.titleMedium),
+            Text(
+              message,
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
             if (action != null) ...[const SizedBox(height: 20), action!],
           ],
         ),

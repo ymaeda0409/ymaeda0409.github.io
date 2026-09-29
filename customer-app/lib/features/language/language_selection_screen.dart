@@ -13,10 +13,12 @@ class LanguageSelectionScreen extends ConsumerStatefulWidget {
   const LanguageSelectionScreen({super.key});
 
   @override
-  ConsumerState<LanguageSelectionScreen> createState() => _LanguageSelectionScreenState();
+  ConsumerState<LanguageSelectionScreen> createState() =>
+      _LanguageSelectionScreenState();
 }
 
-class _LanguageSelectionScreenState extends ConsumerState<LanguageSelectionScreen> {
+class _LanguageSelectionScreenState
+    extends ConsumerState<LanguageSelectionScreen> {
   @override
   void initState() {
     super.initState();
@@ -37,21 +39,31 @@ class _LanguageSelectionScreenState extends ConsumerState<LanguageSelectionScree
           padding: const EdgeInsets.all(24),
           children: [
             const SizedBox(height: 24),
-            Icon(Icons.translate, size: 48, color: Theme.of(context).colorScheme.primary),
+            Icon(
+              Icons.translate,
+              size: 48,
+              color: Theme.of(context).colorScheme.primary,
+            ),
             const SizedBox(height: 16),
-            Text(l.language_title, style: Theme.of(context).textTheme.headlineSmall),
+            Text(
+              l.language_title,
+              style: Theme.of(context).textTheme.headlineSmall,
+            ),
             const SizedBox(height: 8),
             Text(l.language_subtitle),
             const SizedBox(height: 24),
             LanguageList(
               selected: ref.watch(effectiveLocaleProvider),
-              onSelected: (locale) => ref.read(localeProvider.notifier).select(locale),
+              onSelected: (locale) =>
+                  ref.read(localeProvider.notifier).select(locale),
             ),
             const SizedBox(height: 16),
             FilledButton(
               onPressed: () async {
                 // Persist the (possibly auto-detected) choice before leaving.
-                await ref.read(localeProvider.notifier).select(ref.read(effectiveLocaleProvider));
+                await ref
+                    .read(localeProvider.notifier)
+                    .select(ref.read(effectiveLocaleProvider));
                 if (context.mounted) context.go('/home');
               },
               child: Text(l.common_continue),

@@ -1,25 +1,36 @@
+import 'package:bento_core/bento_core.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:malawi_bento_customer/core/format/money.dart';
 import 'package:malawi_bento_customer/core/locale/app_locales.dart';
-import 'package:malawi_bento_customer/core/locale/formatting_locale.dart';
 
 void main() {
   setUpAll(() => initializeDateFormatting());
 
   group('AppLocales.resolve (first launch)', () {
     test('uses a supported device language', () {
-      expect(AppLocales.resolve(const [Locale('ja', 'JP')]), const Locale('ja'));
-      expect(AppLocales.resolve(const [Locale('ny', 'MW')]), const Locale('ny'));
+      expect(
+        AppLocales.resolve(const [Locale('ja', 'JP')]),
+        const Locale('ja'),
+      );
+      expect(
+        AppLocales.resolve(const [Locale('ny', 'MW')]),
+        const Locale('ny'),
+      );
     });
 
     test('takes the first supported entry of the device list', () {
-      expect(AppLocales.resolve(const [Locale('fr'), Locale('ja')]), const Locale('ja'));
+      expect(
+        AppLocales.resolve(const [Locale('fr'), Locale('ja')]),
+        const Locale('ja'),
+      );
     });
 
     test('falls back to English for unsupported languages', () {
-      expect(AppLocales.resolve(const [Locale('fr', 'FR'), Locale('de')]), const Locale('en'));
+      expect(
+        AppLocales.resolve(const [Locale('fr', 'FR'), Locale('de')]),
+        const Locale('en'),
+      );
       expect(AppLocales.resolve(const []), const Locale('en'));
     });
 
@@ -52,7 +63,10 @@ void main() {
     test('dates are localized', () {
       final date = DateTime(2026, 9, 29, 18, 30);
       expect(formatDateTime(date, const Locale('ja')), contains('2026'));
-      expect(formatDateTime(date, const Locale('ny')), formatDateTime(date, const Locale('en')));
+      expect(
+        formatDateTime(date, const Locale('ny')),
+        formatDateTime(date, const Locale('en')),
+      );
     });
   });
 }

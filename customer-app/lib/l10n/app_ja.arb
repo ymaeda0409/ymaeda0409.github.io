@@ -151,5 +151,12 @@
   "order_cancel_confirm": "この注文をキャンセルしますか？",
   "order_ordered_at": "注文日時：{time}",
   "order_status_title": "ステータス",
-  "error_payment_required": "この注文はまだ支払われていません。"
+  "error_payment_required": "この注文はまだ支払われていません。",
+  "tracking_title": "配達状況",
+  "tracking_rider": "配達員",
+  "tracking_distance": "あと {distance} km",
+  "tracking_updated": "{time} 更新",
+  "vehicle_motorbike": "バイク",
+  "vehicle_bicycle": "自転車",
+  "vehicle_car": "車"
 }

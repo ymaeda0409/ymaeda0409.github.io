@@ -1,8 +1,8 @@
+import 'package:bento_core/bento_core.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../core/format/money.dart';
 import '../../core/ui/widgets.dart';
 import 'models.dart';
 
@@ -20,7 +20,11 @@ class ProductImage extends StatelessWidget {
       width: size,
       height: size,
       color: Theme.of(context).colorScheme.primaryContainer,
-      child: Icon(Icons.bento, color: Theme.of(context).colorScheme.primary, size: size * 0.45),
+      child: Icon(
+        Icons.bento,
+        color: Theme.of(context).colorScheme.primary,
+        size: size * 0.45,
+      ),
     );
     final image = url == null
         ? placeholder
@@ -29,7 +33,8 @@ class ProductImage extends StatelessWidget {
             width: size,
             height: size,
             fit: BoxFit.cover,
-            memCacheWidth: (size * MediaQuery.devicePixelRatioOf(context)).round(),
+            memCacheWidth: (size * MediaQuery.devicePixelRatioOf(context))
+                .round(),
             placeholder: (_, _) => placeholder,
             errorWidget: (_, _, _) => placeholder,
           );
@@ -45,8 +50,10 @@ class PriceText extends StatelessWidget {
   final TextStyle? style;
 
   @override
-  Widget build(BuildContext context) =>
-      Text(formatMoney(amount, currency, context.locale), style: style ?? Theme.of(context).textTheme.titleMedium);
+  Widget build(BuildContext context) => Text(
+    formatMoney(amount, currency, context.locale),
+    style: style ?? Theme.of(context).textTheme.titleMedium,
+  );
 }
 
 /// Row card; text wraps instead of being truncated so longer translations fit.
@@ -76,7 +83,12 @@ class ProductTile extends StatelessWidget {
                     Text(product.name, style: theme.textTheme.titleMedium),
                     if (product.description != null) ...[
                       const SizedBox(height: 4),
-                      Text(product.description!, maxLines: 2, overflow: TextOverflow.ellipsis, style: theme.textTheme.bodySmall),
+                      Text(
+                        product.description!,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: theme.textTheme.bodySmall,
+                      ),
                     ],
                     const SizedBox(height: 8),
                     Wrap(
@@ -107,8 +119,14 @@ class SoldOutBadge extends StatelessWidget {
     final scheme = Theme.of(context).colorScheme;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-      decoration: BoxDecoration(color: scheme.errorContainer, borderRadius: BorderRadius.circular(8)),
-      child: Text(context.l10n.product_sold_out, style: TextStyle(color: scheme.onErrorContainer)),
+      decoration: BoxDecoration(
+        color: scheme.errorContainer,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Text(
+        context.l10n.product_sold_out,
+        style: TextStyle(color: scheme.onErrorContainer),
+      ),
     );
   }
 }
@@ -134,9 +152,18 @@ class FeaturedCard extends StatelessWidget {
               children: [
                 ProductImage(url: product.imageUrl, size: 140),
                 const SizedBox(height: 8),
-                Text(product.name, maxLines: 2, overflow: TextOverflow.ellipsis, style: Theme.of(context).textTheme.titleSmall),
+                Text(
+                  product.name,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.titleSmall,
+                ),
                 const SizedBox(height: 4),
-                PriceText(product.price, product.currency, style: Theme.of(context).textTheme.bodyMedium),
+                PriceText(
+                  product.price,
+                  product.currency,
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
               ],
             ),
           ),

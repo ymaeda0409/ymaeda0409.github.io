@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:bento_core/bento_core.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -7,12 +8,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../features/auth/user.dart';
 import 'config/app_config.dart';
 import 'locale/app_locales.dart';
-import 'network/api_client.dart';
-import 'storage/token_store.dart';
 
 /// Overridden in main() (and in tests) with ready instances.
-final sharedPreferencesProvider = Provider<SharedPreferences>((ref) => throw UnimplementedError());
-final tokenStoreProvider = Provider<TokenStore>((ref) => throw UnimplementedError());
+final sharedPreferencesProvider = Provider<SharedPreferences>(
+  (ref) => throw UnimplementedError(),
+);
+final tokenStoreProvider = Provider<TokenStore>(
+  (ref) => throw UnimplementedError(),
+);
 
 /// Initial auth token read before runApp (so the first requests are authenticated).
 final initialTokenProvider = Provider<String?>((ref) => null);
@@ -20,21 +23,31 @@ final initialTokenProvider = Provider<String?>((ref) => null);
 // ---------------------------------------------------------------- Locale
 
 /// The UI locale chosen by the user. `null` = not chosen yet (first launch).
-final localeProvider = NotifierProvider<LocaleController, Locale?>(LocaleController.new);
+final localeProvider = NotifierProvider<LocaleController, Locale?>(
+  LocaleController.new,
+);
 
 class LocaleController extends Notifier<Locale?> {
   static const _key = 'locale';
 
   @override
-  Locale? build() => AppLocales.parse(ref.read(sharedPreferencesProvider).getString(_key));
+  Locale? build() =>
+      AppLocales.parse(ref.read(sharedPreferencesProvider).getString(_key));
 
   /// Applies immediately (no restart) and syncs to the server when signed in.
   Future<void> select(Locale locale) async {
     state = locale;
-    await ref.read(sharedPreferencesProvider).setString(_key, locale.languageCode);
+    await ref
+        .read(sharedPreferencesProvider)
+        .setString(_key, locale.languageCode);
     if (ref.read(sessionProvider).isSignedIn) {
       try {
-        await ref.read(apiClientProvider).put<Object?>('/account/language', body: {'language': locale.languageCode});
+        await ref
+            .read(apiClientProvider)
+            .put<Object?>(
+              '/account/language',
+              body: {'language': locale.languageCode},
+            );
       } catch (_) {
         // Best effort: the header-based locale keeps the app consistent meanwhile.
       }
@@ -43,7 +56,9 @@ class LocaleController extends Notifier<Locale?> {
 }
 
 /// Locale actually used for rendering and API calls.
-final effectiveLocaleProvider = Provider<Locale>((ref) => ref.watch(localeProvider) ?? AppLocales.fallback);
+final effectiveLocaleProvider = Provider<Locale>(
+  (ref) => ref.watch(localeProvider) ?? AppLocales.fallback,
+);
 
 // ---------------------------------------------------------------- Session
 
@@ -56,7 +71,9 @@ class Session {
   bool get isSignedIn => token != null;
 }
 
-final sessionProvider = NotifierProvider<SessionController, Session>(SessionController.new);
+final sessionProvider = NotifierProvider<SessionController, Session>(
+  SessionController.new,
+);
 
 class SessionController extends Notifier<Session> {
   static const _userKey = 'user';
@@ -73,12 +90,16 @@ class SessionController extends Notifier<Session> {
 
   Future<void> signIn(String token, AppUser user) async {
     await ref.read(tokenStoreProvider).write(token);
-    await ref.read(sharedPreferencesProvider).setString(_userKey, jsonEncode(user.toJson()));
+    await ref
+        .read(sharedPreferencesProvider)
+        .setString(_userKey, jsonEncode(user.toJson()));
     state = Session(token: token, user: user);
   }
 
   Future<void> updateUser(AppUser user) async {
-    await ref.read(sharedPreferencesProvider).setString(_userKey, jsonEncode(user.toJson()));
+    await ref
+        .read(sharedPreferencesProvider)
+        .setString(_userKey, jsonEncode(user.toJson()));
     state = Session(token: state.token, user: user);
   }
 

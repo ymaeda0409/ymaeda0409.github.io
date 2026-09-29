@@ -27,44 +27,61 @@ class AccountScreen extends ConsumerWidget {
             Card(
               child: Padding(
                 padding: const EdgeInsets.all(16),
-                child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-                  Text(l.account_guest, style: Theme.of(context).textTheme.titleMedium),
-                  const SizedBox(height: 12),
-                  FilledButton(onPressed: () => context.push('/login'), child: Text(l.account_sign_in)),
-                ]),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Text(
+                      l.account_guest,
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                    const SizedBox(height: 12),
+                    FilledButton(
+                      onPressed: () => context.push('/login'),
+                      child: Text(l.account_sign_in),
+                    ),
+                  ],
+                ),
               ),
             )
           else
             Card(
-              child: Column(children: [
-                ListTile(
-                  leading: const Icon(Icons.person_outline),
-                  title: Text(l.account_name),
-                  subtitle: Text(user?.name ?? '—'),
-                  trailing: const Icon(Icons.edit_outlined),
-                  onTap: () => _editName(context, ref, user?.name),
-                ),
-                ListTile(leading: const Icon(Icons.phone_outlined), title: Text(l.account_phone), subtitle: Text(user?.phone ?? '')),
-              ]),
+              child: Column(
+                children: [
+                  ListTile(
+                    leading: const Icon(Icons.person_outline),
+                    title: Text(l.account_name),
+                    subtitle: Text(user?.name ?? '—'),
+                    trailing: const Icon(Icons.edit_outlined),
+                    onTap: () => _editName(context, ref, user?.name),
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.phone_outlined),
+                    title: Text(l.account_phone),
+                    subtitle: Text(user?.phone ?? ''),
+                  ),
+                ],
+              ),
             ),
           const SizedBox(height: 12),
           Card(
-            child: Column(children: [
-              ListTile(
-                leading: const Icon(Icons.translate),
-                title: Text(l.account_language),
-                subtitle: Text(AppLocales.nativeName(locale)),
-                trailing: const Icon(Icons.chevron_right),
-                onTap: () => context.push('/account/language'),
-              ),
-              if (session.isSignedIn)
+            child: Column(
+              children: [
                 ListTile(
-                  leading: const Icon(Icons.location_on_outlined),
-                  title: Text(l.account_addresses),
+                  leading: const Icon(Icons.translate),
+                  title: Text(l.account_language),
+                  subtitle: Text(AppLocales.nativeName(locale)),
                   trailing: const Icon(Icons.chevron_right),
-                  onTap: () => context.push('/account/addresses'),
+                  onTap: () => context.push('/account/language'),
                 ),
-            ]),
+                if (session.isSignedIn)
+                  ListTile(
+                    leading: const Icon(Icons.location_on_outlined),
+                    title: Text(l.account_addresses),
+                    trailing: const Icon(Icons.chevron_right),
+                    onTap: () => context.push('/account/addresses'),
+                  ),
+              ],
+            ),
           ),
           if (session.isSignedIn) ...[
             const SizedBox(height: 24),
@@ -86,7 +103,11 @@ class AccountScreen extends ConsumerWidget {
     );
   }
 
-  Future<void> _editName(BuildContext context, WidgetRef ref, String? current) async {
+  Future<void> _editName(
+    BuildContext context,
+    WidgetRef ref,
+    String? current,
+  ) async {
     final controller = TextEditingController(text: current);
     final l = context.l10n;
     final name = await showDialog<String>(
@@ -95,8 +116,14 @@ class AccountScreen extends ConsumerWidget {
         title: Text(l.account_name),
         content: TextField(controller: controller, autofocus: true),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context), child: Text(l.common_cancel)),
-          TextButton(onPressed: () => Navigator.pop(context, controller.text.trim()), child: Text(l.common_save)),
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(l.common_cancel),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, controller.text.trim()),
+            child: Text(l.common_save),
+          ),
         ],
       ),
     );

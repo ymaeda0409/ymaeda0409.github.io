@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Order\PlaceOrderRequest;
 use App\Http\Requests\Order\QuoteRequest;
 use App\Http\Resources\OrderResource;
+use App\Http\Resources\OrderTrackingResource;
 use App\Http\Resources\QuoteResource;
 use App\Models\Order;
 use App\Services\Order\OrderPricingService;
@@ -59,6 +60,13 @@ class OrderController extends Controller
     public function show(Request $request, int $order): JsonResponse
     {
         return ApiResponse::success(new OrderResource($this->loadDetail($this->own($request, $order))));
+    }
+
+    public function tracking(Request $request, int $order): JsonResponse
+    {
+        $tracked = $this->own($request, $order)->load(['store', 'kitchen', 'driver.user', 'statusHistories']);
+
+        return ApiResponse::success(new OrderTrackingResource($tracked));
     }
 
     public function cancel(Request $request, int $order, OrderStatusService $statuses): JsonResponse

@@ -151,5 +151,12 @@
   "order_cancel_confirm": "Letsani oda iyi?",
   "order_ordered_at": "Oda: {time}",
   "order_status_title": "Momwe ilili",
-  "error_payment_required": "Oda iyi sinalipiridwe."
+  "error_payment_required": "Oda iyi sinalipiridwe.",
+  "tracking_title": "Kutsatira pompano",
+  "tracking_rider": "Wobweretsa wanu",
+  "tracking_distance": "Ali pa makilomita {distance}",
+  "tracking_updated": "Zasinthidwa {time}",
+  "vehicle_motorbike": "Njinga yamoto",
+  "vehicle_bicycle": "Njinga",
+  "vehicle_car": "Galimoto"
 }

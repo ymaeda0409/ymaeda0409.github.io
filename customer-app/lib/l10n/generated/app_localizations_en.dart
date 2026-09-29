@@ -506,4 +506,29 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get error_payment_required => 'This order has not been paid yet.';
+
+  @override
+  String get tracking_title => 'Live tracking';
+
+  @override
+  String get tracking_rider => 'Your rider';
+
+  @override
+  String tracking_distance(String distance) {
+    return '$distance km away';
+  }
+
+  @override
+  String tracking_updated(String time) {
+    return 'Updated $time';
+  }
+
+  @override
+  String get vehicle_motorbike => 'Motorbike';
+
+  @override
+  String get vehicle_bicycle => 'Bicycle';
+
+  @override
+  String get vehicle_car => 'Car';
 }

@@ -72,6 +72,19 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Driver dispatch
+    |--------------------------------------------------------------------------
+    */
+    'dispatch' => [
+        // Seconds a driver has to accept an offer before it goes to the next driver.
+        'offer_ttl_seconds' => (int) env('DISPATCH_OFFER_TTL', 60),
+        // Drivers whose last GPS point is older than this are not offered deliveries.
+        'location_max_age_minutes' => (int) env('DISPATCH_LOCATION_MAX_AGE', 10),
+        'max_pin_attempts' => 5,
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Geo / delivery
     |--------------------------------------------------------------------------
     | Upper bound used for the SQL bounding-box prefilter in store search.

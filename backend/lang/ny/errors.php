@@ -20,6 +20,9 @@ return [
     'PRODUCT_NOT_AVAILABLE' => 'Zinthu zina sizikupezekanso.',
     'INVALID_STATUS_TRANSITION' => 'Izi sizingatheke pa gawo lomwe oda ili pano.',
     'PAYMENT_REQUIRED' => 'Oda singalandiridwe mpaka italipiridwa.',
+    'DELIVERY_PIN_INVALID' => 'PIN yolandirira si yolondola.',
+    'DELIVERY_PIN_LOCKED' => 'PIN yalakwika kambirimbiri. Chonde lumikizanani ndi sitolo.',
+    'OFFER_NOT_AVAILABLE' => 'Pempho lobweretsa ili palibenso.',
     'TOO_MANY_REQUESTS' => 'Mwayesa kambirimbiri. Dikirani pang\'ono kenako yesaninso.',
     'SERVER_ERROR' => 'Pachitika vuto. Chonde yesaninso.',
 ];

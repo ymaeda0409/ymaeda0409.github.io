@@ -1,8 +1,8 @@
+import 'package:bento_core/bento_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../core/network/api_exception.dart';
 import '../../core/ui/widgets.dart';
 import 'address.dart';
 import 'address_repository.dart';
@@ -22,7 +22,15 @@ class AddressFormScreen extends ConsumerStatefulWidget {
 class _AddressFormScreenState extends ConsumerState<AddressFormScreen> {
   final _form = GlobalKey<FormState>();
   final _fields = {
-    for (final f in ['name', 'area', 'street', 'building', 'landmark', 'delivery_note']) f: TextEditingController(),
+    for (final f in [
+      'name',
+      'area',
+      'street',
+      'building',
+      'landmark',
+      'delivery_note',
+    ])
+      f: TextEditingController(),
   };
   GeoPoint? _point;
   ApiException? _error;
@@ -57,7 +65,9 @@ class _AddressFormScreenState extends ConsumerState<AddressFormScreen> {
         'longitude': _point!.longitude,
       });
       ref.invalidate(addressesProvider);
-      await ref.read(deliveryLocationProvider.notifier).set(DeliveryLocation.fromAddress(address));
+      await ref
+          .read(deliveryLocationProvider.notifier)
+          .set(DeliveryLocation.fromAddress(address));
       if (mounted) context.pop();
     } on ApiException catch (e) {
       setState(() => _error = e);
@@ -67,14 +77,28 @@ class _AddressFormScreenState extends ConsumerState<AddressFormScreen> {
     }
   }
 
-  Widget _field(String key, String label, {String? hint, bool required = false, int maxLines = 1}) {
+  Widget _field(
+    String key,
+    String label, {
+    String? hint,
+    bool required = false,
+    int maxLines = 1,
+  }) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
       child: TextFormField(
         controller: _fields[key],
         maxLines: maxLines,
-        decoration: InputDecoration(labelText: label, hintText: hint, errorText: _error?.fieldMessage(key)),
-        validator: required ? (v) => (v == null || v.trim().isEmpty) ? context.l10n.common_required : null : null,
+        decoration: InputDecoration(
+          labelText: label,
+          hintText: hint,
+          errorText: _error?.fieldMessage(key),
+        ),
+        validator: required
+            ? (v) => (v == null || v.trim().isEmpty)
+                  ? context.l10n.common_required
+                  : null
+            : null,
       ),
     );
   }
@@ -89,10 +113,18 @@ class _AddressFormScreenState extends ConsumerState<AddressFormScreen> {
         child: ListView(
           padding: const EdgeInsets.all(16),
           children: [
-            LocationPicker(value: _point, onChanged: (p) => setState(() => _point = p), height: 220),
+            LocationPicker(
+              value: _point,
+              onChanged: (p) => setState(() => _point = p),
+              height: 220,
+            ),
             const SizedBox(height: 16),
             _field('name', l.location_name_label, required: true),
-            _field('landmark', l.location_landmark_label, hint: l.location_landmark_hint),
+            _field(
+              'landmark',
+              l.location_landmark_label,
+              hint: l.location_landmark_hint,
+            ),
             _field('area', l.location_area_label),
             _field('street', l.location_street_label),
             _field('building', l.location_building_label),

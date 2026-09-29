@@ -20,7 +20,9 @@ class LanguageSettingsScreen extends ConsumerWidget {
             selected: ref.watch(effectiveLocaleProvider),
             onSelected: (locale) async {
               await ref.read(localeProvider.notifier).select(locale);
-              if (context.mounted) showMessage(context, context.l10n.language_changed);
+              if (context.mounted) {
+                showMessage(context, context.l10n.language_changed);
+              }
             },
           ),
         ],

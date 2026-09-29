@@ -491,4 +491,29 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get error_payment_required => 'この注文はまだ支払われていません。';
+
+  @override
+  String get tracking_title => '配達状況';
+
+  @override
+  String get tracking_rider => '配達員';
+
+  @override
+  String tracking_distance(String distance) {
+    return 'あと $distance km';
+  }
+
+  @override
+  String tracking_updated(String time) {
+    return '$time 更新';
+  }
+
+  @override
+  String get vehicle_motorbike => 'バイク';
+
+  @override
+  String get vehicle_bicycle => '自転車';
+
+  @override
+  String get vehicle_car => '車';
 }

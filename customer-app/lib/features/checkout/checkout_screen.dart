@@ -1,8 +1,8 @@
+import 'package:bento_core/bento_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../core/format/money.dart';
 import '../../core/providers.dart';
 import '../../core/ui/widgets.dart';
 import '../cart/cart.dart';
@@ -29,7 +29,8 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
   bool _busy = false;
 
   Address? _selectedAddress(List<Address> addresses) {
-    final preferred = _addressId ?? ref.read(deliveryLocationProvider)?.addressId;
+    final preferred =
+        _addressId ?? ref.read(deliveryLocationProvider)?.addressId;
     return addresses.where((a) => a.id == preferred).firstOrNull ??
         addresses.where((a) => a.isDefault).firstOrNull ??
         addresses.firstOrNull;
@@ -37,22 +38,42 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
 
   Future<void> _pickSchedule() async {
     final now = DateTime.now();
-    final date = await showDatePicker(context: context, firstDate: now, lastDate: now.add(const Duration(days: 7)), initialDate: now);
+    final date = await showDatePicker(
+      context: context,
+      firstDate: now,
+      lastDate: now.add(const Duration(days: 7)),
+      initialDate: now,
+    );
     if (date == null || !mounted) return;
-    final time = await showTimePicker(context: context, initialTime: TimeOfDay.fromDateTime(now.add(const Duration(hours: 1))));
+    final time = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.fromDateTime(now.add(const Duration(hours: 1))),
+    );
     if (time == null) return;
-    setState(() => _scheduledAt = DateTime(date.year, date.month, date.day, time.hour, time.minute));
+    setState(
+      () => _scheduledAt = DateTime(
+        date.year,
+        date.month,
+        date.day,
+        time.hour,
+        time.minute,
+      ),
+    );
   }
 
   Future<void> _placeOrder(Address address) async {
     setState(() => _busy = true);
     try {
-      final order = await ref.read(orderRepositoryProvider).place(PlaceOrderRequest(
-            cart: ref.read(cartProvider),
-            addressId: address.id,
-            paymentMethod: _payment,
-            scheduledAt: _scheduledAt,
-          ));
+      final order = await ref
+          .read(orderRepositoryProvider)
+          .place(
+            PlaceOrderRequest(
+              cart: ref.read(cartProvider),
+              addressId: address.id,
+              paymentMethod: _payment,
+              scheduledAt: _scheduledAt,
+            ),
+          );
       await ref.read(cartProvider.notifier).clear();
       if (mounted) context.go('/orders/${order.id}/complete');
     } catch (e) {
@@ -81,69 +102,110 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
         children: [
           _Section(
             title: l.checkout_delivery_address,
-            trailing: TextButton(onPressed: () => _chooseAddress(addresses.value ?? const []), child: Text(l.checkout_change)),
+            trailing: TextButton(
+              onPressed: () => _chooseAddress(addresses.value ?? const []),
+              child: Text(l.checkout_change),
+            ),
             child: addresses.isLoading
                 ? const LoadingView()
                 : address == null
-                    ? ListTile(
-                        leading: const Icon(Icons.add_location_alt_outlined),
-                        title: Text(l.checkout_select_address),
-                        onTap: () => context.push('/location/new'),
-                      )
-                    : ListTile(
-                        leading: const Icon(Icons.location_on_outlined),
-                        title: Text(address.name),
-                        subtitle: address.summary.isEmpty ? null : Text(address.summary),
-                      ),
+                ? ListTile(
+                    leading: const Icon(Icons.add_location_alt_outlined),
+                    title: Text(l.checkout_select_address),
+                    onTap: () => context.push('/location/new'),
+                  )
+                : ListTile(
+                    leading: const Icon(Icons.location_on_outlined),
+                    title: Text(address.name),
+                    subtitle: address.summary.isEmpty
+                        ? null
+                        : Text(address.summary),
+                  ),
           ),
           _Section(
             title: l.checkout_payment_method,
             child: RadioGroup<PaymentMethod>(
               groupValue: _payment,
               onChanged: (v) => setState(() => _payment = v!),
-              child: Column(children: [
-                for (final method in PaymentMethod.values)
-                  RadioListTile<PaymentMethod>(value: method, title: Text(_paymentLabel(method))),
-                if (_payment.isMobileMoney && phone != null)
-                  ListTile(title: Text(l.checkout_mobile_money_phone), subtitle: Text(phone)),
-              ]),
+              child: Column(
+                children: [
+                  for (final method in PaymentMethod.values)
+                    RadioListTile<PaymentMethod>(
+                      value: method,
+                      title: Text(_paymentLabel(method)),
+                    ),
+                  if (_payment.isMobileMoney && phone != null)
+                    ListTile(
+                      title: Text(l.checkout_mobile_money_phone),
+                      subtitle: Text(phone),
+                    ),
+                ],
+              ),
             ),
           ),
           _Section(
             title: l.checkout_delivery_time,
             child: RadioGroup<bool>(
               groupValue: _scheduledAt != null,
-              onChanged: (scheduled) => scheduled! ? _pickSchedule() : setState(() => _scheduledAt = null),
-              child: Column(children: [
-                RadioListTile<bool>(value: false, title: Text(l.checkout_asap)),
-                RadioListTile<bool>(
-                  value: true,
-                  title: Text(l.checkout_schedule),
-                  subtitle: _scheduledAt == null ? null : Text(l.checkout_scheduled_for(formatDateTime(_scheduledAt!, context.locale))),
-                ),
-              ]),
+              onChanged: (scheduled) => scheduled!
+                  ? _pickSchedule()
+                  : setState(() => _scheduledAt = null),
+              child: Column(
+                children: [
+                  RadioListTile<bool>(
+                    value: false,
+                    title: Text(l.checkout_asap),
+                  ),
+                  RadioListTile<bool>(
+                    value: true,
+                    title: Text(l.checkout_schedule),
+                    subtitle: _scheduledAt == null
+                        ? null
+                        : Text(
+                            l.checkout_scheduled_for(
+                              formatDateTime(_scheduledAt!, context.locale),
+                            ),
+                          ),
+                  ),
+                ],
+              ),
             ),
           ),
           _Section(
             title: l.checkout_order_summary,
-            child: Column(children: [
-              for (final line in cart.lines)
-                ListTile(
-                  dense: true,
-                  title: Text(localizedLine(ref, line, cart.storeId!).name),
-                  leading: Text('${line.quantity}×', style: theme.textTheme.titleMedium),
-                  trailing: Text(formatMoney(line.total, cart.currency, context.locale)),
-                ),
-            ]),
+            child: Column(
+              children: [
+                for (final line in cart.lines)
+                  ListTile(
+                    dense: true,
+                    title: Text(localizedLine(ref, line, cart.storeId!).name),
+                    leading: Text(
+                      '${line.quantity}×',
+                      style: theme.textTheme.titleMedium,
+                    ),
+                    trailing: Text(
+                      formatMoney(line.total, cart.currency, context.locale),
+                    ),
+                  ),
+              ],
+            ),
           ),
           quote.when(
             loading: () => const LoadingView(),
-            error: (e, _) => ErrorView(error: e, onRetry: () => ref.invalidate(checkoutQuoteProvider(address?.id))),
+            error: (e, _) => ErrorView(
+              error: e,
+              onRetry: () => ref.invalidate(checkoutQuoteProvider(address?.id)),
+            ),
             data: (q) => q == null
                 ? const CartSummary()
                 : CartSummary(
                     currency: q.currency,
-                    totals: CartTotals(subtotal: q.subtotal, deliveryFee: q.deliveryFee, serviceFee: q.serviceFee, discount: q.discount),
+                    totals: CartTotals(
+                      subtotal: q.subtotal,
+                      deliveryFee: q.deliveryFee,
+                      serviceFee: q.serviceFee,
+                      discount: q.discount,
+                    ),
                   ),
           ),
           const SizedBox(height: 8),
@@ -154,9 +216,14 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: FilledButton(
-            onPressed: _busy || !quoteOk || cart.isEmpty ? null : () => _placeOrder(address),
+            onPressed: _busy || !quoteOk || cart.isEmpty
+                ? null
+                : () => _placeOrder(address),
             child: _busy
-                ? const SizedBox.square(dimension: 22, child: CircularProgressIndicator(strokeWidth: 2))
+                ? const SizedBox.square(
+                    dimension: 22,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  )
                 : Text(l.order_place_order),
           ),
         ),
@@ -177,26 +244,31 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
     final chosen = await showModalBottomSheet<Object>(
       context: context,
       builder: (context) => SafeArea(
-        child: ListView(shrinkWrap: true, children: [
-          for (final a in addresses)
+        child: ListView(
+          shrinkWrap: true,
+          children: [
+            for (final a in addresses)
+              ListTile(
+                leading: const Icon(Icons.location_on_outlined),
+                title: Text(a.name),
+                subtitle: a.summary.isEmpty ? null : Text(a.summary),
+                onTap: () => Navigator.pop(context, a),
+              ),
             ListTile(
-              leading: const Icon(Icons.location_on_outlined),
-              title: Text(a.name),
-              subtitle: a.summary.isEmpty ? null : Text(a.summary),
-              onTap: () => Navigator.pop(context, a),
+              leading: const Icon(Icons.add),
+              title: Text(context.l10n.location_new_address),
+              onTap: () => Navigator.pop(context, 'new'),
             ),
-          ListTile(
-            leading: const Icon(Icons.add),
-            title: Text(context.l10n.location_new_address),
-            onTap: () => Navigator.pop(context, 'new'),
-          ),
-        ]),
+          ],
+        ),
       ),
     );
     if (!mounted) return;
     if (chosen is Address) {
       setState(() => _addressId = chosen.id);
-      await ref.read(deliveryLocationProvider.notifier).set(DeliveryLocation.fromAddress(chosen));
+      await ref
+          .read(deliveryLocationProvider.notifier)
+          .set(DeliveryLocation.fromAddress(chosen));
     } else if (chosen == 'new') {
       context.push('/location/new');
     }
@@ -217,10 +289,17 @@ class _Section extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(children: [
-            Expanded(child: Text(title, style: Theme.of(context).textTheme.titleMedium)),
-            ?trailing,
-          ]),
+          Row(
+            children: [
+              Expanded(
+                child: Text(
+                  title,
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
+              ),
+              ?trailing,
+            ],
+          ),
           const SizedBox(height: 6),
           Card(child: child),
         ],

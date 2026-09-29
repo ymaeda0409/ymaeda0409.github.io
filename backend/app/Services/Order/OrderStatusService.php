@@ -67,9 +67,13 @@ class OrderStatusService
         return $this->transition($order, OrderStatus::CANCELLED, $actor, $reason ?? self::REASON_STORE_CANCELLED);
     }
 
-    public function transition(Order $order, OrderStatus $to, ?User $actor, ?string $reasonCode = null): Order
+    /**
+     * @param  (callable(Order): void)|null  $mutate  extra changes applied under the same row lock
+     *                                                (may throw to abort the transition)
+     */
+    public function transition(Order $order, OrderStatus $to, ?User $actor, ?string $reasonCode = null, ?callable $mutate = null): Order
     {
-        [$order, $from] = DB::transaction(function () use ($order, $to, $actor, $reasonCode) {
+        [$order, $from] = DB::transaction(function () use ($order, $to, $actor, $reasonCode, $mutate) {
             // Re-read under lock so two taps (or two staff) cannot double-transition.
             $locked = Order::query()->whereKey($order->id)->lockForUpdate()->firstOrFail();
             $from = $locked->status;
@@ -78,6 +82,9 @@ class OrderStatusService
                 throw ApiException::of(ErrorCode::INVALID_STATUS_TRANSITION);
             }
 
+            if ($mutate) {
+                $mutate($locked);
+            }
             $locked->status = $to;
             if ($column = $to->timestampColumn()) {
                 $locked->{$column} = now();

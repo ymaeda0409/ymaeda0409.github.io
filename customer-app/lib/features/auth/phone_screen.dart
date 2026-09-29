@@ -39,12 +39,21 @@ class _PhoneScreenState extends ConsumerState<PhoneScreen> {
       _fieldError = null;
     });
     try {
-      final request = await ref.read(authRepositoryProvider).sendOtp('${AppConfig.phoneCountryCode}${digits.replaceFirst(RegExp('^0'), '')}');
+      final request = await ref
+          .read(authRepositoryProvider)
+          .sendOtp(
+            '${AppConfig.phoneCountryCode}${digits.replaceFirst(RegExp('^0'), '')}',
+          );
       if (!mounted) return;
-      context.push(Uri(path: '/login/otp', queryParameters: {
-        'phone': request.phone,
-        if (widget.from != null) 'from': widget.from,
-      }).toString());
+      context.push(
+        Uri(
+          path: '/login/otp',
+          queryParameters: {
+            'phone': request.phone,
+            if (widget.from != null) 'from': widget.from,
+          },
+        ).toString(),
+      );
     } catch (e) {
       if (mounted) showError(context, e);
     } finally {
@@ -61,14 +70,22 @@ class _PhoneScreenState extends ConsumerState<PhoneScreen> {
         child: ListView(
           padding: const EdgeInsets.all(24),
           children: [
-            Text(l.auth_phone_title, style: Theme.of(context).textTheme.headlineSmall),
-            if (widget.from != null) ...[const SizedBox(height: 8), Text(l.auth_login_required)],
+            Text(
+              l.auth_phone_title,
+              style: Theme.of(context).textTheme.headlineSmall,
+            ),
+            if (widget.from != null) ...[
+              const SizedBox(height: 8),
+              Text(l.auth_login_required),
+            ],
             const SizedBox(height: 24),
             TextField(
               controller: _controller,
               keyboardType: TextInputType.phone,
               autofocus: true,
-              inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[0-9 ]'))],
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(RegExp(r'[0-9 ]')),
+              ],
               style: Theme.of(context).textTheme.titleLarge,
               decoration: InputDecoration(
                 labelText: l.auth_phone_label,
@@ -80,7 +97,12 @@ class _PhoneScreenState extends ConsumerState<PhoneScreen> {
             const SizedBox(height: 24),
             FilledButton(
               onPressed: _busy ? null : _submit,
-              child: _busy ? const SizedBox.square(dimension: 22, child: CircularProgressIndicator(strokeWidth: 2)) : Text(l.auth_send_code),
+              child: _busy
+                  ? const SizedBox.square(
+                      dimension: 22,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    )
+                  : Text(l.auth_send_code),
             ),
           ],
         ),

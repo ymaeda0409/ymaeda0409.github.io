@@ -1011,6 +1011,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'This order has not been paid yet.'**
   String get error_payment_required;
+
+  /// Canonical key: tracking.title
+  ///
+  /// In en, this message translates to:
+  /// **'Live tracking'**
+  String get tracking_title;
+
+  /// Canonical key: tracking.rider
+  ///
+  /// In en, this message translates to:
+  /// **'Your rider'**
+  String get tracking_rider;
+
+  /// Canonical key: tracking.distance
+  ///
+  /// In en, this message translates to:
+  /// **'{distance} km away'**
+  String tracking_distance(String distance);
+
+  /// Canonical key: tracking.updated
+  ///
+  /// In en, this message translates to:
+  /// **'Updated {time}'**
+  String tracking_updated(String time);
+
+  /// Canonical key: vehicle.motorbike
+  ///
+  /// In en, this message translates to:
+  /// **'Motorbike'**
+  String get vehicle_motorbike;
+
+  /// Canonical key: vehicle.bicycle
+  ///
+  /// In en, this message translates to:
+  /// **'Bicycle'**
+  String get vehicle_bicycle;
+
+  /// Canonical key: vehicle.car
+  ///
+  /// In en, this message translates to:
+  /// **'Car'**
+  String get vehicle_car;
 }
 
 class _AppLocalizationsDelegate

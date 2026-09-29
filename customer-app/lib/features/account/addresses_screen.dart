@@ -24,9 +24,15 @@ class AddressesScreen extends ConsumerWidget {
       ),
       body: addresses.when(
         loading: () => const LoadingView(),
-        error: (e, _) => ErrorView(error: e, onRetry: () => ref.invalidate(addressesProvider)),
+        error: (e, _) => ErrorView(
+          error: e,
+          onRetry: () => ref.invalidate(addressesProvider),
+        ),
         data: (items) => items.isEmpty
-            ? MessageView(icon: Icons.location_off_outlined, message: l.address_empty)
+            ? MessageView(
+                icon: Icons.location_off_outlined,
+                message: l.address_empty,
+              )
             : ListView.separated(
                 padding: const EdgeInsets.fromLTRB(16, 16, 16, 96),
                 itemCount: items.length,
@@ -35,23 +41,41 @@ class AddressesScreen extends ConsumerWidget {
                   final a = items[i];
                   return Card(
                     child: ListTile(
-                      title: Wrap(spacing: 8, crossAxisAlignment: WrapCrossAlignment.center, children: [
-                        Text(a.name),
-                        if (a.isDefault) Chip(visualDensity: VisualDensity.compact, label: Text(l.address_default)),
-                      ]),
+                      title: Wrap(
+                        spacing: 8,
+                        crossAxisAlignment: WrapCrossAlignment.center,
+                        children: [
+                          Text(a.name),
+                          if (a.isDefault)
+                            Chip(
+                              visualDensity: VisualDensity.compact,
+                              label: Text(l.address_default),
+                            ),
+                        ],
+                      ),
                       subtitle: a.summary.isEmpty ? null : Text(a.summary),
                       trailing: PopupMenuButton<String>(
                         onSelected: (action) async {
                           try {
-                            if (action == 'default') await repo.update(a.id, {'is_default': true});
+                            if (action == 'default') {
+                              await repo.update(a.id, {'is_default': true});
+                            }
                             if (action == 'delete' && context.mounted) {
                               final ok = await showDialog<bool>(
                                 context: context,
                                 builder: (context) => AlertDialog(
                                   content: Text(l.address_delete_confirm),
                                   actions: [
-                                    TextButton(onPressed: () => Navigator.pop(context, false), child: Text(l.common_cancel)),
-                                    TextButton(onPressed: () => Navigator.pop(context, true), child: Text(l.common_delete)),
+                                    TextButton(
+                                      onPressed: () =>
+                                          Navigator.pop(context, false),
+                                      child: Text(l.common_cancel),
+                                    ),
+                                    TextButton(
+                                      onPressed: () =>
+                                          Navigator.pop(context, true),
+                                      child: Text(l.common_delete),
+                                    ),
                                   ],
                                 ),
                               );
@@ -63,8 +87,15 @@ class AddressesScreen extends ConsumerWidget {
                           }
                         },
                         itemBuilder: (_) => [
-                          if (!a.isDefault) PopupMenuItem(value: 'default', child: Text(l.address_set_default)),
-                          PopupMenuItem(value: 'delete', child: Text(l.common_delete)),
+                          if (!a.isDefault)
+                            PopupMenuItem(
+                              value: 'default',
+                              child: Text(l.address_set_default),
+                            ),
+                          PopupMenuItem(
+                            value: 'delete',
+                            child: Text(l.common_delete),
+                          ),
                         ],
                       ),
                     ),

@@ -15,7 +15,10 @@ final orderDetailProvider = FutureProvider.autoDispose.family<Order, int>(
 );
 
 /// Server quote for the current cart to a saved address (null address → no quote).
-final checkoutQuoteProvider = FutureProvider.autoDispose.family<Quote?, int?>((ref, addressId) async {
+final checkoutQuoteProvider = FutureProvider.autoDispose.family<Quote?, int?>((
+  ref,
+  addressId,
+) async {
   final cart = ref.watch(cartProvider);
   ref.watch(effectiveLocaleProvider);
   if (addressId == null || cart.isEmpty) return null;

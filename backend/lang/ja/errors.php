@@ -19,6 +19,9 @@ return [
     'PRODUCT_NOT_AVAILABLE' => '一部の商品が現在ご注文いただけません。',
     'INVALID_STATUS_TRANSITION' => '注文の現在の状態ではこの操作はできません。',
     'PAYMENT_REQUIRED' => '支払いが完了するまで注文を受け付けられません。',
+    'DELIVERY_PIN_INVALID' => '受け取りPINが正しくありません。',
+    'DELIVERY_PIN_LOCKED' => 'PINの入力ミスが多すぎます。店舗に連絡してください。',
+    'OFFER_NOT_AVAILABLE' => 'この配達依頼は既に無効です。',
     'TOO_MANY_REQUESTS' => '試行回数が多すぎます。しばらく待ってから再度お試しください。',
     'SERVER_ERROR' => 'エラーが発生しました。もう一度お試しください。',
 ];

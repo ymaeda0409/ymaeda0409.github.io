@@ -60,8 +60,12 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
     });
     try {
       final language = ref.read(effectiveLocaleProvider).languageCode;
-      final result = await ref.read(authRepositoryProvider).verifyOtp(widget.phone, _controller.text, language: language);
-      await ref.read(sessionProvider.notifier).signIn(result.token, result.user);
+      final result = await ref
+          .read(authRepositoryProvider)
+          .verifyOtp(widget.phone, _controller.text, language: language);
+      await ref
+          .read(sessionProvider.notifier)
+          .signIn(result.token, result.user);
       if (!mounted) return;
       context.go(widget.from ?? '/home');
     } catch (e) {
@@ -89,7 +93,10 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
         child: ListView(
           padding: const EdgeInsets.all(24),
           children: [
-            Text(l.auth_otp_title, style: Theme.of(context).textTheme.headlineSmall),
+            Text(
+              l.auth_otp_title,
+              style: Theme.of(context).textTheme.headlineSmall,
+            ),
             const SizedBox(height: 8),
             Text(l.auth_otp_sent_to(widget.phone)),
             const SizedBox(height: 24),
@@ -100,8 +107,13 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
               textAlign: TextAlign.center,
               maxLength: 6,
               inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-              style: Theme.of(context).textTheme.headlineMedium?.copyWith(letterSpacing: 12),
-              decoration: InputDecoration(counterText: '', errorText: _error, errorMaxLines: 3),
+              style: Theme.of(context).textTheme.headlineMedium
+                  ?.copyWith(letterSpacing: 12),
+              decoration: InputDecoration(
+                counterText: '',
+                errorText: _error,
+                errorMaxLines: 3,
+              ),
               onChanged: (v) {
                 if (v.length == 6) _verify();
               },
@@ -109,12 +121,19 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
             const SizedBox(height: 24),
             FilledButton(
               onPressed: _busy ? null : _verify,
-              child: _busy ? const SizedBox.square(dimension: 22, child: CircularProgressIndicator(strokeWidth: 2)) : Text(l.auth_verify),
+              child: _busy
+                  ? const SizedBox.square(
+                      dimension: 22,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    )
+                  : Text(l.auth_verify),
             ),
             const SizedBox(height: 12),
             TextButton(
               onPressed: _remaining > 0 ? null : _resend,
-              child: Text(_remaining > 0 ? l.auth_resend_in(_remaining) : l.auth_resend),
+              child: Text(
+                _remaining > 0 ? l.auth_resend_in(_remaining) : l.auth_resend,
+              ),
             ),
           ],
         ),

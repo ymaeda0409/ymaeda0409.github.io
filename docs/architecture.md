@@ -26,6 +26,7 @@
 ├── backend/          Laravel 13 (REST API + Admin/Kitchen Web)  ← PHASE 1
 ├── customer-app/     Flutter (顧客アプリ)                         ← PHASE 2
 ├── driver-app/       Flutter (配達員アプリ)                       ← PHASE 4
+├── packages/bento_core/  両アプリ共通 Dart パッケージ（API クライアント・Locale フォールバック・書式）
 ├── docs/             設計ドキュメント
 ├── docker-compose.yml
 └── README.md

@@ -665,5 +665,43 @@
   "error_payment_required": "This order has not been paid yet.",
   "@error_payment_required": {
     "description": "Canonical key: error.payment_required"
+  },
+  "tracking_title": "Live tracking",
+  "@tracking_title": {
+    "description": "Canonical key: tracking.title"
+  },
+  "tracking_rider": "Your rider",
+  "@tracking_rider": {
+    "description": "Canonical key: tracking.rider"
+  },
+  "tracking_distance": "{distance} km away",
+  "@tracking_distance": {
+    "description": "Canonical key: tracking.distance",
+    "placeholders": {
+      "distance": {
+        "type": "String"
+      }
+    }
+  },
+  "tracking_updated": "Updated {time}",
+  "@tracking_updated": {
+    "description": "Canonical key: tracking.updated",
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "vehicle_motorbike": "Motorbike",
+  "@vehicle_motorbike": {
+    "description": "Canonical key: vehicle.motorbike"
+  },
+  "vehicle_bicycle": "Bicycle",
+  "@vehicle_bicycle": {
+    "description": "Canonical key: vehicle.bicycle"
+  },
+  "vehicle_car": "Car",
+  "@vehicle_car": {
+    "description": "Canonical key: vehicle.car"
   }
 }

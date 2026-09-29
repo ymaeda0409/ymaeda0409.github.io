@@ -504,4 +504,29 @@ class AppLocalizationsNy extends AppLocalizations {
 
   @override
   String get error_payment_required => 'Oda iyi sinalipiridwe.';
+
+  @override
+  String get tracking_title => 'Kutsatira pompano';
+
+  @override
+  String get tracking_rider => 'Wobweretsa wanu';
+
+  @override
+  String tracking_distance(String distance) {
+    return 'Ali pa makilomita $distance';
+  }
+
+  @override
+  String tracking_updated(String time) {
+    return 'Zasinthidwa $time';
+  }
+
+  @override
+  String get vehicle_motorbike => 'Njinga yamoto';
+
+  @override
+  String get vehicle_bicycle => 'Njinga';
+
+  @override
+  String get vehicle_car => 'Galimoto';
 }

@@ -1,5 +1,6 @@
+import 'package:bento_core/bento_core.dart';
+
 import '../../l10n/generated/app_localizations.dart';
-import '../network/api_exception.dart';
 
 /// The only place where API codes are mapped to translation keys
 /// (`error.<code>` / `order.status.<code>`). Unknown codes never crash the UI.

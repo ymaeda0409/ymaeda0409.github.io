@@ -7,6 +7,8 @@ environment:
   sdk: ^3.13.4
 
 dependencies:
+  bento_core:
+    path: ../packages/bento_core
   cached_network_image: ^4.0.3
   dio: ^5.11.1
   flutter:

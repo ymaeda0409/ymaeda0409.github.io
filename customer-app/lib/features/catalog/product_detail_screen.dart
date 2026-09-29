@@ -1,8 +1,8 @@
+import 'package:bento_core/bento_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../core/format/money.dart';
 import '../../core/ui/widgets.dart';
 import '../cart/cart.dart';
 import 'catalog_providers.dart';
@@ -18,16 +18,24 @@ class ProductDetailScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final store = ref.watch(currentStoreProvider).value;
-    if (store == null) return Scaffold(appBar: AppBar(), body: const LoadingView());
+    if (store == null) {
+      return Scaffold(appBar: AppBar(), body: const LoadingView());
+    }
 
     final key = (storeId: store.store.id, productId: productId);
-    return ref.watch(productDetailProvider(key)).when(
+    return ref
+        .watch(productDetailProvider(key))
+        .when(
           loading: () => Scaffold(appBar: AppBar(), body: const LoadingView()),
           error: (e, _) => Scaffold(
             appBar: AppBar(),
-            body: ErrorView(error: e, onRetry: () => ref.invalidate(productDetailProvider(key))),
+            body: ErrorView(
+              error: e,
+              onRetry: () => ref.invalidate(productDetailProvider(key)),
+            ),
           ),
-          data: (product) => _ProductDetail(product: product, store: store.store),
+          data: (product) =>
+              _ProductDetail(product: product, store: store.store),
         );
   }
 }
@@ -52,22 +60,28 @@ class _ProductDetailState extends ConsumerState<_ProductDetail> {
     super.initState();
     // Preselect the first option of required single-choice groups (e.g. "Regular" rice).
     for (final g in widget.product.optionGroups) {
-      _selected[g.id] = {if (g.isRequired && g.isSingleChoice && g.options.isNotEmpty) g.options.first.id};
+      _selected[g.id] = {
+        if (g.isRequired && g.isSingleChoice && g.options.isNotEmpty)
+          g.options.first.id,
+      };
     }
   }
 
   List<ProductOption> get _chosenOptions => [
-        for (final g in widget.product.optionGroups)
-          for (final o in g.options)
-            if (_selected[g.id]!.contains(o.id)) o,
-      ];
+    for (final g in widget.product.optionGroups)
+      for (final o in g.options)
+        if (_selected[g.id]!.contains(o.id)) o,
+  ];
 
   bool get _valid => widget.product.optionGroups.every((g) {
-        final n = _selected[g.id]!.length;
-        return n >= g.minSelect && n <= g.maxSelect;
-      });
+    final n = _selected[g.id]!.length;
+    return n >= g.minSelect && n <= g.maxSelect;
+  });
 
-  int get _total => (widget.product.price + _chosenOptions.fold<int>(0, (s, o) => s + o.price)) * _quantity;
+  int get _total =>
+      (widget.product.price +
+          _chosenOptions.fold<int>(0, (s, o) => s + o.price)) *
+      _quantity;
 
   void _toggle(OptionGroup group, ProductOption option) {
     setState(() {
@@ -92,16 +106,29 @@ class _ProductDetailState extends ConsumerState<_ProductDetail> {
         context: context,
         builder: (context) => AlertDialog(
           title: Text(l.cart_replace_title),
-          content: Text(l.cart_replace_message(ref.read(cartProvider).storeName ?? '')),
+          content: Text(
+            l.cart_replace_message(ref.read(cartProvider).storeName ?? ''),
+          ),
           actions: [
-            TextButton(onPressed: () => Navigator.pop(context, false), child: Text(l.common_cancel)),
-            TextButton(onPressed: () => Navigator.pop(context, true), child: Text(l.cart_replace_confirm)),
+            TextButton(
+              onPressed: () => Navigator.pop(context, false),
+              child: Text(l.common_cancel),
+            ),
+            TextButton(
+              onPressed: () => Navigator.pop(context, true),
+              child: Text(l.cart_replace_confirm),
+            ),
           ],
         ),
       );
       if (replace != true) return;
     }
-    await cart.add(store: widget.store, product: widget.product, options: _chosenOptions, quantity: _quantity);
+    await cart.add(
+      store: widget.store,
+      product: widget.product,
+      options: _chosenOptions,
+      quantity: _quantity,
+    );
     if (!mounted) return;
     showMessage(context, l.product_added);
     context.pop();
@@ -118,33 +145,58 @@ class _ProductDetailState extends ConsumerState<_ProductDetail> {
       body: ListView(
         padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
         children: [
-          LayoutBuilder(builder: (_, c) => ProductImage(url: product.imageUrl, size: c.maxWidth.clamp(0, 480))),
+          LayoutBuilder(
+            builder: (_, c) => ProductImage(
+              url: product.imageUrl,
+              size: c.maxWidth.clamp(0, 480),
+            ),
+          ),
           const SizedBox(height: 16),
           Text(product.name, style: theme.textTheme.headlineSmall),
           const SizedBox(height: 4),
-          Wrap(spacing: 12, crossAxisAlignment: WrapCrossAlignment.center, children: [
-            PriceText(product.price, product.currency),
-            if (product.preparationMinutes > 0)
-              Row(mainAxisSize: MainAxisSize.min, children: [
-                const Icon(Icons.schedule, size: 18),
-                const SizedBox(width: 4),
-                Text(l.product_preparation_time(product.preparationMinutes)),
-              ]),
-            if (product.isSoldOut) const SoldOutBadge(),
-          ]),
-          if (product.description != null) ...[const SizedBox(height: 12), Text(product.description!)],
+          Wrap(
+            spacing: 12,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            children: [
+              PriceText(product.price, product.currency),
+              if (product.preparationMinutes > 0)
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(Icons.schedule, size: 18),
+                    const SizedBox(width: 4),
+                    Text(
+                      l.product_preparation_time(product.preparationMinutes),
+                    ),
+                  ],
+                ),
+              if (product.isSoldOut) const SoldOutBadge(),
+            ],
+          ),
+          if (product.description != null) ...[
+            const SizedBox(height: 12),
+            Text(product.description!),
+          ],
           for (final group in product.optionGroups) ...[
             const SizedBox(height: 20),
-            Wrap(spacing: 8, crossAxisAlignment: WrapCrossAlignment.center, children: [
-              Text(group.name, style: theme.textTheme.titleMedium),
-              Chip(
-                visualDensity: VisualDensity.compact,
-                label: Text(group.isRequired ? l.common_required : l.common_optional),
-              ),
-              Text(group.minSelect == group.maxSelect
-                  ? l.product_choose_exactly(group.maxSelect)
-                  : l.product_choose_up_to(group.maxSelect)),
-            ]),
+            Wrap(
+              spacing: 8,
+              crossAxisAlignment: WrapCrossAlignment.center,
+              children: [
+                Text(group.name, style: theme.textTheme.titleMedium),
+                Chip(
+                  visualDensity: VisualDensity.compact,
+                  label: Text(
+                    group.isRequired ? l.common_required : l.common_optional,
+                  ),
+                ),
+                Text(
+                  group.minSelect == group.maxSelect
+                      ? l.product_choose_exactly(group.maxSelect)
+                      : l.product_choose_up_to(group.maxSelect),
+                ),
+              ],
+            ),
             Card(
               child: Column(
                 children: [
@@ -154,7 +206,13 @@ class _ProductDetailState extends ConsumerState<_ProductDetail> {
                       onChanged: (_) => _toggle(group, option),
                       title: Text(option.name),
                       secondary: option.price > 0
-                          ? Text(formatMoney(option.price, product.currency, context.locale))
+                          ? Text(
+                              formatMoney(
+                                option.price,
+                                product.currency,
+                                context.locale,
+                              ),
+                            )
                           : null,
                       controlAffinity: ListTileControlAffinity.leading,
                     ),
@@ -165,9 +223,16 @@ class _ProductDetailState extends ConsumerState<_ProductDetail> {
           const SizedBox(height: 20),
           Row(
             children: [
-              Expanded(child: Text(l.product_quantity, style: theme.textTheme.titleMedium)),
+              Expanded(
+                child: Text(
+                  l.product_quantity,
+                  style: theme.textTheme.titleMedium,
+                ),
+              ),
               IconButton.filledTonal(
-                onPressed: _quantity > 1 ? () => setState(() => _quantity--) : null,
+                onPressed: _quantity > 1
+                    ? () => setState(() => _quantity--)
+                    : null,
                 icon: const Icon(Icons.remove),
               ),
               Padding(
@@ -175,7 +240,9 @@ class _ProductDetailState extends ConsumerState<_ProductDetail> {
                 child: Text('$_quantity', style: theme.textTheme.titleLarge),
               ),
               IconButton.filledTonal(
-                onPressed: _quantity < 20 ? () => setState(() => _quantity++) : null,
+                onPressed: _quantity < 20
+                    ? () => setState(() => _quantity++)
+                    : null,
                 icon: const Icon(Icons.add),
               ),
             ],

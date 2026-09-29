@@ -1,0 +1,417 @@
+{
+  "@@locale": "en",
+  "language_native_name": "English",
+  "@language_native_name": {
+    "description": "The language's own name (autonym). Never translate into another language."
+  },
+  "app_title": "Malawi Bento Rider",
+  "@app_title": {
+    "description": "Canonical key: app.title"
+  },
+  "common_retry": "Retry",
+  "@common_retry": {
+    "description": "Canonical key: common.retry"
+  },
+  "common_cancel": "Cancel",
+  "@common_cancel": {
+    "description": "Canonical key: common.cancel"
+  },
+  "common_continue": "Continue",
+  "@common_continue": {
+    "description": "Canonical key: common.continue"
+  },
+  "common_ok": "OK",
+  "@common_ok": {
+    "description": "Canonical key: common.ok"
+  },
+  "language_title": "Choose your language",
+  "@language_title": {
+    "description": "Canonical key: language.title"
+  },
+  "language_subtitle": "You can change this anytime in Settings.",
+  "@language_subtitle": {
+    "description": "Canonical key: language.subtitle"
+  },
+  "language_settings_title": "Language",
+  "@language_settings_title": {
+    "description": "Canonical key: language.settings_title"
+  },
+  "language_changed": "Language updated",
+  "@language_changed": {
+    "description": "Canonical key: language.changed"
+  },
+  "auth_phone_title": "Rider sign in",
+  "@auth_phone_title": {
+    "description": "Canonical key: auth.phone_title"
+  },
+  "auth_phone_label": "Phone number",
+  "@auth_phone_label": {
+    "description": "Canonical key: auth.phone_label"
+  },
+  "auth_send_code": "Send code",
+  "@auth_send_code": {
+    "description": "Canonical key: auth.send_code"
+  },
+  "auth_phone_invalid": "Enter a valid phone number",
+  "@auth_phone_invalid": {
+    "description": "Canonical key: auth.phone_invalid"
+  },
+  "auth_otp_title": "Enter the verification code",
+  "@auth_otp_title": {
+    "description": "Canonical key: auth.otp_title"
+  },
+  "auth_otp_sent_to": "We sent a 6-digit code to {phone}",
+  "@auth_otp_sent_to": {
+    "description": "Canonical key: auth.otp_sent_to",
+    "placeholders": {
+      "phone": {
+        "type": "String"
+      }
+    }
+  },
+  "auth_verify": "Verify",
+  "@auth_verify": {
+    "description": "Canonical key: auth.verify"
+  },
+  "auth_resend": "Resend code",
+  "@auth_resend": {
+    "description": "Canonical key: auth.resend"
+  },
+  "auth_resend_in": "Resend in {seconds}s",
+  "@auth_resend_in": {
+    "description": "Canonical key: auth.resend_in",
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "auth_logout": "Sign out",
+  "@auth_logout": {
+    "description": "Canonical key: auth.logout"
+  },
+  "auth_not_a_driver": "This phone number is not registered as a rider. Please contact your store.",
+  "@auth_not_a_driver": {
+    "description": "Canonical key: auth.not_a_driver"
+  },
+  "driver_home_title": "Deliveries",
+  "@driver_home_title": {
+    "description": "Canonical key: driver.home_title"
+  },
+  "driver_status_online": "You are online",
+  "@driver_status_online": {
+    "description": "Canonical key: driver.status_online"
+  },
+  "driver_status_offline": "You are offline",
+  "@driver_status_offline": {
+    "description": "Canonical key: driver.status_offline"
+  },
+  "driver_go_online": "GO ONLINE",
+  "@driver_go_online": {
+    "description": "Canonical key: driver.go_online"
+  },
+  "driver_go_offline": "GO OFFLINE",
+  "@driver_go_offline": {
+    "description": "Canonical key: driver.go_offline"
+  },
+  "driver_waiting_requests": "Waiting for delivery requests…",
+  "@driver_waiting_requests": {
+    "description": "Canonical key: driver.waiting_requests"
+  },
+  "driver_offline_hint": "Go online to receive delivery requests.",
+  "@driver_offline_hint": {
+    "description": "Canonical key: driver.offline_hint"
+  },
+  "driver_location_required": "Location access is needed to go online.",
+  "@driver_location_required": {
+    "description": "Canonical key: driver.location_required"
+  },
+  "driver_new_delivery": "New delivery",
+  "@driver_new_delivery": {
+    "description": "Canonical key: driver.new_delivery"
+  },
+  "driver_request_expires_in": "{seconds}s to respond",
+  "@driver_request_expires_in": {
+    "description": "Canonical key: driver.request_expires_in",
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "driver_distance_to_pickup": "{distance} km to pickup",
+  "@driver_distance_to_pickup": {
+    "description": "Canonical key: driver.distance_to_pickup",
+    "placeholders": {
+      "distance": {
+        "type": "String"
+      }
+    }
+  },
+  "driver_delivery_distance": "{distance} km delivery",
+  "@driver_delivery_distance": {
+    "description": "Canonical key: driver.delivery_distance",
+    "placeholders": {
+      "distance": {
+        "type": "String"
+      }
+    }
+  },
+  "driver_accept": "ACCEPT",
+  "@driver_accept": {
+    "description": "Canonical key: driver.accept"
+  },
+  "driver_decline": "DECLINE",
+  "@driver_decline": {
+    "description": "Canonical key: driver.decline"
+  },
+  "driver_collect_cash": "Collect {amount} in cash",
+  "@driver_collect_cash": {
+    "description": "Canonical key: driver.collect_cash",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "driver_prepaid": "Already paid",
+  "@driver_prepaid": {
+    "description": "Canonical key: driver.prepaid"
+  },
+  "driver_pickup_title": "Pick up",
+  "@driver_pickup_title": {
+    "description": "Canonical key: driver.pickup_title"
+  },
+  "driver_pickup_at": "Pick up at",
+  "@driver_pickup_at": {
+    "description": "Canonical key: driver.pickup_at"
+  },
+  "driver_navigate": "Navigate",
+  "@driver_navigate": {
+    "description": "Canonical key: driver.navigate"
+  },
+  "driver_call": "Call",
+  "@driver_call": {
+    "description": "Canonical key: driver.call"
+  },
+  "driver_order_number": "Order {number}",
+  "@driver_order_number": {
+    "description": "Canonical key: driver.order_number",
+    "placeholders": {
+      "number": {
+        "type": "String"
+      }
+    }
+  },
+  "driver_items_count": "{count, plural, =1{1 item} other{{count} items}}",
+  "@driver_items_count": {
+    "description": "Canonical key: driver.items_count",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "driver_confirm_pickup": "I HAVE THE ORDER",
+  "@driver_confirm_pickup": {
+    "description": "Canonical key: driver.confirm_pickup"
+  },
+  "driver_delivery_title": "Deliver",
+  "@driver_delivery_title": {
+    "description": "Canonical key: driver.delivery_title"
+  },
+  "driver_deliver_to": "Deliver to",
+  "@driver_deliver_to": {
+    "description": "Canonical key: driver.deliver_to"
+  },
+  "driver_landmark": "Landmark",
+  "@driver_landmark": {
+    "description": "Canonical key: driver.landmark"
+  },
+  "driver_note": "Note",
+  "@driver_note": {
+    "description": "Canonical key: driver.note"
+  },
+  "driver_arrived": "I HAVE ARRIVED",
+  "@driver_arrived": {
+    "description": "Canonical key: driver.arrived"
+  },
+  "driver_pin_title": "Delivery PIN",
+  "@driver_pin_title": {
+    "description": "Canonical key: driver.pin_title"
+  },
+  "driver_pin_hint": "Ask the customer for their 4-digit PIN.",
+  "@driver_pin_hint": {
+    "description": "Canonical key: driver.pin_hint"
+  },
+  "driver_pin_attempts_left": "{count} attempts left",
+  "@driver_pin_attempts_left": {
+    "description": "Canonical key: driver.pin_attempts_left",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "driver_confirm_delivery": "CONFIRM DELIVERY",
+  "@driver_confirm_delivery": {
+    "description": "Canonical key: driver.confirm_delivery"
+  },
+  "driver_delivery_failed": "Customer not available",
+  "@driver_delivery_failed": {
+    "description": "Canonical key: driver.delivery_failed"
+  },
+  "driver_fail_confirm": "Mark this delivery as failed?",
+  "@driver_fail_confirm": {
+    "description": "Canonical key: driver.fail_confirm"
+  },
+  "driver_complete_title": "Delivered!",
+  "@driver_complete_title": {
+    "description": "Canonical key: driver.complete_title"
+  },
+  "driver_complete_message": "Great job. You are ready for the next delivery.",
+  "@driver_complete_message": {
+    "description": "Canonical key: driver.complete_message"
+  },
+  "driver_back_home": "Back to home",
+  "@driver_back_home": {
+    "description": "Canonical key: driver.back_home"
+  },
+  "driver_history_title": "Delivery history",
+  "@driver_history_title": {
+    "description": "Canonical key: driver.history_title"
+  },
+  "driver_history_empty": "No deliveries yet",
+  "@driver_history_empty": {
+    "description": "Canonical key: driver.history_empty"
+  },
+  "driver_pending_sync": "Offline — your update will be sent automatically.",
+  "@driver_pending_sync": {
+    "description": "Canonical key: driver.pending_sync"
+  },
+  "driver_settings": "Settings",
+  "@driver_settings": {
+    "description": "Canonical key: driver.settings"
+  },
+  "driver_vehicle": "Vehicle: {vehicle}",
+  "@driver_vehicle": {
+    "description": "Canonical key: driver.vehicle",
+    "placeholders": {
+      "vehicle": {
+        "type": "String"
+      }
+    }
+  },
+  "error_bad_request": "The request is invalid.",
+  "@error_bad_request": {
+    "description": "Canonical key: error.bad_request"
+  },
+  "error_unauthenticated": "Please sign in again.",
+  "@error_unauthenticated": {
+    "description": "Canonical key: error.unauthenticated"
+  },
+  "error_forbidden": "You do not have permission to do this.",
+  "@error_forbidden": {
+    "description": "Canonical key: error.forbidden"
+  },
+  "error_account_disabled": "Your rider account is suspended.",
+  "@error_account_disabled": {
+    "description": "Canonical key: error.account_disabled"
+  },
+  "error_resource_not_found": "This delivery was not found.",
+  "@error_resource_not_found": {
+    "description": "Canonical key: error.resource_not_found"
+  },
+  "error_validation_failed": "Please check the information you entered.",
+  "@error_validation_failed": {
+    "description": "Canonical key: error.validation_failed"
+  },
+  "error_otp_invalid": "The verification code is incorrect.",
+  "@error_otp_invalid": {
+    "description": "Canonical key: error.otp_invalid"
+  },
+  "error_otp_expired": "The code has expired. Please request a new one.",
+  "@error_otp_expired": {
+    "description": "Canonical key: error.otp_expired"
+  },
+  "error_invalid_status_transition": "This delivery has already moved on.",
+  "@error_invalid_status_transition": {
+    "description": "Canonical key: error.invalid_status_transition"
+  },
+  "error_offer_not_available": "This request is no longer available.",
+  "@error_offer_not_available": {
+    "description": "Canonical key: error.offer_not_available"
+  },
+  "error_delivery_pin_invalid": "The PIN is incorrect. Ask the customer again.",
+  "@error_delivery_pin_invalid": {
+    "description": "Canonical key: error.delivery_pin_invalid"
+  },
+  "error_delivery_pin_locked": "Too many wrong PINs. Please call the store.",
+  "@error_delivery_pin_locked": {
+    "description": "Canonical key: error.delivery_pin_locked"
+  },
+  "error_too_many_requests": "Too many attempts. Please wait a moment.",
+  "@error_too_many_requests": {
+    "description": "Canonical key: error.too_many_requests"
+  },
+  "error_server_error": "Something went wrong on our side. Please try again.",
+  "@error_server_error": {
+    "description": "Canonical key: error.server_error"
+  },
+  "error_network": "No internet connection.",
+  "@error_network": {
+    "description": "Canonical key: error.network"
+  },
+  "error_timeout": "The connection is slow. Please try again.",
+  "@error_timeout": {
+    "description": "Canonical key: error.timeout"
+  },
+  "error_unknown": "Something went wrong. Please try again.",
+  "@error_unknown": {
+    "description": "Canonical key: error.unknown"
+  },
+  "order_status_rider_assigned": "Go to pickup",
+  "@order_status_rider_assigned": {
+    "description": "Canonical key: order.status_rider_assigned"
+  },
+  "order_status_picked_up": "Picked up",
+  "@order_status_picked_up": {
+    "description": "Canonical key: order.status_picked_up"
+  },
+  "order_status_on_the_way": "On the way",
+  "@order_status_on_the_way": {
+    "description": "Canonical key: order.status_on_the_way"
+  },
+  "order_status_arrived": "Arrived",
+  "@order_status_arrived": {
+    "description": "Canonical key: order.status_arrived"
+  },
+  "order_status_delivered": "Delivered",
+  "@order_status_delivered": {
+    "description": "Canonical key: order.status_delivered"
+  },
+  "order_status_cancelled": "Cancelled",
+  "@order_status_cancelled": {
+    "description": "Canonical key: order.status_cancelled"
+  },
+  "order_status_failed_delivery": "Delivery failed",
+  "@order_status_failed_delivery": {
+    "description": "Canonical key: order.status_failed_delivery"
+  },
+  "order_status_unknown": "Unknown",
+  "@order_status_unknown": {
+    "description": "Canonical key: order.status_unknown"
+  },
+  "vehicle_motorbike": "Motorbike",
+  "@vehicle_motorbike": {
+    "description": "Canonical key: vehicle.motorbike"
+  },
+  "vehicle_bicycle": "Bicycle",
+  "@vehicle_bicycle": {
+    "description": "Canonical key: vehicle.bicycle"
+  },
+  "vehicle_car": "Car",
+  "@vehicle_car": {
+    "description": "Canonical key: vehicle.car"
+  }
+}

@@ -41,6 +41,20 @@ services:
     depends_on:
       - app
 
+  # Runs `deliveries:dispatch` every minute (expired offers → next driver).
+  scheduler:
+    build: ./backend
+    command: php artisan schedule:work
+    volumes:
+      - ./backend:/var/www/html
+      - /var/www/html/vendor
+    env_file: ./backend/.env
+    environment:
+      DB_HOST: postgres
+      REDIS_HOST: redis
+    depends_on:
+      - app
+
   postgres:
     image: postgres:16-alpine
     environment:

@@ -1,13 +1,19 @@
+import 'package:bento_core/bento_core.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../core/network/api_client.dart';
 import '../../core/providers.dart';
 import 'user.dart';
 
-final authRepositoryProvider = Provider<AuthRepository>((ref) => AuthRepository(ref.watch(apiClientProvider)));
+final authRepositoryProvider = Provider<AuthRepository>(
+  (ref) => AuthRepository(ref.watch(apiClientProvider)),
+);
 
 class OtpRequest {
-  const OtpRequest({required this.phone, required this.expiresIn, required this.resendIn});
+  const OtpRequest({
+    required this.phone,
+    required this.expiresIn,
+    required this.resendIn,
+  });
 
   final String phone;
   final int expiresIn;
@@ -15,7 +21,11 @@ class OtpRequest {
 }
 
 class AuthResult {
-  const AuthResult({required this.token, required this.user, required this.isNewUser});
+  const AuthResult({
+    required this.token,
+    required this.user,
+    required this.isNewUser,
+  });
 
   final String token;
   final AppUser user;
@@ -28,7 +38,10 @@ class AuthRepository {
   final ApiClient _api;
 
   Future<OtpRequest> sendOtp(String phone) async {
-    final data = await _api.post<Map<String, dynamic>>('/auth/send-otp', body: {'phone': phone});
+    final data = await _api.post<Map<String, dynamic>>(
+      '/auth/send-otp',
+      body: {'phone': phone},
+    );
     return OtpRequest(
       phone: data['phone'] as String,
       expiresIn: data['expires_in'] as int,
@@ -36,13 +49,20 @@ class AuthRepository {
     );
   }
 
-  Future<AuthResult> verifyOtp(String phone, String code, {required String language}) async {
-    final data = await _api.post<Map<String, dynamic>>('/auth/verify-otp', body: {
-      'phone': phone,
-      'code': code,
-      'device_name': 'customer-app',
-      'preferred_language': language,
-    });
+  Future<AuthResult> verifyOtp(
+    String phone,
+    String code, {
+    required String language,
+  }) async {
+    final data = await _api.post<Map<String, dynamic>>(
+      '/auth/verify-otp',
+      body: {
+        'phone': phone,
+        'code': code,
+        'device_name': 'customer-app',
+        'preferred_language': language,
+      },
+    );
     return AuthResult(
       token: data['token'] as String,
       user: AppUser.fromJson(data['user'] as Map<String, dynamic>),
@@ -50,10 +70,12 @@ class AuthRepository {
     );
   }
 
-  Future<AppUser> me() async => AppUser.fromJson(await _api.get<Map<String, dynamic>>('/account'));
+  Future<AppUser> me() async =>
+      AppUser.fromJson(await _api.get<Map<String, dynamic>>('/account'));
 
-  Future<AppUser> updateName(String name) async =>
-      AppUser.fromJson(await _api.put<Map<String, dynamic>>('/account', body: {'name': name}));
+  Future<AppUser> updateName(String name) async => AppUser.fromJson(
+    await _api.put<Map<String, dynamic>>('/account', body: {'name': name}),
+  );
 
   Future<void> logout() => _api.post<Object?>('/auth/logout');
 }

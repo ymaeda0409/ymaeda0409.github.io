@@ -1,14 +1,15 @@
 import 'dart:async';
 
+import 'package:bento_core/bento_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../core/format/money.dart';
 import '../../core/ui/widgets.dart';
 import '../checkout/order_repository.dart';
 import 'order.dart';
 import 'order_providers.dart';
 import 'order_widgets.dart';
+import 'tracking.dart';
 
 /// 15 Order Detail (status is refreshed every 20 s while the order is active;
 /// the live map comes with tracking in PHASE 5).
@@ -29,7 +30,10 @@ class _OrderDetailScreenState extends ConsumerState<OrderDetailScreen> {
     super.initState();
     _poll = Timer.periodic(const Duration(seconds: 20), (_) {
       final order = ref.read(orderDetailProvider(widget.orderId)).value;
-      if (order == null || order.isActive) ref.invalidate(orderDetailProvider(widget.orderId));
+      if (order == null || order.isActive) {
+        ref.invalidate(orderDetailProvider(widget.orderId));
+        ref.invalidate(trackingProvider(widget.orderId));
+      }
     });
   }
 
@@ -46,8 +50,14 @@ class _OrderDetailScreenState extends ConsumerState<OrderDetailScreen> {
       builder: (context) => AlertDialog(
         content: Text(l.order_cancel_confirm),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context, false), child: Text(l.common_cancel)),
-          TextButton(onPressed: () => Navigator.pop(context, true), child: Text(l.order_cancel)),
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: Text(l.common_cancel),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: Text(l.order_cancel),
+          ),
         ],
       ),
     );
@@ -66,48 +76,102 @@ class _OrderDetailScreenState extends ConsumerState<OrderDetailScreen> {
     final l = context.l10n;
     final theme = Theme.of(context);
     return Scaffold(
-      appBar: AppBar(title: Text(l.order_detail_title), leading: closeToHomeIfRoot(context)),
-      body: ref.watch(orderDetailProvider(widget.orderId)).when(
+      appBar: AppBar(
+        title: Text(l.order_detail_title),
+        leading: closeToHomeIfRoot(context),
+      ),
+      body: ref
+          .watch(orderDetailProvider(widget.orderId))
+          .when(
             loading: () => const LoadingView(),
-            error: (e, _) => ErrorView(error: e, onRetry: () => ref.invalidate(orderDetailProvider(widget.orderId))),
+            error: (e, _) => ErrorView(
+              error: e,
+              onRetry: () =>
+                  ref.invalidate(orderDetailProvider(widget.orderId)),
+            ),
             data: (order) => RefreshIndicator(
-              onRefresh: () => ref.refresh(orderDetailProvider(widget.orderId).future),
+              onRefresh: () =>
+                  ref.refresh(orderDetailProvider(widget.orderId).future),
               child: ListView(
                 padding: const EdgeInsets.all(16),
                 children: [
-                  Wrap(spacing: 8, runSpacing: 4, crossAxisAlignment: WrapCrossAlignment.center, children: [
-                    Text(order.orderNumber, style: theme.textTheme.titleMedium),
-                    StatusChip(order.status),
-                  ]),
-                  Text(l.order_ordered_at(formatDateTime(order.orderedAt, context.locale))),
-                  if (order.scheduledAt != null) Text(l.checkout_scheduled_for(formatDateTime(order.scheduledAt!, context.locale))),
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 4,
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: [
+                      Text(
+                        order.orderNumber,
+                        style: theme.textTheme.titleMedium,
+                      ),
+                      StatusChip(order.status),
+                    ],
+                  ),
+                  Text(
+                    l.order_ordered_at(
+                      formatDateTime(order.orderedAt, context.locale),
+                    ),
+                  ),
+                  if (order.scheduledAt != null)
+                    Text(
+                      l.checkout_scheduled_for(
+                        formatDateTime(order.scheduledAt!, context.locale),
+                      ),
+                    ),
                   const SizedBox(height: 12),
-                  if (order.deliveryPin != null && order.isActive) DeliveryPinCard(pin: order.deliveryPin!),
+                  if (order.deliveryPin != null && order.isActive)
+                    DeliveryPinCard(pin: order.deliveryPin!),
                   const SizedBox(height: 12),
-                  Text(l.order_status_title, style: theme.textTheme.titleMedium),
+                  if (order.isActive) ...[
+                    TrackingCard(orderId: order.id),
+                    const SizedBox(height: 12),
+                  ],
+                  Text(
+                    l.order_status_title,
+                    style: theme.textTheme.titleMedium,
+                  ),
                   Card(child: StatusTimeline(entries: order.timeline)),
                   const SizedBox(height: 12),
-                  Text(l.checkout_order_summary, style: theme.textTheme.titleMedium),
+                  Text(
+                    l.checkout_order_summary,
+                    style: theme.textTheme.titleMedium,
+                  ),
                   Card(
                     child: Padding(
                       padding: const EdgeInsets.all(12),
-                      child: Column(children: [
-                        for (final item in order.items)
-                          ListTile(
-                            contentPadding: EdgeInsets.zero,
-                            leading: Text('${item.quantity}×', style: theme.textTheme.titleMedium),
-                            title: Text(item.name),
-                            subtitle: item.options.isEmpty ? null : Text(item.options.join(', ')),
-                            trailing: Text(formatMoney(item.total, order.currency, context.locale)),
-                          ),
-                        const Divider(),
-                        OrderAmounts(order: order),
-                      ]),
+                      child: Column(
+                        children: [
+                          for (final item in order.items)
+                            ListTile(
+                              contentPadding: EdgeInsets.zero,
+                              leading: Text(
+                                '${item.quantity}×',
+                                style: theme.textTheme.titleMedium,
+                              ),
+                              title: Text(item.name),
+                              subtitle: item.options.isEmpty
+                                  ? null
+                                  : Text(item.options.join(', ')),
+                              trailing: Text(
+                                formatMoney(
+                                  item.total,
+                                  order.currency,
+                                  context.locale,
+                                ),
+                              ),
+                            ),
+                          const Divider(),
+                          OrderAmounts(order: order),
+                        ],
+                      ),
                     ),
                   ),
                   if (order.canCancel) ...[
                     const SizedBox(height: 16),
-                    OutlinedButton(onPressed: () => _cancel(order), child: Text(l.order_cancel)),
+                    OutlinedButton(
+                      onPressed: () => _cancel(order),
+                      child: Text(l.order_cancel),
+                    ),
                   ],
                 ],
               ),

@@ -17,14 +17,14 @@ class CartLine {
   });
 
   factory CartLine.fromJson(Map<String, dynamic> json) => CartLine(
-        productId: json['product_id'] as int,
-        name: json['name'] as String,
-        optionIds: (json['option_ids'] as List).cast<int>(),
-        optionNames: (json['option_names'] as List).cast<String>(),
-        unitPrice: json['unit_price'] as int,
-        optionsPrice: json['options_price'] as int,
-        quantity: json['quantity'] as int,
-      );
+    productId: json['product_id'] as int,
+    name: json['name'] as String,
+    optionIds: (json['option_ids'] as List).cast<int>(),
+    optionNames: (json['option_names'] as List).cast<String>(),
+    unitPrice: json['unit_price'] as int,
+    optionsPrice: json['options_price'] as int,
+    quantity: json['quantity'] as int,
+  );
 
   final int productId;
 
@@ -42,35 +42,42 @@ class CartLine {
   int get total => (unitPrice + optionsPrice) * quantity;
 
   CartLine copyWith({int? quantity}) => CartLine(
-        productId: productId,
-        name: name,
-        optionIds: optionIds,
-        optionNames: optionNames,
-        unitPrice: unitPrice,
-        optionsPrice: optionsPrice,
-        quantity: quantity ?? this.quantity,
-      );
+    productId: productId,
+    name: name,
+    optionIds: optionIds,
+    optionNames: optionNames,
+    unitPrice: unitPrice,
+    optionsPrice: optionsPrice,
+    quantity: quantity ?? this.quantity,
+  );
 
   Map<String, dynamic> toJson() => {
-        'product_id': productId,
-        'name': name,
-        'option_ids': optionIds,
-        'option_names': optionNames,
-        'unit_price': unitPrice,
-        'options_price': optionsPrice,
-        'quantity': quantity,
-      };
+    'product_id': productId,
+    'name': name,
+    'option_ids': optionIds,
+    'option_names': optionNames,
+    'unit_price': unitPrice,
+    'options_price': optionsPrice,
+    'quantity': quantity,
+  };
 }
 
 class Cart {
-  const Cart({this.storeId, this.storeName, this.currency = 'MWK', this.lines = const []});
+  const Cart({
+    this.storeId,
+    this.storeName,
+    this.currency = 'MWK',
+    this.lines = const [],
+  });
 
   factory Cart.fromJson(Map<String, dynamic> json) => Cart(
-        storeId: json['store_id'] as int?,
-        storeName: json['store_name'] as String?,
-        currency: json['currency'] as String,
-        lines: (json['lines'] as List).map((l) => CartLine.fromJson(l as Map<String, dynamic>)).toList(),
-      );
+    storeId: json['store_id'] as int?,
+    storeName: json['store_name'] as String?,
+    currency: json['currency'] as String,
+    lines: (json['lines'] as List)
+        .map((l) => CartLine.fromJson(l as Map<String, dynamic>))
+        .toList(),
+  );
 
   /// A cart belongs to exactly one store (prices and availability are per store).
   final int? storeId;
@@ -83,16 +90,21 @@ class Cart {
   int get subtotal => lines.fold(0, (sum, l) => sum + l.total);
 
   Map<String, dynamic> toJson() => {
-        'store_id': storeId,
-        'store_name': storeName,
-        'currency': currency,
-        'lines': lines.map((l) => l.toJson()).toList(),
-      };
+    'store_id': storeId,
+    'store_name': storeName,
+    'currency': currency,
+    'lines': lines.map((l) => l.toJson()).toList(),
+  };
 }
 
 /// Client-side estimate; the server recalculates every amount when the order is placed.
 class CartTotals {
-  const CartTotals({required this.subtotal, required this.deliveryFee, this.serviceFee = 0, this.discount = 0});
+  const CartTotals({
+    required this.subtotal,
+    required this.deliveryFee,
+    this.serviceFee = 0,
+    this.discount = 0,
+  });
 
   final int subtotal;
   final int deliveryFee;
@@ -110,7 +122,9 @@ class CartController extends Notifier<Cart> {
   @override
   Cart build() {
     final raw = ref.read(sharedPreferencesProvider).getString(_key);
-    return raw == null ? const Cart() : Cart.fromJson(jsonDecode(raw) as Map<String, dynamic>);
+    return raw == null
+        ? const Cart()
+        : Cart.fromJson(jsonDecode(raw) as Map<String, dynamic>);
   }
 
   /// True when adding from [storeId] would discard the current cart.
@@ -136,27 +150,48 @@ class CartController extends Notifier<Cart> {
     final lines = [...base.lines];
     final index = lines.indexWhere((l) => l.key == line.key);
     if (index >= 0) {
-      lines[index] = lines[index].copyWith(quantity: lines[index].quantity + quantity);
+      lines[index] = lines[index].copyWith(
+        quantity: lines[index].quantity + quantity,
+      );
     } else {
       lines.add(line);
     }
-    await _save(Cart(storeId: store.id, storeName: store.name, currency: store.currency, lines: lines));
+    await _save(
+      Cart(
+        storeId: store.id,
+        storeName: store.name,
+        currency: store.currency,
+        lines: lines,
+      ),
+    );
   }
 
   Future<void> setQuantity(String key, int quantity) async {
     final lines = [
       for (final l in state.lines)
-        if (l.key != key) l else if (quantity > 0) l.copyWith(quantity: quantity),
+        if (l.key != key)
+          l
+        else if (quantity > 0)
+          l.copyWith(quantity: quantity),
     ];
-    await _save(lines.isEmpty
-        ? const Cart()
-        : Cart(storeId: state.storeId, storeName: state.storeName, currency: state.currency, lines: lines));
+    await _save(
+      lines.isEmpty
+          ? const Cart()
+          : Cart(
+              storeId: state.storeId,
+              storeName: state.storeName,
+              currency: state.currency,
+              lines: lines,
+            ),
+    );
   }
 
   Future<void> clear() => _save(const Cart());
 
   Future<void> _save(Cart cart) async {
     state = cart;
-    await ref.read(sharedPreferencesProvider).setString(_key, jsonEncode(cart.toJson()));
+    await ref
+        .read(sharedPreferencesProvider)
+        .setString(_key, jsonEncode(cart.toJson()));
   }
 }

@@ -10,13 +10,13 @@ class StoreInfo {
   });
 
   factory StoreInfo.fromJson(Map<String, dynamic> json) => StoreInfo(
-        id: json['id'] as int,
-        name: json['name'] as String,
-        currency: json['currency'] as String,
-        isOpen: json['is_open'] as bool,
-        description: json['description'] as String?,
-        announcement: json['announcement'] as String?,
-      );
+    id: json['id'] as int,
+    name: json['name'] as String,
+    currency: json['currency'] as String,
+    isOpen: json['is_open'] as bool,
+    description: json['description'] as String?,
+    announcement: json['announcement'] as String?,
+  );
 
   final int id;
   final String name;
@@ -38,14 +38,14 @@ class AvailableStore {
   });
 
   factory AvailableStore.fromJson(Map<String, dynamic> json) => AvailableStore(
-        store: StoreInfo.fromJson(json['store'] as Map<String, dynamic>),
-        kitchenId: json['kitchen_id'] as int?,
-        deliveryZoneId: json['delivery_zone_id'] as int,
-        distanceKm: (json['distance_km'] as num).toDouble(),
-        deliveryFee: json['delivery_fee'] as int,
-        currency: json['currency'] as String,
-        isOpen: json['is_open'] as bool,
-      );
+    store: StoreInfo.fromJson(json['store'] as Map<String, dynamic>),
+    kitchenId: json['kitchen_id'] as int?,
+    deliveryZoneId: json['delivery_zone_id'] as int,
+    distanceKm: (json['distance_km'] as num).toDouble(),
+    deliveryFee: json['delivery_fee'] as int,
+    currency: json['currency'] as String,
+    isOpen: json['is_open'] as bool,
+  );
 
   final StoreInfo store;
   final int? kitchenId;
@@ -57,14 +57,19 @@ class AvailableStore {
 }
 
 class Category {
-  const Category({required this.id, required this.code, required this.name, this.imageUrl});
+  const Category({
+    required this.id,
+    required this.code,
+    required this.name,
+    this.imageUrl,
+  });
 
   factory Category.fromJson(Map<String, dynamic> json) => Category(
-        id: json['id'] as int,
-        code: json['code'] as String,
-        name: json['name'] as String? ?? '',
-        imageUrl: json['image_url'] as String?,
-      );
+    id: json['id'] as int,
+    code: json['code'] as String,
+    name: json['name'] as String? ?? '',
+    imageUrl: json['image_url'] as String?,
+  );
 
   final int id;
   final String code;
@@ -73,13 +78,17 @@ class Category {
 }
 
 class ProductOption {
-  const ProductOption({required this.id, required this.name, required this.price});
+  const ProductOption({
+    required this.id,
+    required this.name,
+    required this.price,
+  });
 
   factory ProductOption.fromJson(Map<String, dynamic> json) => ProductOption(
-        id: json['id'] as int,
-        name: json['name'] as String? ?? '',
-        price: json['price'] as int,
-      );
+    id: json['id'] as int,
+    name: json['name'] as String? ?? '',
+    price: json['price'] as int,
+  );
 
   final int id;
   final String name;
@@ -96,12 +105,14 @@ class OptionGroup {
   });
 
   factory OptionGroup.fromJson(Map<String, dynamic> json) => OptionGroup(
-        id: json['id'] as int,
-        name: json['name'] as String? ?? '',
-        minSelect: json['min_select'] as int,
-        maxSelect: json['max_select'] as int,
-        options: (json['options'] as List).map((o) => ProductOption.fromJson(o as Map<String, dynamic>)).toList(),
-      );
+    id: json['id'] as int,
+    name: json['name'] as String? ?? '',
+    minSelect: json['min_select'] as int,
+    maxSelect: json['max_select'] as int,
+    options: (json['options'] as List)
+        .map((o) => ProductOption.fromJson(o as Map<String, dynamic>))
+        .toList(),
+  );
 
   final int id;
   final String name;
@@ -129,20 +140,20 @@ class Product {
   });
 
   factory Product.fromJson(Map<String, dynamic> json) => Product(
-        id: json['id'] as int,
-        categoryId: json['category_id'] as int,
-        name: json['name'] as String? ?? '',
-        description: json['description'] as String?,
-        imageUrl: json['image_url'] as String?,
-        price: json['price'] as int,
-        currency: json['currency'] as String,
-        preparationMinutes: json['preparation_minutes'] as int,
-        isFeatured: json['is_featured'] as bool,
-        isSoldOut: json['is_sold_out'] as bool,
-        optionGroups: ((json['option_groups'] as List?) ?? const [])
-            .map((g) => OptionGroup.fromJson(g as Map<String, dynamic>))
-            .toList(),
-      );
+    id: json['id'] as int,
+    categoryId: json['category_id'] as int,
+    name: json['name'] as String? ?? '',
+    description: json['description'] as String?,
+    imageUrl: json['image_url'] as String?,
+    price: json['price'] as int,
+    currency: json['currency'] as String,
+    preparationMinutes: json['preparation_minutes'] as int,
+    isFeatured: json['is_featured'] as bool,
+    isSoldOut: json['is_sold_out'] as bool,
+    optionGroups: ((json['option_groups'] as List?) ?? const [])
+        .map((g) => OptionGroup.fromJson(g as Map<String, dynamic>))
+        .toList(),
+  );
 
   final int id;
   final int categoryId;

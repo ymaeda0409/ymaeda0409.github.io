@@ -42,6 +42,8 @@
 | 422 | `INVALID_STATUS_TRANSITION` | 注文ステータス遷移不可 (P3) |
 | 422 | `PAYMENT_REQUIRED` | Mobile Money 未払い注文の厨房受付 (P3) |
 | 422 | `DELIVERY_PIN_INVALID` | PIN 不一致 (P4) |
+| 422 | `DELIVERY_PIN_LOCKED` | PIN 失敗回数超過 (P4) |
+| 409 | `OFFER_NOT_AVAILABLE` | 配達オファー失効・他者受諾 (P4) |
 | 422 | `PAYMENT_FAILED` | 決済失敗 (P5) |
 | 429 | `TOO_MANY_REQUESTS` | レート制限（OTP 再送待ち含む） |
 | 500 | `SERVER_ERROR` | サーバーエラー |
@@ -199,10 +201,52 @@
 | POST | /payments | `{ order_id, method, phone? }` → `PaymentGatewayInterface::pay()` |
 | POST | /payments/webhook | ゲートウェイ callback（署名検証 → `verify()`） |
 
-## DRIVER (P4)
+## DRIVER (P4) ✅
 
-| Method | Path |
-|---|---|
+`auth:sanctum` + `role:DRIVER` + 有効な drivers プロフィール（無い → 403 `FORBIDDEN`、停止中 → 403 `ACCOUNT_DISABLED`）。
+`{id}` は **注文 ID**。他の配達員の注文は 404。
+
+| Method | Path | 説明 |
+|---|---|---|
+| GET | /driver/me | プロフィール + 現在の配送（`active_delivery`） |
+| POST | /driver/online | `{ latitude?, longitude? }` オンライン化（待機中の READY 注文を即オファー） |
+| POST | /driver/offline | オフライン化（保留中オファーは次の配達員へ） |
+| POST | /driver/location | `{ latitude, longitude, order_id?, timestamp? }` または `{ points: [...] }`（最大 500, オフラインバッファ一括）。古い点で現在地は戻らない |
+| GET | /driver/delivery-requests | 自分宛ての有効なオファー（`expires_in` 秒） |
+| POST | /driver/deliveries/{id}/accept | READY_FOR_PICKUP → RIDER_ASSIGNED（失効/他者受諾は 409 `OFFER_NOT_AVAILABLE`） |
+| POST | /driver/deliveries/{id}/decline | 辞退 → 次の候補へ |
+| POST | /driver/deliveries/{id}/pickup | RIDER_ASSIGNED → PICKED_UP → ON_THE_WAY |
+| POST | /driver/deliveries/{id}/arrive | ON_THE_WAY → ARRIVED |
+| POST | /driver/deliveries/{id}/complete | `{ pin }` ARRIVED → DELIVERED。不一致 `DELIVERY_PIN_INVALID`、5 回失敗で `DELIVERY_PIN_LOCKED`。代引きはここで PAID |
+| POST | /driver/deliveries/{id}/fail | `{ reason_code }` → FAILED_DELIVERY |
+| GET | /driver/deliveries | 配達履歴 |
+| GET | /driver/deliveries/{id} | 詳細 |
+
+配達員向けレスポンスには **PIN を含めない**（顧客が口頭で伝える）。`amount_to_collect` は代引き未払い時の回収額。
+
+### 配達員割当（DeliveryAssignmentService）
+
+READY_FOR_PICKUP になった注文を、同じ FC の配達員のうち
+「ACTIVE・オンライン・GPS が 10 分以内・配送中でない・他のオファーを保留していない・（店舗専属なら同じ店舗）」
+から **Kitchen に最も近い 1 名** にオファー（有効 60 秒, `DISPATCH_OFFER_TTL`）。
+辞退・失効・オフライン化で次の候補へ。候補がいない注文は `deliveries:dispatch`（毎分）で再試行。
+注文キャンセル時は保留オファーを取り消す。
+
+### 顧客の配送追跡
+
+| Method | Path | 説明 |
+|---|---|---|
+| GET | /orders/{id}/tracking | `{ status, pickup, dropoff, driver: { name, vehicle_type, latitude, longitude, updated_at } \| null, timeline }`。driver は RIDER_ASSIGNED〜ARRIVED の間のみ |
+
+### 管理: 配達員
+
+| Method | Path | Permission | 説明 |
+|---|---|---|---|
+| GET | /admin/drivers?online= | drivers.manage | スコープ内の配達員 |
+| POST | /admin/drivers | drivers.manage | `{ phone, name, vehicle_type, vehicle_number?, store_id?, preferred_language?, franchise_id(SAのみ) }` → DRIVER ユーザー + プロフィール作成 |
+| PUT | /admin/drivers/{id} | drivers.manage | 車両・所属店舗・状態（SUSPENDED で強制オフライン） |
+
+---|---|
 | POST | /driver/online |
 | POST | /driver/offline |
 | POST | /driver/location  `{ latitude, longitude, order_id?, timestamp }` もしくは `{ points: [...] }`（オフラインバッファ一括） |

@@ -18,7 +18,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
     'delivery_address_id', 'delivery_zone_id', 'driver_id', 'status', 'payment_status', 'payment_method',
     'currency', 'subtotal', 'delivery_fee', 'service_fee', 'discount', 'total', 'delivery_latitude',
     'delivery_longitude', 'delivery_distance_km', 'delivery_address_snapshot', 'delivery_pin', 'locale',
-    'cancel_reason_code', 'scheduled_at', 'ordered_at',
+    'cancel_reason_code', 'scheduled_at', 'ordered_at', 'delivery_pin_attempts',
 ])]
 #[Hidden(['delivery_pin'])]
 class Order extends Model
@@ -41,6 +41,7 @@ class Order extends Model
             'service_fee' => 'integer',
             'discount' => 'integer',
             'total' => 'integer',
+            'delivery_pin_attempts' => 'integer',
             'delivery_latitude' => 'float',
             'delivery_longitude' => 'float',
             'delivery_distance_km' => 'float',
@@ -84,6 +85,16 @@ class Order extends Model
     public function items(): HasMany
     {
         return $this->hasMany(OrderItem::class);
+    }
+
+    public function driver(): BelongsTo
+    {
+        return $this->belongsTo(Driver::class);
+    }
+
+    public function assignments(): HasMany
+    {
+        return $this->hasMany(DeliveryAssignment::class);
     }
 
     public function statusHistories(): HasMany

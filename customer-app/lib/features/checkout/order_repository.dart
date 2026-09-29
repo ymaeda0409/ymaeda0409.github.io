@@ -1,11 +1,14 @@
+import 'package:bento_core/bento_core.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../core/network/api_client.dart';
 import '../../core/providers.dart';
 import '../cart/cart.dart';
 import '../orders/order.dart';
+import '../orders/tracking.dart';
 
-final orderRepositoryProvider = Provider<OrderRepository>((ref) => ApiOrderRepository(ref.watch(apiClientProvider)));
+final orderRepositoryProvider = Provider<OrderRepository>(
+  (ref) => ApiOrderRepository(ref.watch(apiClientProvider)),
+);
 
 enum PaymentMethod {
   cash('CASH'),
@@ -21,9 +24,13 @@ enum PaymentMethod {
 }
 
 List<Map<String, dynamic>> cartItemsPayload(Cart cart) => [
-      for (final line in cart.lines)
-        {'product_id': line.productId, 'quantity': line.quantity, 'option_ids': line.optionIds},
-    ];
+  for (final line in cart.lines)
+    {
+      'product_id': line.productId,
+      'quantity': line.quantity,
+      'option_ids': line.optionIds,
+    },
+];
 
 class PlaceOrderRequest {
   const PlaceOrderRequest({
@@ -39,12 +46,13 @@ class PlaceOrderRequest {
   final DateTime? scheduledAt;
 
   Map<String, dynamic> toJson() => {
-        'store_id': cart.storeId,
-        'delivery_address_id': addressId,
-        'payment_method': paymentMethod.code,
-        if (scheduledAt != null) 'scheduled_at': scheduledAt!.toUtc().toIso8601String(),
-        'items': cartItemsPayload(cart),
-      };
+    'store_id': cart.storeId,
+    'delivery_address_id': addressId,
+    'payment_method': paymentMethod.code,
+    if (scheduledAt != null)
+      'scheduled_at': scheduledAt!.toUtc().toIso8601String(),
+    'items': cartItemsPayload(cart),
+  };
 }
 
 abstract class OrderRepository {
@@ -56,6 +64,7 @@ abstract class OrderRepository {
   Future<List<Order>> list();
   Future<Order> detail(int id);
   Future<Order> cancel(int id);
+  Future<Tracking> tracking(int id);
 }
 
 class ApiOrderRepository implements OrderRepository {
@@ -64,22 +73,39 @@ class ApiOrderRepository implements OrderRepository {
   final ApiClient _api;
 
   @override
-  Future<Quote> quote(Cart cart, int addressId) async => Quote.fromJson(await _api.post<Map<String, dynamic>>(
-        '/orders/quote',
-        body: {'store_id': cart.storeId, 'delivery_address_id': addressId, 'items': cartItemsPayload(cart)},
-      ));
+  Future<Quote> quote(Cart cart, int addressId) async => Quote.fromJson(
+    await _api.post<Map<String, dynamic>>(
+      '/orders/quote',
+      body: {
+        'store_id': cart.storeId,
+        'delivery_address_id': addressId,
+        'items': cartItemsPayload(cart),
+      },
+    ),
+  );
 
   @override
-  Future<Order> place(PlaceOrderRequest request) async =>
-      Order.fromJson(await _api.post<Map<String, dynamic>>('/orders', body: request.toJson()));
+  Future<Order> place(PlaceOrderRequest request) async => Order.fromJson(
+    await _api.post<Map<String, dynamic>>('/orders', body: request.toJson()),
+  );
 
   @override
   Future<List<Order>> list() async =>
-      (await _api.get<List<dynamic>>('/orders')).map((o) => Order.fromJson(o as Map<String, dynamic>)).toList();
+      (await _api.get<List<dynamic>>('/orders'))
+          .map((o) => Order.fromJson(o as Map<String, dynamic>))
+          .toList();
 
   @override
-  Future<Order> detail(int id) async => Order.fromJson(await _api.get<Map<String, dynamic>>('/orders/$id'));
+  Future<Order> detail(int id) async =>
+      Order.fromJson(await _api.get<Map<String, dynamic>>('/orders/$id'));
 
   @override
-  Future<Order> cancel(int id) async => Order.fromJson(await _api.post<Map<String, dynamic>>('/orders/$id/cancel'));
+  Future<Tracking> tracking(int id) async => Tracking.fromJson(
+    await _api.get<Map<String, dynamic>>('/orders/$id/tracking'),
+  );
+
+  @override
+  Future<Order> cancel(int id) async => Order.fromJson(
+    await _api.post<Map<String, dynamic>>('/orders/$id/cancel'),
+  );
 }

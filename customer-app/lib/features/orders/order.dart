@@ -1,13 +1,20 @@
 /// Order as returned by the API. Status/payment values are codes; UI translates them.
 class OrderLine {
-  const OrderLine({required this.name, required this.quantity, required this.total, required this.options});
+  const OrderLine({
+    required this.name,
+    required this.quantity,
+    required this.total,
+    required this.options,
+  });
 
   factory OrderLine.fromJson(Map<String, dynamic> json) => OrderLine(
-        name: json['name'] as String,
-        quantity: json['quantity'] as int,
-        total: json['total'] as int,
-        options: ((json['options'] as List?) ?? const []).map((o) => (o as Map<String, dynamic>)['name'] as String).toList(),
-      );
+    name: json['name'] as String,
+    quantity: json['quantity'] as int,
+    total: json['total'] as int,
+    options: ((json['options'] as List?) ?? const [])
+        .map((o) => (o as Map<String, dynamic>)['name'] as String)
+        .toList(),
+  );
 
   /// Snapshot in the language the order was placed in.
   final String name;
@@ -46,7 +53,9 @@ class Order {
   });
 
   factory Order.fromJson(Map<String, dynamic> json) {
-    final items = ((json['items'] as List?) ?? const []).map((i) => OrderLine.fromJson(i as Map<String, dynamic>)).toList();
+    final items = ((json['items'] as List?) ?? const [])
+        .map((i) => OrderLine.fromJson(i as Map<String, dynamic>))
+        .toList();
     return Order(
       id: json['id'] as int,
       orderNumber: json['order_number'] as String,
@@ -62,11 +71,20 @@ class Order {
       orderedAt: DateTime.parse(json['ordered_at'] as String),
       deliveryPin: json['delivery_pin'] as String?,
       storeName: (json['store'] as Map<String, dynamic>?)?['name'] as String?,
-      scheduledAt: json['scheduled_at'] == null ? null : DateTime.parse(json['scheduled_at'] as String),
+      scheduledAt: json['scheduled_at'] == null
+          ? null
+          : DateTime.parse(json['scheduled_at'] as String),
       items: items,
-      itemCount: json['item_count'] as int? ?? items.fold<int>(0, (s, i) => s + i.quantity),
+      itemCount:
+          json['item_count'] as int? ??
+          items.fold<int>(0, (s, i) => s + i.quantity),
       timeline: ((json['timeline'] as List?) ?? const [])
-          .map((t) => TimelineEntry((t as Map<String, dynamic>)['status'] as String, DateTime.parse(t['at'] as String)))
+          .map(
+            (t) => TimelineEntry(
+              (t as Map<String, dynamic>)['status'] as String,
+              DateTime.parse(t['at'] as String),
+            ),
+          )
           .toList(),
     );
   }
@@ -109,13 +127,13 @@ class Quote {
   });
 
   factory Quote.fromJson(Map<String, dynamic> json) => Quote(
-        currency: json['currency'] as String,
-        subtotal: json['subtotal'] as int,
-        deliveryFee: json['delivery_fee'] as int,
-        serviceFee: json['service_fee'] as int,
-        discount: json['discount'] as int,
-        total: json['total'] as int,
-      );
+    currency: json['currency'] as String,
+    subtotal: json['subtotal'] as int,
+    deliveryFee: json['delivery_fee'] as int,
+    serviceFee: json['service_fee'] as int,
+    discount: json['discount'] as int,
+    total: json['total'] as int,
+  );
 
   final String currency;
   final int subtotal;

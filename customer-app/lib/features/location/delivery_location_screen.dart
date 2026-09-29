@@ -15,10 +15,12 @@ class DeliveryLocationScreen extends ConsumerStatefulWidget {
   const DeliveryLocationScreen({super.key});
 
   @override
-  ConsumerState<DeliveryLocationScreen> createState() => _DeliveryLocationScreenState();
+  ConsumerState<DeliveryLocationScreen> createState() =>
+      _DeliveryLocationScreenState();
 }
 
-class _DeliveryLocationScreenState extends ConsumerState<DeliveryLocationScreen> {
+class _DeliveryLocationScreenState
+    extends ConsumerState<DeliveryLocationScreen> {
   GeoPoint? _point;
 
   @override
@@ -44,40 +46,70 @@ class _DeliveryLocationScreenState extends ConsumerState<DeliveryLocationScreen>
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          LocationPicker(value: _point, onChanged: (p) => setState(() => _point = p)),
+          LocationPicker(
+            value: _point,
+            onChanged: (p) => setState(() => _point = p),
+          ),
           const SizedBox(height: 12),
           FilledButton(
             onPressed: _point == null
                 ? null
-                : () => _use(DeliveryLocation(latitude: _point!.latitude, longitude: _point!.longitude)),
+                : () => _use(
+                    DeliveryLocation(
+                      latitude: _point!.latitude,
+                      longitude: _point!.longitude,
+                    ),
+                  ),
             child: Text(l.location_confirm),
           ),
           const SizedBox(height: 24),
-          Row(children: [
-            Expanded(child: Text(l.location_saved_addresses, style: Theme.of(context).textTheme.titleMedium)),
-            TextButton.icon(
-              onPressed: () => context.push('/location/new'),
-              icon: const Icon(Icons.add),
-              label: Text(l.location_new_address),
-            ),
-          ]),
+          Row(
+            children: [
+              Expanded(
+                child: Text(
+                  l.location_saved_addresses,
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
+              ),
+              TextButton.icon(
+                onPressed: () => context.push('/location/new'),
+                icon: const Icon(Icons.add),
+                label: Text(l.location_new_address),
+              ),
+            ],
+          ),
           if (signedIn)
             addresses.when(
               loading: () => const LoadingView(),
-              error: (e, _) => ErrorView(error: e, onRetry: () => ref.invalidate(addressesProvider)),
+              error: (e, _) => ErrorView(
+                error: e,
+                onRetry: () => ref.invalidate(addressesProvider),
+              ),
               data: (items) => items.isEmpty
-                  ? Padding(padding: const EdgeInsets.all(8), child: Text(l.address_empty))
-                  : Column(children: [
-                      for (final a in items)
-                        Card(
-                          child: ListTile(
-                            leading: Icon(a.isDefault ? Icons.home : Icons.location_on_outlined),
-                            title: Text(a.name),
-                            subtitle: a.summary.isEmpty ? null : Text(a.summary),
-                            onTap: () => _use(DeliveryLocation.fromAddress(a)),
+                  ? Padding(
+                      padding: const EdgeInsets.all(8),
+                      child: Text(l.address_empty),
+                    )
+                  : Column(
+                      children: [
+                        for (final a in items)
+                          Card(
+                            child: ListTile(
+                              leading: Icon(
+                                a.isDefault
+                                    ? Icons.home
+                                    : Icons.location_on_outlined,
+                              ),
+                              title: Text(a.name),
+                              subtitle: a.summary.isEmpty
+                                  ? null
+                                  : Text(a.summary),
+                              onTap: () =>
+                                  _use(DeliveryLocation.fromAddress(a)),
+                            ),
                           ),
-                        ),
-                    ]),
+                      ],
+                    ),
             ),
         ],
       ),

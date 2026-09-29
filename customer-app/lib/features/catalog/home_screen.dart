@@ -1,8 +1,8 @@
+import 'package:bento_core/bento_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../core/format/money.dart';
 import '../../core/ui/widgets.dart';
 import '../location/delivery_location_controller.dart';
 import 'catalog_providers.dart';
@@ -19,24 +19,39 @@ class HomeScreen extends ConsumerWidget {
     final location = ref.watch(deliveryLocationProvider);
 
     return Scaffold(
-      appBar: AppBar(toolbarHeight: 72, titleSpacing: 16, title: const _DeliverToHeader()),
+      appBar: AppBar(
+        toolbarHeight: 72,
+        titleSpacing: 16,
+        title: const _DeliverToHeader(),
+      ),
       body: location == null
           ? MessageView(
               icon: Icons.location_on_outlined,
               message: l.home_choose_location,
-              action: FilledButton(onPressed: () => context.push('/location'), child: Text(l.home_choose_location)),
-            )
-          : ref.watch(currentStoreProvider).when(
-                loading: () => const LoadingView(),
-                error: (e, _) => ErrorView(error: e, onRetry: () => ref.invalidate(availableStoresProvider)),
-                data: (store) => store == null
-                    ? MessageView(
-                        icon: Icons.wrong_location_outlined,
-                        message: l.home_no_store,
-                        action: OutlinedButton(onPressed: () => context.push('/location'), child: Text(l.home_choose_location)),
-                      )
-                    : _StoreMenu(available: store),
+              action: FilledButton(
+                onPressed: () => context.push('/location'),
+                child: Text(l.home_choose_location),
               ),
+            )
+          : ref
+                .watch(currentStoreProvider)
+                .when(
+                  loading: () => const LoadingView(),
+                  error: (e, _) => ErrorView(
+                    error: e,
+                    onRetry: () => ref.invalidate(availableStoresProvider),
+                  ),
+                  data: (store) => store == null
+                      ? MessageView(
+                          icon: Icons.wrong_location_outlined,
+                          message: l.home_no_store,
+                          action: OutlinedButton(
+                            onPressed: () => context.push('/location'),
+                            child: Text(l.home_choose_location),
+                          ),
+                        )
+                      : _StoreMenu(available: store),
+                ),
     );
   }
 }
@@ -51,20 +66,28 @@ class _DeliverToHeader extends ConsumerWidget {
     final label = location == null
         ? l.home_choose_location
         : location.label ??
-            l.location_coordinates(
-              formatDecimal(location.latitude, context.locale),
-              formatDecimal(location.longitude, context.locale),
-            );
+              l.location_coordinates(
+                formatDecimal(location.latitude, context.locale),
+                formatDecimal(location.longitude, context.locale),
+              );
     return InkWell(
       onTap: () => context.push('/location'),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(l.home_delivery_to, style: Theme.of(context).textTheme.labelMedium),
+          Text(
+            l.home_delivery_to,
+            style: Theme.of(context).textTheme.labelMedium,
+          ),
           Row(
             children: [
               Flexible(
-                child: Text(label, maxLines: 1, overflow: TextOverflow.ellipsis, style: Theme.of(context).textTheme.titleMedium),
+                child: Text(
+                  label,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
               ),
               const Icon(Icons.expand_more),
             ],
@@ -85,7 +108,9 @@ class _StoreMenu extends ConsumerWidget {
     final l = context.l10n;
     final storeId = available.store.id;
     final categories = ref.watch(categoriesProvider(storeId));
-    final featured = ref.watch(productsProvider(ProductQuery(storeId: storeId, featured: true)));
+    final featured = ref.watch(
+      productsProvider(ProductQuery(storeId: storeId, featured: true)),
+    );
     final all = ref.watch(productsProvider(ProductQuery(storeId: storeId)));
     final theme = Theme.of(context);
 
@@ -146,11 +171,24 @@ class _StoreMenu extends ConsumerWidget {
           ...all.when(
             loading: () => [const SliverToBoxAdapter(child: LoadingView())],
             error: (e, _) => [
-              SliverToBoxAdapter(child: ErrorView(error: e, onRetry: () => ref.invalidate(productsProvider))),
+              SliverToBoxAdapter(
+                child: ErrorView(
+                  error: e,
+                  onRetry: () => ref.invalidate(productsProvider),
+                ),
+              ),
             ],
             data: (items) => [
               if (items.isEmpty)
-                SliverToBoxAdapter(child: Padding(padding: const EdgeInsets.all(24), child: Text(l.product_list_empty, style: theme.textTheme.bodyLarge))),
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.all(24),
+                    child: Text(
+                      l.product_list_empty,
+                      style: theme.textTheme.bodyLarge,
+                    ),
+                  ),
+                ),
               SliverPadding(
                 padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
                 sliver: SliverList.separated(
@@ -186,8 +224,14 @@ class _StoreBanner extends StatelessWidget {
           children: [
             Text(store.name, style: Theme.of(context).textTheme.titleLarge),
             if (!available.isOpen) Text(l.home_store_closed(store.name)),
-            if (store.announcement != null) ...[const SizedBox(height: 4), Text(store.announcement!)],
-            if (store.description != null) ...[const SizedBox(height: 4), Text(store.description!)],
+            if (store.announcement != null) ...[
+              const SizedBox(height: 4),
+              Text(store.announcement!),
+            ],
+            if (store.description != null) ...[
+              const SizedBox(height: 4),
+              Text(store.description!),
+            ],
             const SizedBox(height: 8),
             Wrap(
               spacing: 6,
@@ -195,8 +239,14 @@ class _StoreBanner extends StatelessWidget {
               children: [
                 const Icon(Icons.delivery_dining, size: 20),
                 Text(l.cart_delivery_fee),
-                Text(formatMoney(available.deliveryFee, available.currency, context.locale),
-                    style: const TextStyle(fontWeight: FontWeight.w600)),
+                Text(
+                  formatMoney(
+                    available.deliveryFee,
+                    available.currency,
+                    context.locale,
+                  ),
+                  style: const TextStyle(fontWeight: FontWeight.w600),
+                ),
               ],
             ),
           ],
@@ -213,9 +263,9 @@ class _SectionTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => SliverToBoxAdapter(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 20, 16, 10),
-          child: Text(title, style: Theme.of(context).textTheme.titleLarge),
-        ),
-      );
+    child: Padding(
+      padding: const EdgeInsets.fromLTRB(16, 20, 16, 10),
+      child: Text(title, style: Theme.of(context).textTheme.titleLarge),
+    ),
+  );
 }

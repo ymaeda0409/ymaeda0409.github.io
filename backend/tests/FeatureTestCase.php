@@ -6,11 +6,14 @@ use App\Enums\UserRole;
 use App\Models\DeliveryZone;
 use App\Models\Franchise;
 use App\Models\Kitchen;
+use App\Models\Order;
 use App\Models\Organization;
 use App\Models\Product;
 use App\Models\ProductCategory;
 use App\Models\Store;
 use App\Models\User;
+use App\Models\UserAddress;
+use App\Services\Order\OrderStatusService;
 use Database\Seeders\LanguageSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Sanctum\Sanctum;
@@ -86,5 +89,41 @@ abstract class FeatureTestCase extends TestCase
         Sanctum::actingAs($user);
 
         return $user;
+    }
+
+    /**
+     * Places a real order through the API as a fresh customer ~0.5 km from the store.
+     */
+    protected function placeOrder(Store $store, string $paymentMethod = 'CASH', string $locale = 'en'): Order
+    {
+        $product = $store->storeProducts()->first()?->product ?? $this->createProduct($store);
+        $customer = $this->actingAsRole(UserRole::CUSTOMER);
+        $address = UserAddress::factory()->create([
+            'user_id' => $customer->id,
+            'latitude' => $store->latitude - 0.005,
+            'longitude' => $store->longitude,
+        ]);
+
+        $id = $this->postJson('/api/orders', [
+            'store_id' => $store->id,
+            'delivery_address_id' => $address->id,
+            'payment_method' => $paymentMethod,
+            'items' => [['product_id' => $product->id, 'quantity' => 1]],
+        ], ['Accept-Language' => $locale])->assertCreated()->json('data.id');
+
+        return Order::findOrFail($id);
+    }
+
+    /**
+     * Moves an order through the kitchen to READY_FOR_PICKUP (triggers driver dispatch).
+     */
+    protected function makeReady(Order $order): Order
+    {
+        $statuses = app(OrderStatusService::class);
+        $staff = User::factory()->kitchenStaff($order->store)->create();
+        $statuses->accept($order, $staff);
+        $statuses->startCooking($order, $staff);
+
+        return $statuses->markReady($order, $staff)->refresh();
     }
 }

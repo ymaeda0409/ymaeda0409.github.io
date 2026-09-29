@@ -67,13 +67,25 @@
 
 **修正したバグ**: 予約日時（+02:00 付き）が UTC 変換されずに保存されていた（テストで検出）、チェックアウトの商品名が追加時の言語のままだった。
 
-## PHASE 4 — Driver App / Assignment / GPS / Delivery
+## PHASE 4 — Driver App / Assignment / GPS / Delivery ✅
 
-* drivers, delivery_assignments, driver_locations
-* `DeliveryAssignmentService`（READY 時に ONLINE かつ配送中でない Driver を Kitchen から近い順にオファー、辞退/期限切れで次候補）
-* Driver API 一式、Delivery PIN 検証（試行回数制限）
-* Driver App（オフラインキュー、GPS バッファ、現在配送ローカル保存）
-* テスト: Driver 割当、PIN、Driver のテナント分離
+| 項目 | 内容 |
+|---|---|
+| DB | drivers, delivery_assignments, driver_locations、orders.driver_id FK、orders.delivery_pin_attempts |
+| 割当 | `DeliveryAssignmentService`: READY で最寄り（Kitchen 起点）の空き・オンライン・GPS 新鮮な同 FC 配達員へ 1 件ずつオファー、辞退/失効/オフラインで次へ、`deliveries:dispatch`（毎分, scheduler） |
+| 配達 | `DeliveryService`: online/offline、GPS（一括・端末時刻・未来時刻補正・古い点で戻らない）、pickup → ON_THE_WAY、arrive、PIN 検証（5 回でロック）、代引きは完了時に PAID、fail |
+| API | Driver API 一式、顧客 `GET /orders/{id}/tracking`、管理 `/admin/drivers` |
+| 共通化 | `packages/bento_core`（ApiClient・エラーコード・Locale フォールバック・書式・トークン保存）を顧客/配達員アプリで共有 |
+| Driver App | 01 言語選択 → 02 ログイン（DRIVER 以外は拒否）→ 03/04 ONLINE/OFFLINE → 05 依頼（カウントダウン）→ 06/07 受取（ナビ・電話）→ 08/09 配達・到着 → 10 PIN パッド → 11 完了、12 履歴、13 言語設定 |
+| オフライン | 現在の配送を端末保存、受取/到着は送信キューで再送（適用済みは破棄）、GPS はバッファして一括送信 |
+| 顧客アプリ | 注文詳細に配達員の位置・車両・距離（MAPS_ENABLED 時は地図） |
+| テスト | Backend 138（割当条件・辞退/失効・オフライン化・PIN・ロック・GPS・追跡・他配達員不可・管理）、Driver App 15、Customer App 38、bento_core 6、Vue 12 |
+
+**結果**: 実 API で「顧客注文（ja）→ 厨房 API で準備完了（配達員不在で待機）→ 配達員アプリ（Web, ny）で
+OTP ログイン → オンライン → 依頼受諾 → 受取 → 到着 → PIN 入力 → 配達完了」を Chromium で確認。
+注文は DELIVERED / PAID、履歴 9 段階、全リクエストに `Accept-Language: ny`。
+
+**検出して直した問題**: 小画面・文字拡大時に依頼カード見出し（ny/en）が横にはみ出していた（テストで検出）。
 
 ## PHASE 5 — Payment / Tracking / Notification
 
