@@ -5,7 +5,7 @@
 
 ---
 
-## PHASE 1 — Backend 基盤 ✅（本コミットで実装）
+## PHASE 1 — Backend 基盤 ✅
 
 | 項目 | 内容 |
 |---|---|
@@ -31,14 +31,24 @@
 **PHASE 1 で意図的に対象外としたもの**: スタッフユーザー管理 API（Seeder で作成、管理画面は PHASE 6）、
 本番 SMS ドライバ（`SmsGateway` 実装の追加のみで対応）、`drivers` テーブル（PHASE 4。DRIVER ロールのユーザーは作成済み）。
 
-## PHASE 2 — Customer App（Flutter）
+## PHASE 2 — Customer App（Flutter）✅
 
-* プロジェクト雛形、flavor（dev/prod）、`API_BASE_URL`
-* gen-l10n（app_en/ny/ja.arb）、FallbackMaterialLocalizationsDelegate、FormattingLocale
-* Splash → Language Selection → Login/OTP → Home → Product List/Detail → Cart → Checkout（注文送信は PHASE 3 の API 完成後に接続）
-* 状態管理: Riverpod、HTTP: dio（Accept-Language interceptor, token interceptor, retry）
-* キャッシュ: dio cache + cached_network_image
-* テスト: widget test（3 言語で主要画面がオーバーフローしない）、ARB キー整合性テスト
+| 項目 | 内容 |
+|---|---|
+| 構成 | Flutter 3.47 / Dart 3.13、Riverpod 3、go_router、dio、shared_preferences、flutter_secure_storage |
+| 設定 | `--dart-define=API_BASE_URL`, `MAPS_ENABLED`（環境ごとに再ビルドのみ） |
+| i18n | gen-l10n（app_en/ny/ja.arb, 140 キー）、FallbackLocalizationsDelegate、FormattingLocale、`code_labels.dart`（エラーコード・ステータス → 翻訳の唯一の対応表） |
+| 画面 | 01 Splash, 02 Language Selection, 03 Phone, 04 OTP, 05 Home, 06 Delivery Location（+ 住所追加）, 07 Product List, 08 Product Detail, 09 Cart, 10 Checkout, 16 Account, 17 Saved Addresses, 18 Language Settings |
+| 通信 | Accept-Language / Bearer 自動付与、封筒展開、エラー→コード、GET 1 回再試行、401 でセッション破棄 |
+| オフライン | カート・配送先・言語・ユーザー情報をローカル保存、翻訳はアプリ同梱 |
+| テスト | 39 tests（ARB 整合性、ロケール判定、書式、エラーコード網羅、API クライアント、カート、3 言語 × 小画面 × 文字 130% のオーバーフロー検出、画面フロー） |
+
+**結果**: `flutter analyze` 0 件、`flutter test` 39 件 green。Web ビルドを実 Laravel API に接続し、Chromium で
+言語選択 → Home（en/ny/ja）→ 商品詳細 → カート → OTP ログイン → アカウントを確認
+（全 API リクエストに選択言語の `Accept-Language` が付与されることを確認）。
+
+**PHASE 3 で接続するもの**: Checkout の「注文する」は `POST /api/orders` を呼ぶ実装済みだが、API は PHASE 3 で追加。
+11 Payment / 12 Order Complete / 13 Tracking / 14–15 Order History・Detail は PHASE 3・5。
 
 ## PHASE 3 — Order / Kitchen
 

@@ -6,7 +6,7 @@
 | ディレクトリ | 内容 | 状態 |
 |---|---|---|
 | [`backend/`](backend) | Laravel 13 REST API（+ 将来の Admin / Kitchen Web） | ✅ PHASE 1 |
-| [`customer-app/`](customer-app) | Flutter 顧客アプリ | PHASE 2 |
+| [`customer-app/`](customer-app) | Flutter 顧客アプリ（en / ny / ja） | ✅ PHASE 2 |
 | [`driver-app/`](driver-app) | Flutter 配達員アプリ | PHASE 4 |
 | [`docs/`](docs) | 設計ドキュメント | ✅ |
 
@@ -116,7 +116,7 @@ DB_CONNECTION=pgsql DB_HOST=127.0.0.1 DB_DATABASE=malawi_bento_test \
 DB_USERNAME=bento DB_PASSWORD=secret php artisan test
 ```
 
-GitHub Actions（`.github/workflows/backend.yml`）で Pint + SQLite + PostgreSQL の両方を実行。
+GitHub Actions: `backend.yml`（Pint + SQLite + PostgreSQL）、`customer-app.yml`（gen-l10n 差分・analyze・test）。
 
 PHASE 1 のテスト範囲（90 tests）:
 
@@ -148,7 +148,7 @@ PHASE 1 のテスト範囲（90 tests）:
 2. **Backend 翻訳ファイル**: `backend/lang/en/` を `backend/lang/tum/` にコピーして翻訳
    （`errors.php`, `sms.php` は必須、`validation.php` は未訳キーが英語にフォールバック）。
    `php artisan test --filter=TranslationFilesTest` でキー欠落を検出。
-3. **アプリ翻訳**（PHASE 2 以降）: `lib/l10n/app_en.arb` → `app_tum.arb` を作成し `flutter gen-l10n`。
+3. **アプリ翻訳**: `customer-app/lib/l10n/app_en.arb` → `app_tum.arb` を作成し `flutter gen-l10n`（`language_native_name` に自言語名を入れる）。`flutter test` の ARB 整合性テストで欠落を検出。
 4. **DB コンテンツ**: 管理 API / 管理画面で商品・カテゴリ・オプションの `translations.tum` を入力。
 5. アプリ配布後に `PUT /api/admin/languages/{id}` で `is_active: true`。
 
@@ -156,8 +156,21 @@ PHASE 1 のテスト範囲（90 tests）:
 
 ---
 
-## 5. 開発フェーズ
+## 5. Customer App（Flutter）
 
-[docs/development-plan.md](docs/development-plan.md) 参照。現在 **PHASE 1 完了**（Backend 基盤・DB・認証・FC 階層・言語/翻訳・商品・顧客・住所・管理 API）。
+```bash
+cd customer-app
+flutter pub get
+flutter run --dart-define=API_BASE_URL=http://10.0.2.2:8000/api   # Android エミュレータ
+flutter test                                                       # 39 tests
+```
+
+詳細は [customer-app/README.md](customer-app/README.md)。アプリの翻訳追加は `lib/l10n/app_en.arb` をコピーして `app_<code>.arb` を作成 → `flutter gen-l10n`。
+
+---
+
+## 6. 開発フェーズ
+
+[docs/development-plan.md](docs/development-plan.md) 参照。現在 **PHASE 2 完了**（PHASE 1: Backend 基盤 / PHASE 2: Customer App の言語選択〜商品〜カート〜チェックアウト画面）。
 
 > **Chichewa 訳について**: 同梱の Chichewa 文言は初版です。リリース前にネイティブ話者のレビューを受けてください（翻訳ファイル / 管理画面の修正のみで反映できます）。

@@ -1,0 +1,608 @@
+{
+  "@@locale": "en",
+  "app_title": "Malawi Bento",
+  "language_native_name": "English",
+  "@language_native_name": {
+    "description": "Canonical key: language.native_name — the language's own name (autonym), shown in the language picker. Never translate into another language."
+  },
+  "@app_title": {
+    "description": "Canonical key: app.title"
+  },
+  "common_retry": "Retry",
+  "@common_retry": {
+    "description": "Canonical key: common.retry"
+  },
+  "common_cancel": "Cancel",
+  "@common_cancel": {
+    "description": "Canonical key: common.cancel"
+  },
+  "common_save": "Save",
+  "@common_save": {
+    "description": "Canonical key: common.save"
+  },
+  "common_continue": "Continue",
+  "@common_continue": {
+    "description": "Canonical key: common.continue"
+  },
+  "common_ok": "OK",
+  "@common_ok": {
+    "description": "Canonical key: common.ok"
+  },
+  "common_delete": "Delete",
+  "@common_delete": {
+    "description": "Canonical key: common.delete"
+  },
+  "common_edit": "Edit",
+  "@common_edit": {
+    "description": "Canonical key: common.edit"
+  },
+  "common_optional": "Optional",
+  "@common_optional": {
+    "description": "Canonical key: common.optional"
+  },
+  "common_required": "Required",
+  "@common_required": {
+    "description": "Canonical key: common.required"
+  },
+  "language_title": "Choose your language",
+  "@language_title": {
+    "description": "Canonical key: language.title"
+  },
+  "language_subtitle": "You can change this anytime in Account.",
+  "@language_subtitle": {
+    "description": "Canonical key: language.subtitle"
+  },
+  "language_settings_title": "Language",
+  "@language_settings_title": {
+    "description": "Canonical key: language.settings_title"
+  },
+  "language_changed": "Language updated",
+  "@language_changed": {
+    "description": "Canonical key: language.changed"
+  },
+  "auth_phone_title": "Sign in with your phone",
+  "@auth_phone_title": {
+    "description": "Canonical key: auth.phone_title"
+  },
+  "auth_phone_label": "Phone number",
+  "@auth_phone_label": {
+    "description": "Canonical key: auth.phone_label"
+  },
+  "auth_send_code": "Send code",
+  "@auth_send_code": {
+    "description": "Canonical key: auth.send_code"
+  },
+  "auth_phone_invalid": "Enter a valid phone number",
+  "@auth_phone_invalid": {
+    "description": "Canonical key: auth.phone_invalid"
+  },
+  "auth_otp_title": "Enter the verification code",
+  "@auth_otp_title": {
+    "description": "Canonical key: auth.otp_title"
+  },
+  "auth_otp_sent_to": "We sent a 6-digit code to {phone}",
+  "@auth_otp_sent_to": {
+    "description": "Canonical key: auth.otp_sent_to",
+    "placeholders": {
+      "phone": {
+        "type": "String"
+      }
+    }
+  },
+  "auth_verify": "Verify",
+  "@auth_verify": {
+    "description": "Canonical key: auth.verify"
+  },
+  "auth_resend": "Resend code",
+  "@auth_resend": {
+    "description": "Canonical key: auth.resend"
+  },
+  "auth_resend_in": "Resend in {seconds}s",
+  "@auth_resend_in": {
+    "description": "Canonical key: auth.resend_in",
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "auth_login_required": "Please sign in to continue",
+  "@auth_login_required": {
+    "description": "Canonical key: auth.login_required"
+  },
+  "auth_logout": "Sign out",
+  "@auth_logout": {
+    "description": "Canonical key: auth.logout"
+  },
+  "nav_home": "Home",
+  "@nav_home": {
+    "description": "Canonical key: nav.home"
+  },
+  "nav_cart": "Cart",
+  "@nav_cart": {
+    "description": "Canonical key: nav.cart"
+  },
+  "nav_account": "Account",
+  "@nav_account": {
+    "description": "Canonical key: nav.account"
+  },
+  "home_title": "Home",
+  "@home_title": {
+    "description": "Canonical key: home.title"
+  },
+  "home_delivery_to": "Deliver to",
+  "@home_delivery_to": {
+    "description": "Canonical key: home.delivery_to"
+  },
+  "home_choose_location": "Choose delivery location",
+  "@home_choose_location": {
+    "description": "Canonical key: home.choose_location"
+  },
+  "home_categories": "Categories",
+  "@home_categories": {
+    "description": "Canonical key: home.categories"
+  },
+  "home_featured": "Recommended",
+  "@home_featured": {
+    "description": "Canonical key: home.featured"
+  },
+  "home_all_products": "All items",
+  "@home_all_products": {
+    "description": "Canonical key: home.all_products"
+  },
+  "home_no_store": "Sorry, we don't deliver to this location yet.",
+  "@home_no_store": {
+    "description": "Canonical key: home.no_store"
+  },
+  "home_store_closed": "{store} is closed right now",
+  "@home_store_closed": {
+    "description": "Canonical key: home.store_closed",
+    "placeholders": {
+      "store": {
+        "type": "String"
+      }
+    }
+  },
+  "location_title": "Delivery location",
+  "@location_title": {
+    "description": "Canonical key: location.title"
+  },
+  "location_use_current": "Use my current location",
+  "@location_use_current": {
+    "description": "Canonical key: location.use_current"
+  },
+  "location_saved_addresses": "Saved addresses",
+  "@location_saved_addresses": {
+    "description": "Canonical key: location.saved_addresses"
+  },
+  "location_new_address": "New address",
+  "@location_new_address": {
+    "description": "Canonical key: location.new_address"
+  },
+  "location_name_label": "Label (e.g. Home, Office)",
+  "@location_name_label": {
+    "description": "Canonical key: location.name_label"
+  },
+  "location_area_label": "Area",
+  "@location_area_label": {
+    "description": "Canonical key: location.area_label"
+  },
+  "location_street_label": "Street",
+  "@location_street_label": {
+    "description": "Canonical key: location.street_label"
+  },
+  "location_building_label": "Building",
+  "@location_building_label": {
+    "description": "Canonical key: location.building_label"
+  },
+  "location_landmark_label": "Landmark",
+  "@location_landmark_label": {
+    "description": "Canonical key: location.landmark_label"
+  },
+  "location_landmark_hint": "e.g. Near the blue gate",
+  "@location_landmark_hint": {
+    "description": "Canonical key: location.landmark_hint"
+  },
+  "location_note_label": "Note for the rider",
+  "@location_note_label": {
+    "description": "Canonical key: location.note_label"
+  },
+  "location_confirm": "Deliver here",
+  "@location_confirm": {
+    "description": "Canonical key: location.confirm"
+  },
+  "location_permission_denied": "Location permission is needed to find you",
+  "@location_permission_denied": {
+    "description": "Canonical key: location.permission_denied"
+  },
+  "location_move_map": "Move the map to place the pin",
+  "@location_move_map": {
+    "description": "Canonical key: location.move_map"
+  },
+  "product_add_to_cart": "Add to cart",
+  "@product_add_to_cart": {
+    "description": "Canonical key: product.add_to_cart"
+  },
+  "product_sold_out": "Sold out",
+  "@product_sold_out": {
+    "description": "Canonical key: product.sold_out"
+  },
+  "product_choose_up_to": "Choose up to {count}",
+  "@product_choose_up_to": {
+    "description": "Canonical key: product.choose_up_to",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "product_choose_exactly": "Choose {count}",
+  "@product_choose_exactly": {
+    "description": "Canonical key: product.choose_exactly",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "product_quantity": "Quantity",
+  "@product_quantity": {
+    "description": "Canonical key: product.quantity"
+  },
+  "product_preparation_time": "About {minutes} min",
+  "@product_preparation_time": {
+    "description": "Canonical key: product.preparation_time",
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "product_added": "Added to cart",
+  "@product_added": {
+    "description": "Canonical key: product.added"
+  },
+  "product_list_empty": "No items available",
+  "@product_list_empty": {
+    "description": "Canonical key: product.list_empty"
+  },
+  "cart_title": "Cart",
+  "@cart_title": {
+    "description": "Canonical key: cart.title"
+  },
+  "cart_empty": "Your cart is empty",
+  "@cart_empty": {
+    "description": "Canonical key: cart.empty"
+  },
+  "cart_browse": "Browse the menu",
+  "@cart_browse": {
+    "description": "Canonical key: cart.browse"
+  },
+  "cart_subtotal": "Subtotal",
+  "@cart_subtotal": {
+    "description": "Canonical key: cart.subtotal"
+  },
+  "cart_delivery_fee": "Delivery fee",
+  "@cart_delivery_fee": {
+    "description": "Canonical key: cart.delivery_fee"
+  },
+  "cart_service_fee": "Service fee",
+  "@cart_service_fee": {
+    "description": "Canonical key: cart.service_fee"
+  },
+  "cart_discount": "Discount",
+  "@cart_discount": {
+    "description": "Canonical key: cart.discount"
+  },
+  "cart_total": "Total",
+  "@cart_total": {
+    "description": "Canonical key: cart.total"
+  },
+  "cart_checkout": "Checkout",
+  "@cart_checkout": {
+    "description": "Canonical key: cart.checkout"
+  },
+  "cart_item_count": "{count, plural, =0{No items} =1{1 item} other{{count} items}}",
+  "@cart_item_count": {
+    "description": "Canonical key: cart.item_count",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "cart_replace_title": "Start a new cart?",
+  "@cart_replace_title": {
+    "description": "Canonical key: cart.replace_title"
+  },
+  "cart_replace_message": "Your cart has items from {store}. Adding this item will clear it.",
+  "@cart_replace_message": {
+    "description": "Canonical key: cart.replace_message",
+    "placeholders": {
+      "store": {
+        "type": "String"
+      }
+    }
+  },
+  "cart_replace_confirm": "Start new cart",
+  "@cart_replace_confirm": {
+    "description": "Canonical key: cart.replace_confirm"
+  },
+  "cart_remove": "Remove",
+  "@cart_remove": {
+    "description": "Canonical key: cart.remove"
+  },
+  "checkout_title": "Checkout",
+  "@checkout_title": {
+    "description": "Canonical key: checkout.title"
+  },
+  "checkout_delivery_address": "Delivery address",
+  "@checkout_delivery_address": {
+    "description": "Canonical key: checkout.delivery_address"
+  },
+  "checkout_change": "Change",
+  "@checkout_change": {
+    "description": "Canonical key: checkout.change"
+  },
+  "checkout_payment_method": "Payment method",
+  "@checkout_payment_method": {
+    "description": "Canonical key: checkout.payment_method"
+  },
+  "checkout_delivery_time": "Delivery time",
+  "@checkout_delivery_time": {
+    "description": "Canonical key: checkout.delivery_time"
+  },
+  "checkout_asap": "As soon as possible",
+  "@checkout_asap": {
+    "description": "Canonical key: checkout.asap"
+  },
+  "checkout_schedule": "Schedule for later",
+  "@checkout_schedule": {
+    "description": "Canonical key: checkout.schedule"
+  },
+  "checkout_scheduled_for": "Scheduled: {time}",
+  "@checkout_scheduled_for": {
+    "description": "Canonical key: checkout.scheduled_for",
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "checkout_order_summary": "Order summary",
+  "@checkout_order_summary": {
+    "description": "Canonical key: checkout.order_summary"
+  },
+  "checkout_mobile_money_phone": "Mobile Money number",
+  "@checkout_mobile_money_phone": {
+    "description": "Canonical key: checkout.mobile_money_phone"
+  },
+  "checkout_estimate_note": "The final amount is confirmed when you place the order.",
+  "@checkout_estimate_note": {
+    "description": "Canonical key: checkout.estimate_note"
+  },
+  "checkout_select_address": "Please choose a saved delivery address",
+  "@checkout_select_address": {
+    "description": "Canonical key: checkout.select_address"
+  },
+  "order_place_order": "Place Order",
+  "@order_place_order": {
+    "description": "Canonical key: order.place_order"
+  },
+  "payment_cash": "Cash on delivery",
+  "@payment_cash": {
+    "description": "Canonical key: payment.cash"
+  },
+  "payment_airtel_money": "Airtel Money",
+  "@payment_airtel_money": {
+    "description": "Canonical key: payment.airtel_money"
+  },
+  "payment_tnm_mpamba": "TNM Mpamba",
+  "@payment_tnm_mpamba": {
+    "description": "Canonical key: payment.tnm_mpamba"
+  },
+  "account_title": "Account",
+  "@account_title": {
+    "description": "Canonical key: account.title"
+  },
+  "account_name": "Name",
+  "@account_name": {
+    "description": "Canonical key: account.name"
+  },
+  "account_phone": "Phone",
+  "@account_phone": {
+    "description": "Canonical key: account.phone"
+  },
+  "account_language": "Language",
+  "@account_language": {
+    "description": "Canonical key: account.language"
+  },
+  "account_addresses": "Saved addresses",
+  "@account_addresses": {
+    "description": "Canonical key: account.addresses"
+  },
+  "account_sign_in": "Sign in",
+  "@account_sign_in": {
+    "description": "Canonical key: account.sign_in"
+  },
+  "account_guest": "You are not signed in",
+  "@account_guest": {
+    "description": "Canonical key: account.guest"
+  },
+  "address_title": "Saved addresses",
+  "@address_title": {
+    "description": "Canonical key: address.title"
+  },
+  "address_empty": "No saved addresses yet",
+  "@address_empty": {
+    "description": "Canonical key: address.empty"
+  },
+  "address_default": "Default",
+  "@address_default": {
+    "description": "Canonical key: address.default"
+  },
+  "address_set_default": "Set as default",
+  "@address_set_default": {
+    "description": "Canonical key: address.set_default"
+  },
+  "address_delete_confirm": "Delete this address?",
+  "@address_delete_confirm": {
+    "description": "Canonical key: address.delete_confirm"
+  },
+  "error_bad_request": "The request is invalid.",
+  "@error_bad_request": {
+    "description": "Canonical key: error.bad_request"
+  },
+  "error_unauthenticated": "Please sign in to continue.",
+  "@error_unauthenticated": {
+    "description": "Canonical key: error.unauthenticated"
+  },
+  "error_invalid_credentials": "The e-mail or password is incorrect.",
+  "@error_invalid_credentials": {
+    "description": "Canonical key: error.invalid_credentials"
+  },
+  "error_forbidden": "You do not have permission to do this.",
+  "@error_forbidden": {
+    "description": "Canonical key: error.forbidden"
+  },
+  "error_account_disabled": "Your account has been disabled.",
+  "@error_account_disabled": {
+    "description": "Canonical key: error.account_disabled"
+  },
+  "error_resource_not_found": "The requested item was not found.",
+  "@error_resource_not_found": {
+    "description": "Canonical key: error.resource_not_found"
+  },
+  "error_route_not_found": "This feature is not available yet.",
+  "@error_route_not_found": {
+    "description": "Canonical key: error.route_not_found"
+  },
+  "error_method_not_allowed": "This action is not allowed.",
+  "@error_method_not_allowed": {
+    "description": "Canonical key: error.method_not_allowed"
+  },
+  "error_conflict": "This can't be done right now.",
+  "@error_conflict": {
+    "description": "Canonical key: error.conflict"
+  },
+  "error_validation_failed": "Please check the information you entered.",
+  "@error_validation_failed": {
+    "description": "Canonical key: error.validation_failed"
+  },
+  "error_otp_invalid": "The verification code is incorrect.",
+  "@error_otp_invalid": {
+    "description": "Canonical key: error.otp_invalid"
+  },
+  "error_otp_expired": "The code has expired. Please request a new one.",
+  "@error_otp_expired": {
+    "description": "Canonical key: error.otp_expired"
+  },
+  "error_language_not_supported": "This language is not supported.",
+  "@error_language_not_supported": {
+    "description": "Canonical key: error.language_not_supported"
+  },
+  "error_store_not_available": "This store is not accepting orders right now.",
+  "@error_store_not_available": {
+    "description": "Canonical key: error.store_not_available"
+  },
+  "error_out_of_delivery_area": "This location is outside our delivery area.",
+  "@error_out_of_delivery_area": {
+    "description": "Canonical key: error.out_of_delivery_area"
+  },
+  "error_product_not_available": "This item is not available right now.",
+  "@error_product_not_available": {
+    "description": "Canonical key: error.product_not_available"
+  },
+  "error_invalid_status_transition": "This can't be done at this stage of the order.",
+  "@error_invalid_status_transition": {
+    "description": "Canonical key: error.invalid_status_transition"
+  },
+  "error_delivery_pin_invalid": "The PIN is incorrect.",
+  "@error_delivery_pin_invalid": {
+    "description": "Canonical key: error.delivery_pin_invalid"
+  },
+  "error_payment_failed": "The payment could not be completed.",
+  "@error_payment_failed": {
+    "description": "Canonical key: error.payment_failed"
+  },
+  "error_too_many_requests": "Too many attempts. Please wait a moment.",
+  "@error_too_many_requests": {
+    "description": "Canonical key: error.too_many_requests"
+  },
+  "error_server_error": "Something went wrong on our side. Please try again.",
+  "@error_server_error": {
+    "description": "Canonical key: error.server_error"
+  },
+  "error_network": "No internet connection. Check your network.",
+  "@error_network": {
+    "description": "Canonical key: error.network"
+  },
+  "error_timeout": "The connection is slow. Please try again.",
+  "@error_timeout": {
+    "description": "Canonical key: error.timeout"
+  },
+  "error_unknown": "Something went wrong. Please try again.",
+  "@error_unknown": {
+    "description": "Canonical key: error.unknown"
+  },
+  "order_status_new": "Order received",
+  "@order_status_new": {
+    "description": "Canonical key: order.status.new"
+  },
+  "order_status_confirmed": "Confirmed",
+  "@order_status_confirmed": {
+    "description": "Canonical key: order.status.confirmed"
+  },
+  "order_status_cooking": "Preparing",
+  "@order_status_cooking": {
+    "description": "Canonical key: order.status.cooking"
+  },
+  "order_status_ready_for_pickup": "Ready for pickup",
+  "@order_status_ready_for_pickup": {
+    "description": "Canonical key: order.status.ready_for_pickup"
+  },
+  "order_status_rider_assigned": "Rider assigned",
+  "@order_status_rider_assigned": {
+    "description": "Canonical key: order.status.rider_assigned"
+  },
+  "order_status_picked_up": "Picked up",
+  "@order_status_picked_up": {
+    "description": "Canonical key: order.status.picked_up"
+  },
+  "order_status_on_the_way": "On the way",
+  "@order_status_on_the_way": {
+    "description": "Canonical key: order.status.on_the_way"
+  },
+  "order_status_arrived": "Rider has arrived",
+  "@order_status_arrived": {
+    "description": "Canonical key: order.status.arrived"
+  },
+  "order_status_delivered": "Delivered",
+  "@order_status_delivered": {
+    "description": "Canonical key: order.status.delivered"
+  },
+  "order_status_cancelled": "Cancelled",
+  "@order_status_cancelled": {
+    "description": "Canonical key: order.status.cancelled"
+  },
+  "order_status_failed_delivery": "Delivery failed",
+  "@order_status_failed_delivery": {
+    "description": "Canonical key: order.status.failed_delivery"
+  },
+  "order_status_unknown": "Unknown",
+  "@order_status_unknown": {
+    "description": "Canonical key: order.status.unknown"
+  },
+  "location_coordinates": "{latitude}, {longitude}",
+  "@location_coordinates": {
+    "description": "Canonical key: location.coordinates — GPS point shown when no address label exists",
+    "placeholders": {
+      "latitude": {
+        "type": "String"
+      },
+      "longitude": {
+        "type": "String"
+      }
+    }
+  }
+}
