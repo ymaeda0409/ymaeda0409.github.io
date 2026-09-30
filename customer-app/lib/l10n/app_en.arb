@@ -768,5 +768,14 @@
   "demo_otp_hint": "Demo: enter 123456. No SMS is sent and no real orders or payments are made.",
   "@demo_otp_hint": {
     "description": "Canonical key: demo.otp_hint"
+  },
+  "product_option_extra": "+{price}",
+  "@product_option_extra": {
+    "description": "Canonical key: product.option_extra. Extra charge of an option.",
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
   }
 }

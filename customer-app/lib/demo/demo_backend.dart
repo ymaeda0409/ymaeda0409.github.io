@@ -350,12 +350,29 @@ class DemoBackend implements HttpClientAdapter {
       final optionIds = ((item['option_ids'] as List?) ?? const [])
           .map((e) => '$e')
           .toSet();
-      final options = [
-        for (final group in (product['option_groups'] as List? ?? const []))
-          for (final option in (group as Map)['options'] as List)
-            if (optionIds.contains('${(option as Map)['id']}'))
-              {'name': option['name'], 'price': option['price']},
-      ];
+      // Same rules as the API: every group's min/max, and only this product's options.
+      final options = <Map<String, dynamic>>[];
+      final known = <String>{};
+      for (final raw in (product['option_groups'] as List? ?? const [])) {
+        final group = raw as Map;
+        final chosen = [
+          for (final option in group['options'] as List)
+            if (optionIds.contains('${(option as Map)['id']}')) option,
+        ];
+        known.addAll([
+          for (final o in group['options'] as List) '${(o as Map)['id']}',
+        ]);
+        if (chosen.length < (group['min_select'] as int) ||
+            chosen.length > (group['max_select'] as int)) {
+          throw _DemoError('VALIDATION_FAILED', 422);
+        }
+        options.addAll([
+          for (final o in chosen) {'name': o['name'], 'price': o['price']},
+        ]);
+      }
+      if (!known.containsAll(optionIds)) {
+        throw _DemoError('VALIDATION_FAILED', 422);
+      }
       final quantity = item['quantity'] as int;
       final unit = product['price'] as int;
       final optionAmount = options.fold<int>(
@@ -656,9 +673,26 @@ class DemoBackend implements HttpClientAdapter {
     return next;
   }
 
-  Future<Object?> _asset(String name) async => _assets[name] ??= jsonDecode(
-    await rootBundle.loadString('assets/demo/$name.json'),
+  Future<Object?> _asset(String name) async => _assets[name] ??= _localImages(
+    jsonDecode(await rootBundle.loadString('assets/demo/$name.json')),
   );
+
+  /// Captured catalog points image_url at the API server; the demo serves the same
+  /// photos from its own bundle (`assets/demo/menu/`), next to the web app.
+  static Object? _localImages(Object? json) {
+    if (json is List) return json.map(_localImages).toList();
+    if (json is! Map) return json;
+    return {
+      for (final e in json.entries)
+        e.key: e.key == 'image_url' && e.value is String
+            ? Uri.base
+                  .resolve(
+                    'assets/assets/demo/menu/${Uri.parse(e.value as String).pathSegments.last}',
+                  )
+                  .toString()
+            : _localImages(e.value),
+    };
+  }
 
   Future<Map<String, dynamic>> _load() async {
     if (_state != null) return _state!;

@@ -87,9 +87,10 @@ class _ProductDetailState extends ConsumerState<_ProductDetail> {
     setState(() {
       final set = _selected[group.id]!;
       if (group.isSingleChoice) {
-        set
-          ..clear()
-          ..add(option.id);
+        // An optional single choice (e.g. "add a drink") can be tapped again to remove it.
+        final deselect = !group.isRequired && set.contains(option.id);
+        set.clear();
+        if (!deselect) set.add(option.id);
       } else if (set.contains(option.id)) {
         set.remove(option.id);
       } else if (set.length < group.maxSelect) {
@@ -97,6 +98,19 @@ class _ProductDetailState extends ConsumerState<_ProductDetail> {
       }
     });
   }
+
+  /// Surcharge shown next to an option ("+MK 2,500"); nothing for free options.
+  Widget? _extraPrice(
+    BuildContext context,
+    ProductOption option,
+    Product product,
+  ) => option.price > 0
+      ? Text(
+          context.l10n.product_option_extra(
+            formatMoney(option.price, product.currency, context.locale),
+          ),
+        )
+      : null;
 
   Future<void> _addToCart() async {
     final l = context.l10n;
@@ -198,26 +212,37 @@ class _ProductDetailState extends ConsumerState<_ProductDetail> {
               ],
             ),
             Card(
-              child: Column(
-                children: [
-                  for (final option in group.options)
-                    CheckboxListTile(
-                      value: _selected[group.id]!.contains(option.id),
-                      onChanged: (_) => _toggle(group, option),
-                      title: Text(option.name),
-                      secondary: option.price > 0
-                          ? Text(
-                              formatMoney(
-                                option.price,
-                                product.currency,
-                                context.locale,
-                              ),
-                            )
-                          : null,
-                      controlAffinity: ListTileControlAffinity.leading,
+              // "Pick exactly one" reads as radio buttons; everything else as checkboxes.
+              child: group.isRequired && group.isSingleChoice
+                  ? RadioGroup<int>(
+                      groupValue: _selected[group.id]!.firstOrNull,
+                      onChanged: (id) => _toggle(
+                        group,
+                        group.options.firstWhere((o) => o.id == id),
+                      ),
+                      child: Column(
+                        children: [
+                          for (final option in group.options)
+                            RadioListTile<int>(
+                              value: option.id,
+                              title: Text(option.name),
+                              secondary: _extraPrice(context, option, product),
+                            ),
+                        ],
+                      ),
+                    )
+                  : Column(
+                      children: [
+                        for (final option in group.options)
+                          CheckboxListTile(
+                            value: _selected[group.id]!.contains(option.id),
+                            onChanged: (_) => _toggle(group, option),
+                            title: Text(option.name),
+                            secondary: _extraPrice(context, option, product),
+                            controlAffinity: ListTileControlAffinity.leading,
+                          ),
+                      ],
                     ),
-                ],
-              ),
             ),
           ],
           const SizedBox(height: 20),

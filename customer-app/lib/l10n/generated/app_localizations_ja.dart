@@ -564,4 +564,9 @@ class AppLocalizationsJa extends AppLocalizations {
   @override
   String get demo_otp_hint =>
       'デモ版です。123456 を入力してください。SMS は送られず、実際の注文や支払いも発生しません。';
+
+  @override
+  String product_option_extra(String price) {
+    return '+$price';
+  }
 }

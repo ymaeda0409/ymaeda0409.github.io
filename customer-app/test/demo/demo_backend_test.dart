@@ -77,7 +77,7 @@ void main() {
           {
             'product_id': 1,
             'quantity': 1,
-            'option_ids': [2],
+            'option_ids': [1, 6],
           },
           {'product_id': 5, 'quantity': 2},
         ],
@@ -92,10 +92,14 @@ void main() {
     final catalog = ApiCatalogRepository(api);
     final stores = await catalog.availableStores(-13.97, 33.78);
     expect(stores, hasLength(1));
-    expect((await catalog.products(1)).first.name, 'Chicken Bento');
+    expect((await catalog.products(1)).first.name, 'Chicken & Beef Combo');
 
     locale = 'ja';
-    expect((await catalog.product(1, 1)).name, 'チキン弁当');
+    expect((await catalog.product(1, 1)).name, 'チキン＆ビーフのコンボ弁当');
+    expect(
+      (await catalog.product(1, 1)).imageUrl,
+      endsWith('assets/demo/menu/combo-chicken-beef.jpg'),
+    );
     locale = 'ny';
     expect((await catalog.categories(1)), isNotEmpty);
 
@@ -117,7 +121,7 @@ void main() {
               {
                 'product_id': 1,
                 'quantity': 1,
-                'option_ids': [2],
+                'option_ids': [1, 6],
               },
               {'product_id': 5, 'quantity': 2},
             ],
@@ -125,13 +129,13 @@ void main() {
         ),
       );
       // Same figures as the real API for this basket (captured fixture).
-      expect(quote.subtotal, 500000);
+      expect(quote.subtotal, 1360000);
       expect(quote.deliveryFee, 150000);
-      expect(quote.total, 650000);
+      expect(quote.total, 1510000);
 
       final order = await place(addressId, 'AIRTEL_MONEY');
       expect(order.status, 'NEW');
-      expect(order.total, 650000);
+      expect(order.total, 1510000);
 
       // Unpaid orders do not move.
       now = now.add(const Duration(minutes: 5));
@@ -174,6 +178,27 @@ void main() {
 
   test('declined payment and cancellation behave like the real API', () async {
     final addressId = await signInWithAddress();
+    // Required choices (staple, portion) are enforced like the real API.
+    await expectLater(
+      api.post<Map<String, dynamic>>(
+        '/orders/quote',
+        body: {
+          'store_id': 1,
+          'delivery_address_id': addressId,
+          'items': [
+            {
+              'product_id': 1,
+              'quantity': 1,
+              'option_ids': [6],
+            },
+          ],
+        },
+      ),
+      throwsA(
+        isA<ApiException>().having((e) => e.code, 'code', 'VALIDATION_FAILED'),
+      ),
+    );
+
     final order = await place(addressId, 'TNM_MPAMBA');
 
     final declined = await ApiPaymentRepository(api)

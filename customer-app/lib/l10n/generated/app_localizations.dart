@@ -1143,6 +1143,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Demo: enter 123456. No SMS is sent and no real orders or payments are made.'**
   String get demo_otp_hint;
+
+  /// Canonical key: product.option_extra. Extra charge of an option.
+  ///
+  /// In en, this message translates to:
+  /// **'+{price}'**
+  String product_option_extra(String price);
 }
 
 class _AppLocalizationsDelegate

@@ -173,5 +173,6 @@
   "payment_status_refunded": "返金済み",
   "error_payment_not_required": "この注文はオンライン決済の必要がありません。",
   "demo_banner": "デモ",
-  "demo_otp_hint": "デモ版です。123456 を入力してください。SMS は送られず、実際の注文や支払いも発生しません。"
+  "demo_otp_hint": "デモ版です。123456 を入力してください。SMS は送られず、実際の注文や支払いも発生しません。",
+  "product_option_extra": "+{price}"
 }

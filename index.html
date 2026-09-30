@@ -44,6 +44,11 @@ code { background: var(--green-soft); color: var(--green); padding: 1px 6px; bor
 .shots figure.wide { width: min(92%, 560px); }
 .shots img { width: 100%; height: auto; border: 1px solid var(--line); border-radius: 10px; background: #fff; display: block; }
 .shots figcaption { font-size: .85rem; color: var(--muted); }
+.hero { margin: 0; border-radius: 14px; overflow: hidden; aspect-ratio: 4 / 3; background: var(--green-soft); }
+.hero img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.menu { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.menu li { display: flex; justify-content: space-between; gap: 12px; border-bottom: 1px dashed var(--line); padding-bottom: 6px; }
+.menu li span:last-child { white-space: nowrap; font-variant-numeric: tabular-nums; }
 ul.facts { margin: 0; padding-left: 1.2em; display: grid; gap: 6px; }
 .reset { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
 button { font: inherit; border: 1px solid var(--line); background: var(--surface); color: var(--ink);
@@ -57,9 +62,22 @@ footer { font-size: .82rem; color: var(--muted); border-top: 1px solid var(--lin
     <p class="eyebrow">Lilongwe · Malawi · デモ版</p>
     <h1>Malawi <span>Bento</span></h1>
     <p>マラウイ向けのお弁当デリバリーサービスです。お客様アプリをブラウザで体験できるデモを用意しました。スマホでそのまま開けます。</p>
+    <figure class="hero"><img src="site/hero-bento.jpg" alt="チキン＆ビーフのコンボ弁当。イエローライス、グリーンピースとにんじんの煮込み、カチュンバリ、フライドチキンと牛肉の炒め物" width="900" height="1200"></figure>
     <a class="cta" href="app/">お客様アプリのデモを開く</a>
     <p class="note">英語・チェワ語・日本語に対応。最初の読み込みは数 MB あります（2 回目からは速く開きます）。</p>
   </header>
+
+  <section aria-labelledby="menu">
+    <p class="eyebrow">メニュー（デモ）</p>
+    <h2 id="menu">リロングウェ中央店のお弁当</h2>
+    <ul class="menu">
+      <li><span>チキン＆ビーフのコンボ弁当</span><span>MK 9,500</span></li>
+      <li><span>牛肉のトマト煮込み＆焼き野菜弁当</span><span>MK 9,800</span></li>
+      <li><span>牛肉の煮込み＆白身魚フライ弁当</span><span>MK 10,500</span></li>
+      <li><span>ヤギ肉の煮込み＆ピラウ弁当</span><span>MK 11,000</span></li>
+    </ul>
+    <p class="note">主食（イエローライス・ピラウ・シマ・フライドポテト）、おかずの量、トッピング、ドリンクを選べます。配送料 MK 1,500〜。</p>
+  </section>
 
   <section aria-labelledby="how">
     <p class="eyebrow">試し方（約 3 分）</p>
@@ -67,7 +85,7 @@ footer { font-size: .82rem; color: var(--muted); border-top: 1px solid var(--lin
     <ol class="steps">
       <li>言語を選んで「続ける」</li>
       <li>「お届け先を選択」→「現在地を使う」→「ここに届ける」<br><span class="note">デモでは現在地がリロングウェ市内になります。</span></li>
-      <li>お弁当を選んでカートに追加 →「レジに進む」</li>
+      <li>お弁当を選び、主食・量・トッピング・ドリンクを選んでカートに追加 →「カート」→「レジに進む」</li>
       <li>電話番号は <code>0991234567</code> のような 9〜10 桁なら何でも OK（SMS は送られません）。認証コードは <code>123456</code></li>
       <li>お届け先の名前と目印を入れて保存、支払い方法（Airtel Money など）を選んで注文</li>
       <li>「支払う」→ 数秒で支払い完了 →「注文を見る」</li>
@@ -80,8 +98,10 @@ footer { font-size: .82rem; color: var(--muted); border-top: 1px solid var(--lin
     <p class="eyebrow">画面</p>
     <h2 id="screens">アプリと管理画面</h2>
     <div class="shots">
-      <figure><img src="site/app-home-ja.png" alt="お客様アプリのホーム画面。店舗、カテゴリ、おすすめのお弁当と価格" loading="lazy"><figcaption>お客様アプリ：ホーム</figcaption></figure>
-      <figure><img src="site/app-tracking-ja.png" alt="注文詳細。受け取り PIN、配達員と残り距離、ステータスの経過" loading="lazy"><figcaption>お客様アプリ：配達状況と受け取り PIN</figcaption></figure>
+      <figure><img src="site/app-home-ja.jpg" alt="お客様アプリのホーム画面。店舗、カテゴリ、写真付きのおすすめ弁当と価格" loading="lazy"><figcaption>お客様アプリ：ホーム</figcaption></figure>
+      <figure><img src="site/app-product-ja.jpg" alt="商品詳細。お弁当の写真、説明、主食の選択" loading="lazy"><figcaption>お客様アプリ：商品詳細</figcaption></figure>
+      <figure><img src="site/app-options-ja.jpg" alt="オプション選択。おかずの量、トッピング、ドリンクと追加料金" loading="lazy"><figcaption>お客様アプリ：オプション選択</figcaption></figure>
+      <figure><img src="site/app-tracking-ja.jpg" alt="注文詳細。受け取り PIN、配達員と残り距離、ステータスの経過" loading="lazy"><figcaption>お客様アプリ：配達状況と受け取り PIN</figcaption></figure>
       <figure class="wide"><img src="site/admin-dashboard-ja.png" alt="管理画面のダッシュボード。本日の売上、注文、進行中の注文、過去 7 日の売上" loading="lazy"><figcaption>管理画面：ダッシュボード（今回のデモには含まれません）</figcaption></figure>
       <figure class="wide"><img src="site/admin-sales-ja.png" alt="管理画面の売上。商品別集計" loading="lazy"><figcaption>管理画面：売上</figcaption></figure>
       <figure class="wide"><img src="site/admin-product-ny.png" alt="チェワ語表示の商品編集画面。言語タブとオプション" loading="lazy"><figcaption>管理画面：商品編集（チェワ語表示）</figcaption></figure>

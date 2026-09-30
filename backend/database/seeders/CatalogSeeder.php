@@ -9,7 +9,8 @@ use App\Models\Store;
 use Illuminate\Database\Seeder;
 
 /**
- * Initial menu with en / ny / ja translations. Prices are minor units (MWK × 100).
+ * Launch menu of the Lilongwe store with en / ny / ja translations.
+ * Prices are minor units (MWK × 100). Photos live in public/images/menu.
  * Chichewa strings are an initial translation and need native-speaker review.
  */
 class CatalogSeeder extends Seeder
@@ -43,6 +44,7 @@ class CatalogSeeder extends Seeder
                     'price' => $data['price'],
                     'preparation_minutes' => $data['minutes'],
                     'is_featured' => $data['featured'],
+                    'image_url' => isset($data['image']) ? url("/images/menu/{$data['image']}") : null,
                     'is_active' => true,
                     'sort_order' => $index + 1,
                 ],
@@ -52,8 +54,10 @@ class CatalogSeeder extends Seeder
                 $product->translations()->updateOrCreate(['locale' => $locale], $values);
             }
 
-            if ($data['category'] === 'bento') {
-                $this->seedRiceOption($product);
+            if ($data['category'] === 'bento' && ! $product->optionGroups()->exists()) {
+                foreach ($this->bentoOptions($data['staples']) as $sort => $group) {
+                    $this->seedOptionGroup($product, $group, $sort + 1);
+                }
             }
         }
 
@@ -67,28 +71,73 @@ class CatalogSeeder extends Seeder
         });
     }
 
-    private function seedRiceOption(Product $product): void
+    /**
+     * @param  array{min: int, max: int, names: array<string, string>, options: list<array{price: int, names: array<string, string>}>}  $group
+     */
+    private function seedOptionGroup(Product $product, array $group, int $sort): void
     {
-        if ($product->optionGroups()->exists()) {
-            return;
+        $model = $product->optionGroups()->create(['min_select' => $group['min'], 'max_select' => $group['max'], 'sort_order' => $sort]);
+        foreach ($group['names'] as $locale => $name) {
+            $model->translations()->create(['locale' => $locale, 'name' => $name]);
         }
-
-        $group = $product->optionGroups()->create(['min_select' => 1, 'max_select' => 1, 'sort_order' => 1]);
-        foreach (['en' => 'Rice size', 'ny' => 'Kukula kwa mpunga', 'ja' => 'ご飯の量'] as $locale => $name) {
-            $group->translations()->create(['locale' => $locale, 'name' => $name]);
-        }
-
-        $options = [
-            ['price' => 0, 'names' => ['en' => 'Regular', 'ny' => 'Wamba', 'ja' => '普通']],
-            ['price' => 50000, 'names' => ['en' => 'Large', 'ny' => 'Wochuluka', 'ja' => '大盛り']],
-        ];
-        foreach ($options as $sort => $option) {
-            $model = $group->options()->create(['price' => $option['price'], 'is_active' => true, 'sort_order' => $sort + 1]);
+        foreach ($group['options'] as $optionSort => $option) {
+            $optionModel = $model->options()->create(['price' => $option['price'], 'is_active' => true, 'sort_order' => $optionSort + 1]);
             foreach ($option['names'] as $locale => $name) {
-                $model->translations()->create(['locale' => $locale, 'name' => $name]);
+                $optionModel->translations()->create(['locale' => $locale, 'name' => $name]);
             }
         }
     }
+
+    /**
+     * Option groups shared by every bento; the staple list puts the bento's own staple first.
+     *
+     * @param  list<string>  $staples  keys of self::STAPLES
+     */
+    private function bentoOptions(array $staples): array
+    {
+        return [
+            [
+                'min' => 1, 'max' => 1,
+                'names' => ['en' => 'Choose your staple', 'ny' => 'Sankhani chakudya chachikulu', 'ja' => '主食を選ぶ'],
+                'options' => array_map(fn ($key) => self::STAPLES[$key], $staples),
+            ],
+            [
+                'min' => 1, 'max' => 1,
+                'names' => ['en' => 'Portion', 'ny' => 'Kuchuluka', 'ja' => 'おかずの量'],
+                'options' => [
+                    ['price' => 0, 'names' => ['en' => 'Regular', 'ny' => 'Wamba', 'ja' => '普通']],
+                    ['price' => 250000, 'names' => ['en' => 'Large (1.5× meat)', 'ny' => 'Chachikulu (nyama 1.5×)', 'ja' => '大盛り（お肉 1.5 倍）']],
+                ],
+            ],
+            [
+                'min' => 0, 'max' => 3,
+                'names' => ['en' => 'Extras (up to 3)', 'ny' => 'Zowonjezera (mpaka 3)', 'ja' => 'トッピング（3 つまで）'],
+                'options' => [
+                    ['price' => 80000, 'names' => ['en' => 'Extra kachumbari salad', 'ny' => 'Kachumbari yowonjezera', 'ja' => 'カチュンバリ（トマトときゅうりのサラダ）追加']],
+                    ['price' => 30000, 'names' => ['en' => 'Malawian chilli sauce', 'ny' => 'Tsabola wa ku Malawi', 'ja' => 'マラウイ風チリソース']],
+                    ['price' => 70000, 'names' => ['en' => 'Boiled egg', 'ny' => 'Dzira lowiritsa', 'ja' => 'ゆで卵']],
+                    ['price' => 100000, 'names' => ['en' => 'Chapati', 'ny' => 'Chapati', 'ja' => 'チャパティ']],
+                ],
+            ],
+            [
+                'min' => 0, 'max' => 1,
+                'names' => ['en' => 'Add a drink', 'ny' => 'Onjezani chakumwa', 'ja' => 'ドリンクを追加'],
+                'options' => [
+                    ['price' => 80000, 'names' => ['en' => 'Bottled water 500ml', 'ny' => 'Madzi a m\'botolo 500ml', 'ja' => 'ミネラルウォーター 500ml']],
+                    ['price' => 130000, 'names' => ['en' => 'Coca-Cola 500ml', 'ny' => 'Coca-Cola 500ml', 'ja' => 'コカ・コーラ 500ml']],
+                    ['price' => 150000, 'names' => ['en' => 'Fresh mango juice', 'ny' => 'Madzi a mango', 'ja' => '生マンゴージュース']],
+                ],
+            ],
+        ];
+    }
+
+    private const STAPLES = [
+        'yellow_rice' => ['price' => 0, 'names' => ['en' => 'Yellow rice', 'ny' => 'Mpunga wachikasu', 'ja' => 'イエローライス']],
+        'pilau' => ['price' => 0, 'names' => ['en' => 'Pilau rice', 'ny' => 'Pilau', 'ja' => 'ピラウ（スパイスご飯）']],
+        'potatoes' => ['price' => 0, 'names' => ['en' => 'Rosemary potatoes', 'ny' => 'Mbatata za rosemary', 'ja' => 'ローズマリーポテト']],
+        'nsima' => ['price' => 0, 'names' => ['en' => 'Nsima', 'ny' => 'Nsima', 'ja' => 'シマ（とうもろこしの主食）']],
+        'chips' => ['price' => 100000, 'names' => ['en' => 'Chips', 'ny' => 'Chipisi', 'ja' => 'フライドポテト']],
+    ];
 
     /**
      * @return list<array<string, mixed>>
@@ -97,51 +146,63 @@ class CatalogSeeder extends Seeder
     {
         return [
             [
-                'sku' => 'BENTO-CHICKEN', 'category' => 'bento', 'price' => 350000, 'minutes' => 15, 'featured' => true,
+                'sku' => 'BENTO-COMBO', 'category' => 'bento', 'price' => 950000, 'minutes' => 15, 'featured' => true,
+                'image' => 'combo-chicken-beef.jpg', 'staples' => ['yellow_rice', 'pilau', 'nsima', 'chips'],
                 'translations' => [
-                    'en' => ['name' => 'Chicken Bento', 'description' => 'Grilled chicken with rice and seasonal vegetables.'],
-                    'ny' => ['name' => 'Bento ya Nkhuku', 'description' => 'Nkhuku yowotcha ndi mpunga komanso ndiwo zamasamba.'],
-                    'ja' => ['name' => 'チキン弁当', 'description' => 'グリルチキンとご飯、季節の野菜の弁当です。'],
+                    'en' => ['name' => 'Chicken & Beef Combo', 'description' => 'Crispy fried chicken and beef stir-fried with peppers and onion, served with yellow rice, pea and carrot stew and a fresh kachumbari salad.'],
+                    'ny' => ['name' => 'Nkhuku ndi Ng\'ombe', 'description' => 'Nkhuku yokazinga ndi nyama ya ng\'ombe yokazinga ndi tsabola ndi anyezi, pamodzi ndi mpunga wachikasu, nsawawa ndi karoti, komanso saladi ya kachumbari.'],
+                    'ja' => ['name' => 'チキン＆ビーフのコンボ弁当', 'description' => 'カリッと揚げたチキンと、ピーマン・玉ねぎと炒めた牛肉。イエローライス、グリーンピースとにんじんの煮込み、トマトときゅうりのカチュンバリ付き。'],
                 ],
             ],
             [
-                'sku' => 'BENTO-BEEF', 'category' => 'bento', 'price' => 400000, 'minutes' => 15, 'featured' => true,
+                'sku' => 'BENTO-BEEF-FISH', 'category' => 'bento', 'price' => 1050000, 'minutes' => 20, 'featured' => true,
+                'image' => 'beef-stew-fish.jpg', 'staples' => ['potatoes', 'yellow_rice', 'nsima', 'chips'],
                 'translations' => [
-                    'en' => ['name' => 'Beef Bento', 'description' => 'Tender stewed beef with rice.'],
-                    'ny' => ['name' => 'Bento ya Ng\'ombe', 'description' => 'Nyama ya ng\'ombe yofewa ndi mpunga.'],
-                    'ja' => ['name' => 'ビーフ弁当', 'description' => 'やわらかく煮込んだ牛肉とご飯の弁当です。'],
+                    'en' => ['name' => 'Beef Stew & Crumbed Fish', 'description' => 'Slow-cooked beef stew and a golden crumbed fish fillet with rosemary potatoes, broccoli, cauliflower and carrot, plus pea stew and kachumbari.'],
+                    'ny' => ['name' => 'Nyama ya Ng\'ombe ndi Nsomba', 'description' => 'Nyama ya ng\'ombe yophika pang\'onopang\'ono ndi nsomba yokazinga, mbatata za rosemary, broccoli, cauliflower ndi karoti, nsawawa ndi kachumbari.'],
+                    'ja' => ['name' => '牛肉の煮込み＆白身魚フライ弁当', 'description' => 'じっくり煮込んだ牛肉と、衣サクサクの白身魚フライ。ローズマリーポテト、ブロッコリー、カリフラワー、にんじん、グリーンピースの煮込みとカチュンバリ付き。'],
                 ],
             ],
             [
-                'sku' => 'BENTO-FISH', 'category' => 'bento', 'price' => 380000, 'minutes' => 20, 'featured' => false,
+                'sku' => 'BENTO-GOAT-PILAU', 'category' => 'bento', 'price' => 1100000, 'minutes' => 20, 'featured' => true,
+                'image' => 'goat-stew-pilau.jpg', 'staples' => ['pilau', 'yellow_rice', 'nsima', 'chips'],
                 'translations' => [
-                    'en' => ['name' => 'Fish Bento', 'description' => 'Fried chambo from Lake Malawi with rice.'],
-                    'ny' => ['name' => 'Bento ya Nsomba', 'description' => 'Chambo yokazinga ya ku Nyanja ya Malawi ndi mpunga.'],
-                    'ja' => ['name' => 'フィッシュ弁当', 'description' => 'マラウイ湖のチャンボのフライとご飯の弁当です。'],
+                    'en' => ['name' => 'Goat Stew & Pilau', 'description' => 'Tender bone-in goat stewed with tomato and spices, fragrant pilau rice with a fried chicken wing, pea and carrot stew and kachumbari.'],
+                    'ny' => ['name' => 'Nyama ya Mbuzi ndi Pilau', 'description' => 'Nyama ya mbuzi yofewa yophikidwa ndi phwetekere ndi zonunkhira, pilau, phiko la nkhuku lokazinga, nsawawa ndi kachumbari.'],
+                    'ja' => ['name' => 'ヤギ肉の煮込み＆ピラウ弁当', 'description' => 'トマトとスパイスで骨付きのままやわらかく煮込んだヤギ肉。スパイス香るピラウ、手羽先フライ、グリーンピースの煮込み、カチュンバリ付き。'],
                 ],
             ],
             [
-                'sku' => 'BENTO-VEG', 'category' => 'bento', 'price' => 300000, 'minutes' => 12, 'featured' => false,
+                'sku' => 'BENTO-BEEF-VEG', 'category' => 'bento', 'price' => 980000, 'minutes' => 15, 'featured' => false,
+                'image' => 'braised-beef-vegetables.jpg', 'staples' => ['pilau', 'yellow_rice', 'nsima', 'chips'],
                 'translations' => [
-                    'en' => ['name' => 'Vegetarian Bento', 'description' => 'Beans, greens and vegetables with rice.'],
-                    'ny' => ['name' => 'Bento ya Ndiwo Zamasamba', 'description' => 'Nyemba, masamba ndi ndiwo zina ndi mpunga.'],
-                    'ja' => ['name' => 'ベジタリアン弁当', 'description' => '豆と青菜、野菜とご飯の弁当です。'],
+                    'en' => ['name' => 'Braised Beef & Roast Vegetables', 'description' => 'Beef braised in a rich tomato gravy with pilau rice, roasted peppers and aubergine, broccoli and carrot, and kachumbari.'],
+                    'ny' => ['name' => 'Nyama ya Ng\'ombe ndi Ndiwo Zowotcha', 'description' => 'Nyama ya ng\'ombe yophikidwa mu msuzi wa phwetekere, pilau, tsabola ndi biringanya zowotcha, broccoli, karoti ndi kachumbari.'],
+                    'ja' => ['name' => '牛肉のトマト煮込み＆焼き野菜弁当', 'description' => '濃厚なトマトソースで煮込んだ牛肉。ピラウ、ローストしたパプリカとなす、ブロッコリー、にんじん、カチュンバリ付き。'],
                 ],
             ],
             [
-                'sku' => 'DRINK-WATER', 'category' => 'drinks', 'price' => 50000, 'minutes' => 0, 'featured' => false,
+                'sku' => 'DRINK-WATER', 'category' => 'drinks', 'price' => 80000, 'minutes' => 0, 'featured' => false,
                 'translations' => [
-                    'en' => ['name' => 'Water', 'description' => 'Bottled water 500ml.'],
-                    'ny' => ['name' => 'Madzi', 'description' => 'Madzi a m\'botolo 500ml.'],
-                    'ja' => ['name' => '水', 'description' => 'ボトル入り飲料水 500ml'],
+                    'en' => ['name' => 'Bottled Water', 'description' => 'Still mineral water, 500ml.'],
+                    'ny' => ['name' => 'Madzi a M\'botolo', 'description' => 'Madzi akumwa, 500ml.'],
+                    'ja' => ['name' => 'ミネラルウォーター', 'description' => '500ml'],
                 ],
             ],
             [
-                'sku' => 'DRINK-COKE', 'category' => 'drinks', 'price' => 80000, 'minutes' => 0, 'featured' => false,
+                'sku' => 'DRINK-COLA', 'category' => 'drinks', 'price' => 130000, 'minutes' => 0, 'featured' => false,
                 'translations' => [
-                    'en' => ['name' => 'Coke', 'description' => 'Coca-Cola 500ml.'],
-                    'ny' => ['name' => 'Coke', 'description' => 'Coca-Cola 500ml.'],
-                    'ja' => ['name' => 'コーラ', 'description' => 'コカ・コーラ 500ml'],
+                    'en' => ['name' => 'Coca-Cola', 'description' => 'Chilled, 500ml bottle.'],
+                    'ny' => ['name' => 'Coca-Cola', 'description' => 'Yozizira, botolo la 500ml.'],
+                    'ja' => ['name' => 'コカ・コーラ', 'description' => '冷えた 500ml ボトル'],
+                ],
+            ],
+            [
+                'sku' => 'DRINK-MANGO', 'category' => 'drinks', 'price' => 150000, 'minutes' => 3, 'featured' => false,
+                'translations' => [
+                    'en' => ['name' => 'Fresh Mango Juice', 'description' => 'Made from Malawian mangoes, no added sugar, 350ml.'],
+                    'ny' => ['name' => 'Madzi a Mango', 'description' => 'Opangidwa ndi mango a ku Malawi, opanda shuga wowonjezera, 350ml.'],
+                    'ja' => ['name' => '生マンゴージュース', 'description' => 'マラウイ産マンゴー使用、砂糖不使用。350ml'],
                 ],
             ],
         ];

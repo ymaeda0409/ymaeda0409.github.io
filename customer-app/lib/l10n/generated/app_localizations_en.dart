@@ -581,4 +581,9 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get demo_otp_hint =>
       'Demo: enter 123456. No SMS is sent and no real orders or payments are made.';
+
+  @override
+  String product_option_extra(String price) {
+    return '+$price';
+  }
 }

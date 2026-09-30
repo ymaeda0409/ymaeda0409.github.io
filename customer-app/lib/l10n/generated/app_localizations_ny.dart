@@ -579,4 +579,9 @@ class AppLocalizationsNy extends AppLocalizations {
   @override
   String get demo_otp_hint =>
       'Chitsanzo: lembani 123456. Palibe SMS yotumizidwa, ndipo palibe oda kapena malipiro enieni.';
+
+  @override
+  String product_option_extra(String price) {
+    return '+$price';
+  }
 }

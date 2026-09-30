@@ -20,7 +20,7 @@
 | 店舗検索 | StoreLocatorService::findAvailableStores（Haversine + ゾーン判定 + 配送料） |
 | 管理 API | Franchise / Store / Kitchen / DeliveryZone / Category / Product / StoreProduct / Language / AuditLog |
 | 監査 | AuditLogger（管理操作・言語変更） |
-| Seeder | Malawi Bento / Lilongwe Franchise / Central Store & Kitchen / 3 言語 / 商品 6 種 / テストユーザー |
+| Seeder | Malawi Bento / Lilongwe Franchise / Central Store & Kitchen / 3 言語 / 弁当 4 種（写真付き, 主食・量・トッピング・ドリンクのオプション）+ ドリンク 3 種 / テストユーザー |
 | テスト | 認証, 配送エリア判定, 店舗検索, 権限, 他 FC アクセス禁止, 言語切替, Fallback, 商品翻訳, Accept-Language, 翻訳ファイル整合性 |
 
 **完了条件**: `php artisan migrate:fresh --seed` が PostgreSQL で成功し、`php artisan test` が全件 green。

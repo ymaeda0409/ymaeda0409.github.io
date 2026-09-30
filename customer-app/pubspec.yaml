@@ -35,6 +35,7 @@ flutter:
   # Catalog captured from the real API, used only by DEMO_MODE builds.
   assets:
     - assets/demo/
+    - assets/demo/menu/
   # Noto Sans JP (SIL OFL 1.1, assets/fonts/OFL.txt), subset to the Japanese
   # characters in app_ja.arb and the demo catalog; others fall back to system fonts.
   fonts:
