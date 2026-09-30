@@ -193,6 +193,24 @@ class CatalogSeeder extends Seeder
     {
         return [
             [
+                'sku' => 'DRINK-WATER', 'category' => 'drinks', 'price' => 80000, 'minutes' => 0, 'featured' => false,
+                'image' => 'mineral-water.jpg',
+                'translations' => [
+                    'en' => ['name' => 'Mineral Water', 'description' => 'Natural still mineral water, ice-cold. 500ml.'],
+                    'ny' => ['name' => 'Madzi a M\'botolo', 'description' => 'Madzi akumwa achilengedwe, ozizira kwambiri. 500ml.'],
+                    'ja' => ['name' => 'ミネラルウォーター', 'description' => '冷えたナチュラルミネラルウォーター。500ml'],
+                ],
+            ],
+            [
+                'sku' => 'DRINK-COLA', 'category' => 'drinks', 'price' => 130000, 'minutes' => 0, 'featured' => false,
+                'image' => 'cola.jpg',
+                'translations' => [
+                    'en' => ['name' => 'Cola', 'description' => 'Classic fizzy cola, served ice-cold. 500ml.'],
+                    'ny' => ['name' => 'Kola', 'description' => 'Kola ya thovu, yozizira kwambiri. 500ml.'],
+                    'ja' => ['name' => 'コーラ', 'description' => 'キンキンに冷えたコーラ。500ml'],
+                ],
+            ],
+            [
                 'sku' => 'DRINK-THOBWA', 'category' => 'drinks', 'price' => 150000, 'minutes' => 0, 'featured' => false,
                 'image' => 'thobwa.jpg',
                 'translations' => [
