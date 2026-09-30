@@ -129,13 +129,13 @@ void main() {
         ),
       );
       // Same figures as the real API for this basket (captured fixture).
-      expect(quote.subtotal, 1360000);
+      expect(quote.subtotal, 1500000);
       expect(quote.deliveryFee, 150000);
-      expect(quote.total, 1510000);
+      expect(quote.total, 1650000);
 
       final order = await place(addressId, 'AIRTEL_MONEY');
       expect(order.status, 'NEW');
-      expect(order.total, 1510000);
+      expect(order.total, 1650000);
 
       // Unpaid orders do not move.
       now = now.add(const Duration(minutes: 5));

@@ -122,11 +122,10 @@ class CatalogSeeder extends Seeder
             [
                 'min' => 0, 'max' => 1,
                 'names' => ['en' => 'Add a drink', 'ny' => 'Onjezani chakumwa', 'ja' => 'ドリンクを追加'],
-                'options' => [
-                    ['price' => 80000, 'names' => ['en' => 'Bottled water 500ml', 'ny' => 'Madzi a m\'botolo 500ml', 'ja' => 'ミネラルウォーター 500ml']],
-                    ['price' => 130000, 'names' => ['en' => 'Coca-Cola 500ml', 'ny' => 'Coca-Cola 500ml', 'ja' => 'コカ・コーラ 500ml']],
-                    ['price' => 150000, 'names' => ['en' => 'Fresh mango juice', 'ny' => 'Madzi a mango', 'ja' => '生マンゴージュース']],
-                ],
+                'options' => array_map(
+                    fn (array $drink) => ['price' => $drink['price'], 'names' => array_map(fn ($t) => $t['name'], $drink['translations'])],
+                    $this->drinks(),
+                ),
             ],
         ];
     }
@@ -181,28 +180,61 @@ class CatalogSeeder extends Seeder
                     'ja' => ['name' => '牛肉のトマト煮込み＆焼き野菜弁当', 'description' => '濃厚なトマトソースで煮込んだ牛肉。ピラウ、ローストしたパプリカとなす、ブロッコリー、にんじん、カチュンバリ付き。'],
                 ],
             ],
+            ...$this->drinks(),
+        ];
+    }
+
+    /**
+     * Bottled drinks (500ml); also offered as the bento "add a drink" option.
+     *
+     * @return list<array<string, mixed>>
+     */
+    private function drinks(): array
+    {
+        return [
             [
-                'sku' => 'DRINK-WATER', 'category' => 'drinks', 'price' => 80000, 'minutes' => 0, 'featured' => false,
+                'sku' => 'DRINK-THOBWA', 'category' => 'drinks', 'price' => 150000, 'minutes' => 0, 'featured' => false,
+                'image' => 'thobwa.jpg',
                 'translations' => [
-                    'en' => ['name' => 'Bottled Water', 'description' => 'Still mineral water, 500ml.'],
-                    'ny' => ['name' => 'Madzi a M\'botolo', 'description' => 'Madzi akumwa, 500ml.'],
-                    'ja' => ['name' => 'ミネラルウォーター', 'description' => '500ml'],
+                    'en' => ['name' => 'Thobwa', 'description' => 'Traditional Malawian drink of lightly fermented maize: creamy and gently tangy. Rich in B vitamins, no added sugar. 500ml.'],
+                    'ny' => ['name' => 'Thobwa', 'description' => 'Chakumwa chachikhalidwe cha ku Malawi chopangidwa ndi chimanga: chokoma komanso chowawasa pang\'ono. Chili ndi mavitamini a B, chopanda shuga wowonjezera. 500ml.'],
+                    'ja' => ['name' => 'トブワ（伝統のとうもろこしドリンク）', 'description' => 'とうもろこしを軽く発酵させたマラウイ伝統の飲み物。とろりとして、ほのかな酸味。ビタミン B 豊富、砂糖不使用。500ml'],
                 ],
             ],
             [
-                'sku' => 'DRINK-COLA', 'category' => 'drinks', 'price' => 130000, 'minutes' => 0, 'featured' => false,
+                'sku' => 'DRINK-HIBISCUS', 'category' => 'drinks', 'price' => 180000, 'minutes' => 0, 'featured' => false,
+                'image' => 'hibiscus-ginger.jpg',
                 'translations' => [
-                    'en' => ['name' => 'Coca-Cola', 'description' => 'Chilled, 500ml bottle.'],
-                    'ny' => ['name' => 'Coca-Cola', 'description' => 'Yozizira, botolo la 500ml.'],
-                    'ja' => ['name' => 'コカ・コーラ', 'description' => '冷えた 500ml ボトル'],
+                    'en' => ['name' => 'Hibiscus Ginger Drink', 'description' => 'Hibiscus flowers and fresh ginger: tart, bright and refreshing. Rich in antioxidants, no added sugar. 500ml.'],
+                    'ny' => ['name' => 'Hibiscus ndi Ginger', 'description' => 'Maluwa a hibiscus ndi ginger watsopano: chowawasa komanso chotsitsimula. Chopanda shuga wowonjezera. 500ml.'],
+                    'ja' => ['name' => 'ハイビスカス・ジンジャー', 'description' => 'ハイビスカスの花と生姜の、すっきりとした酸味。抗酸化成分たっぷり、砂糖不使用。500ml'],
                 ],
             ],
             [
-                'sku' => 'DRINK-MANGO', 'category' => 'drinks', 'price' => 150000, 'minutes' => 3, 'featured' => false,
+                'sku' => 'DRINK-ICED-TEA', 'category' => 'drinks', 'price' => 180000, 'minutes' => 0, 'featured' => false,
+                'image' => 'highlands-iced-tea.jpg',
                 'translations' => [
-                    'en' => ['name' => 'Fresh Mango Juice', 'description' => 'Made from Malawian mangoes, no added sugar, 350ml.'],
-                    'ny' => ['name' => 'Madzi a Mango', 'description' => 'Opangidwa ndi mango a ku Malawi, opanda shuga wowonjezera, 350ml.'],
-                    'ja' => ['name' => '生マンゴージュース', 'description' => 'マラウイ産マンゴー使用、砂糖不使用。350ml'],
+                    'en' => ['name' => 'Highlands Iced Tea', 'description' => 'Brewed from real Malawian black tea leaves, served chilled. No added sugar. 500ml.'],
+                    'ny' => ['name' => 'Tiyi Wozizira wa Highlands', 'description' => 'Tiyi wopangidwa ndi masamba enieni a tiyi wa ku Malawi, wozizira. Wopanda shuga wowonjezera. 500ml.'],
+                    'ja' => ['name' => 'ハイランズ・アイスティー', 'description' => 'マラウイ高原の紅茶葉で淹れたアイスティー。無糖。500ml'],
+                ],
+            ],
+            [
+                'sku' => 'DRINK-BAOBAB', 'category' => 'drinks', 'price' => 200000, 'minutes' => 0, 'featured' => false,
+                'image' => 'baobab-juice.jpg',
+                'translations' => [
+                    'en' => ['name' => 'Baobab Juice', 'description' => 'Sweet-and-sour juice of the baobab fruit. Rich in vitamin C, no added sugar. 500ml.'],
+                    'ny' => ['name' => 'Madzi a Malambe', 'description' => 'Madzi a zipatso za mlambe, otsekemera komanso owawasa. Ali ndi vitamini C wambiri, opanda shuga wowonjezera. 500ml.'],
+                    'ja' => ['name' => 'バオバブジュース', 'description' => 'バオバブの実の甘酸っぱいジュース。ビタミン C 豊富、砂糖不使用。500ml'],
+                ],
+            ],
+            [
+                'sku' => 'DRINK-ORANGE-SODA', 'category' => 'drinks', 'price' => 130000, 'minutes' => 0, 'featured' => false,
+                'image' => 'orange-soda.jpg',
+                'translations' => [
+                    'en' => ['name' => 'Orange Soda', 'description' => 'Fizzy orange soda, served ice-cold. 500ml.'],
+                    'ny' => ['name' => 'Soda ya Lalanje', 'description' => 'Soda ya lalanje yozizira kwambiri. 500ml.'],
+                    'ja' => ['name' => 'オレンジソーダ', 'description' => 'キンキンに冷えたオレンジソーダ。500ml'],
                 ],
             ],
         ];
