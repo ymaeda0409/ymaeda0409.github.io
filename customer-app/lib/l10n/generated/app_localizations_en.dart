@@ -574,4 +574,11 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get error_payment_not_required =>
       'This order does not need an online payment.';
+
+  @override
+  String get demo_banner => 'DEMO';
+
+  @override
+  String get demo_otp_hint =>
+      'Demo: enter 123456. No SMS is sent and no real orders or payments are made.';
 }

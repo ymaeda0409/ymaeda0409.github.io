@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../core/config/app_config.dart';
 import '../../core/providers.dart';
 import '../../core/ui/code_labels.dart';
 import '../../core/ui/widgets.dart';
@@ -99,6 +100,13 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
             ),
             const SizedBox(height: 8),
             Text(l.auth_otp_sent_to(widget.phone)),
+            if (AppConfig.demoMode) ...[
+              const SizedBox(height: 12),
+              Text(
+                l.demo_otp_hint,
+                style: TextStyle(color: Theme.of(context).colorScheme.primary),
+              ),
+            ],
             const SizedBox(height: 24),
             TextField(
               controller: _controller,

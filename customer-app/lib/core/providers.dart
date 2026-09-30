@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:bento_core/bento_core.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -116,8 +117,12 @@ class SessionController extends Notifier<Session> {
 
 final apiBaseUrlProvider = Provider<String>((ref) => AppConfig.apiBaseUrl);
 
+/// Custom Dio (e.g. the in-browser demo backend); null = the real network.
+final dioProvider = Provider<Dio?>((ref) => null);
+
 final apiClientProvider = Provider<ApiClient>((ref) {
   return ApiClient(
+    dio: ref.watch(dioProvider),
     baseUrl: ref.watch(apiBaseUrlProvider),
     localeTag: () => ref.read(effectiveLocaleProvider).toLanguageTag(),
     token: () => ref.read(sessionProvider).token,

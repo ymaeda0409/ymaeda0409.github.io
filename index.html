@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Malawi Bento デモ</title>
+<meta name="description" content="マラウイ向け弁当デリバリー Malawi Bento のお客様アプリ デモ。ブラウザだけで注文から配達完了まで体験できます。">
+<style>
+/* Mobile-first single column: what it is, open the demo, how to try it, screens, notes. */
+:root {
+  --bg: #f6f5f0; --surface: #ffffff; --ink: #1d2320; --muted: #5b6660; --line: #dcdfd8;
+  --green: #1f6b45; --green-soft: #e3efe7; --gold: #9a6a10;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root { --bg: #121614; --surface: #1a201d; --ink: #e8ece8; --muted: #a2ada6; --line: #2e3833;
+          --green: #5fbf8a; --green-soft: #1d3228; --gold: #e2b04f; color-scheme: dark; }
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); line-height: 1.75;
+  font-family: "Hiragino Sans", "Noto Sans JP", "Yu Gothic", system-ui, sans-serif; font-size: 16px; }
+main { max-width: 720px; margin: 0 auto; padding: 32px 18px 56px; display: grid; gap: 40px; }
+h1, h2 { line-height: 1.3; margin: 0; text-wrap: balance; }
+h1 { font-size: 2.1rem; }
+h1 span { color: var(--green); }
+h2 { font-size: 1.25rem; }
+p { margin: 0; }
+a { color: var(--green); }
+section { display: grid; gap: 14px; }
+.eyebrow { font-size: .78rem; letter-spacing: .06em; color: var(--muted); text-transform: uppercase; }
+.cta { display: block; text-align: center; background: var(--green); color: var(--bg); text-decoration: none;
+  font-weight: 700; font-size: 1.15rem; padding: 16px; border-radius: 12px; }
+.cta:focus-visible, button:focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
+.note { font-size: .88rem; color: var(--muted); }
+ol.steps { margin: 0; padding: 0; list-style: none; counter-reset: s; display: grid; gap: 10px; }
+ol.steps li { counter-increment: s; background: var(--surface); border: 1px solid var(--line); border-radius: 10px;
+  padding: 10px 14px 10px 48px; position: relative; }
+ol.steps li::before { content: counter(s); position: absolute; left: 14px; top: 10px; width: 24px; height: 24px;
+  border-radius: 50%; background: var(--green-soft); color: var(--green); font-weight: 700; font-size: .85rem;
+  display: grid; place-items: center; }
+code { background: var(--green-soft); color: var(--green); padding: 1px 6px; border-radius: 4px; font-weight: 700; }
+.shots { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 6px; scroll-snap-type: x mandatory; }
+.shots figure { margin: 0; flex: 0 0 auto; width: min(78%, 300px); scroll-snap-align: start; display: grid; gap: 6px; }
+.shots figure.wide { width: min(92%, 560px); }
+.shots img { width: 100%; height: auto; border: 1px solid var(--line); border-radius: 10px; background: #fff; display: block; }
+.shots figcaption { font-size: .85rem; color: var(--muted); }
+ul.facts { margin: 0; padding-left: 1.2em; display: grid; gap: 6px; }
+.reset { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+button { font: inherit; border: 1px solid var(--line); background: var(--surface); color: var(--ink);
+  padding: 8px 14px; border-radius: 8px; cursor: pointer; }
+footer { font-size: .82rem; color: var(--muted); border-top: 1px solid var(--line); padding-top: 14px; }
+</style>
+</head>
+<body>
+<main>
+  <header style="display:grid;gap:14px">
+    <p class="eyebrow">Lilongwe · Malawi · デモ版</p>
+    <h1>Malawi <span>Bento</span></h1>
+    <p>マラウイ向けのお弁当デリバリーサービスです。お客様アプリをブラウザで体験できるデモを用意しました。スマホでそのまま開けます。</p>
+    <a class="cta" href="app/">お客様アプリのデモを開く</a>
+    <p class="note">英語・チェワ語・日本語に対応。最初の読み込みは数 MB あります（2 回目からは速く開きます）。</p>
+  </header>
+
+  <section aria-labelledby="how">
+    <p class="eyebrow">試し方（約 3 分）</p>
+    <h2 id="how">注文から配達完了まで</h2>
+    <ol class="steps">
+      <li>言語を選んで「続ける」</li>
+      <li>「お届け先を選択」→「現在地を使う」→「ここに届ける」<br><span class="note">デモでは現在地がリロングウェ市内になります。</span></li>
+      <li>お弁当を選んでカートに追加 →「レジに進む」</li>
+      <li>電話番号は <code>0991234567</code> のような 9〜10 桁なら何でも OK（SMS は送られません）。認証コードは <code>123456</code></li>
+      <li>お届け先の名前と目印を入れて保存、支払い方法（Airtel Money など）を選んで注文</li>
+      <li>「支払う」→ 数秒で支払い完了 →「注文を見る」</li>
+      <li>画面を開いたまま待つと、調理・配達員の割当・配達中（地図の代わりに残り距離）・到着と自動で進みます</li>
+    </ol>
+    <p class="note">支払いに使う電話番号の末尾を <code>0000</code> にすると支払い失敗、<code>9999</code> にすると支払い待ちのままになります（失敗時の画面も確認できます）。</p>
+  </section>
+
+  <section aria-labelledby="screens">
+    <p class="eyebrow">画面</p>
+    <h2 id="screens">アプリと管理画面</h2>
+    <div class="shots">
+      <figure><img src="site/app-home-ja.png" alt="お客様アプリのホーム画面。店舗、カテゴリ、おすすめのお弁当と価格" loading="lazy"><figcaption>お客様アプリ：ホーム</figcaption></figure>
+      <figure><img src="site/app-tracking-ja.png" alt="注文詳細。受け取り PIN、配達員と残り距離、ステータスの経過" loading="lazy"><figcaption>お客様アプリ：配達状況と受け取り PIN</figcaption></figure>
+      <figure class="wide"><img src="site/admin-dashboard-ja.png" alt="管理画面のダッシュボード。本日の売上、注文、進行中の注文、過去 7 日の売上" loading="lazy"><figcaption>管理画面：ダッシュボード（今回のデモには含まれません）</figcaption></figure>
+      <figure class="wide"><img src="site/admin-sales-ja.png" alt="管理画面の売上。商品別集計" loading="lazy"><figcaption>管理画面：売上</figcaption></figure>
+      <figure class="wide"><img src="site/admin-product-ny.png" alt="チェワ語表示の商品編集画面。言語タブとオプション" loading="lazy"><figcaption>管理画面：商品編集（チェワ語表示）</figcaption></figure>
+    </div>
+  </section>
+
+  <section aria-labelledby="about">
+    <p class="eyebrow">このデモについて</p>
+    <h2 id="about">本物との違い</h2>
+    <ul class="facts">
+      <li>サーバーにはつながっていません。注文・支払い・SMS は実際には発生しません。</li>
+      <li>画面と処理は本物のアプリと同じもので、サーバーの代わりをブラウザ内で動かしています。商品データは本物の API から取ったものです。</li>
+      <li>入力した内容はお使いの端末のブラウザにだけ保存され、他の人からは見えません。</li>
+      <li>キッチン画面・配達員アプリ・管理画面は、サーバーが必要なため今回のデモには含まれていません。</li>
+    </ul>
+    <div class="reset">
+      <button type="button" id="reset">デモのデータを消して最初からやり直す</button>
+      <span id="reset-status" class="note" role="status"></span>
+    </div>
+  </section>
+
+  <footer>
+    Malawi Bento · 開発中の MVP ·
+    <a href="https://github.com/ymaeda0409/ymaeda0409.github.io">ソースコード（GitHub）</a>
+  </footer>
+</main>
+<script>
+// The demo keeps its data in this site's localStorage (Flutter's shared_preferences
+// uses the "flutter." prefix). Clearing it resets orders, sign-in and cart.
+document.getElementById('reset').addEventListener('click', function () {
+  var status = document.getElementById('reset-status');
+  try {
+    var keys = [];
+    for (var i = 0; i < localStorage.length; i++) keys.push(localStorage.key(i));
+    keys.forEach(function (k) { if (k && k.indexOf('flutter') === 0) localStorage.removeItem(k); });
+    status.textContent = '消しました。デモを開くと最初から始まります。';
+  } catch (e) {
+    status.textContent = 'このブラウザでは消せませんでした。ブラウザのサイトデータを削除してください。';
+  }
+});
+</script>
+</body>
+</html>

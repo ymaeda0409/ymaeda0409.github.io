@@ -760,5 +760,13 @@
   "error_payment_not_required": "This order does not need an online payment.",
   "@error_payment_not_required": {
     "description": "Canonical key: error.payment_not_required"
+  },
+  "demo_banner": "DEMO",
+  "@demo_banner": {
+    "description": "Canonical key: demo.banner"
+  },
+  "demo_otp_hint": "Demo: enter 123456. No SMS is sent and no real orders or payments are made.",
+  "@demo_otp_hint": {
+    "description": "Canonical key: demo.otp_hint"
   }
 }

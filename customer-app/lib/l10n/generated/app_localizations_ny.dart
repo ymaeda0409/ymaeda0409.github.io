@@ -572,4 +572,11 @@ class AppLocalizationsNy extends AppLocalizations {
   @override
   String get error_payment_not_required =>
       'Oda iyi sifunika kulipiridwa pa intaneti.';
+
+  @override
+  String get demo_banner => 'CHITSANZO';
+
+  @override
+  String get demo_otp_hint =>
+      'Chitsanzo: lembani 123456. Palibe SMS yotumizidwa, ndipo palibe oda kapena malipiro enieni.';
 }

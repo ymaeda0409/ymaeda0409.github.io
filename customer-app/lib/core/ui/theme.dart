@@ -13,7 +13,13 @@ class AppTheme {
       primary: green,
       secondary: accent,
     );
-    final base = ThemeData(colorScheme: scheme, useMaterial3: true);
+    final base = ThemeData(
+      colorScheme: scheme,
+      useMaterial3: true,
+      // Bundled subset with the Japanese characters the app itself shows, so
+      // the web build renders them at once instead of downloading fonts.
+      fontFamilyFallback: const ['NotoSansJP'],
+    );
     return base.copyWith(
       scaffoldBackgroundColor: const Color(0xFFF7F8F6),
       appBarTheme: const AppBarTheme(

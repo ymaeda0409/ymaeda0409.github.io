@@ -21,6 +21,17 @@ flutter run --dart-define=MAPS_ENABLED=true
 
 Google Maps キー: Android は `android/local.properties` に `MAPS_API_KEY=...`、iOS は `ios/Runner/AppDelegate.swift` で `GMSServices.provideAPIKey` を設定。
 
+## Web デモ（DEMO_MODE）
+
+```bash
+flutter run -d chrome --dart-define=DEMO_MODE=true   # サーバー不要。認証コード 123456
+../scripts/build-web-demo.sh                          # GitHub Pages 用に ../app/ へ出力
+```
+
+`lib/demo/demo_backend.dart` が Dio のアダプタとして API に応答し、`DemoGeoService` が現在地をリロングウェに固定します。
+ストア向けビルドでは `DEMO_MODE` を指定しないため、デモのコードは使われません（`assets/demo/` の小さな JSON のみ同梱）。
+日本語表示のため Noto Sans JP のサブセット（アプリの日本語文言に使う文字のみ、各 約 320KB, SIL OFL）を同梱しています。
+
 ## テスト
 
 ```bash
@@ -37,6 +48,7 @@ flutter test
 | `test/features/cart_test.dart` | カート集計（minor units）、店舗切替、永続化 |
 | `test/features/app_flow_test.dart` | 初回言語選択、即時言語切替、3 言語 × 320dp × 文字 130% でオーバーフローなし、カート追加、要ログイン |
 | `test/features/order_flow_test.dart` | 注文 → 完了（PIN）→ 履歴/詳細、キャンセル、Mobile Money 決済（請求 → 確認待ち → 支払い済み → 完了画面） |
+| `test/demo/demo_backend_test.dart` | Web デモのバックエンド（多言語カタログ、決済 → 自動進行 → 配達完了、キャンセル規則、再読み込み後の保持、未ログイン拒否） |
 | `test/core/push_registration_test.dart` | ログイン時の Push 端末登録、Firebase なしでの動作 |
 
 ## 決済（PHASE 5）

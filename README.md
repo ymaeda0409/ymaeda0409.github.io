@@ -11,6 +11,9 @@
 | [`packages/bento_core`](packages/bento_core) | 両アプリ共通の Dart パッケージ（API クライアント・Locale フォールバック・書式） | ✅ |
 | [`docs/`](docs) | 設計ドキュメント | ✅ |
 
+**Web デモ（スマホ可）**: https://ymaeda0409.github.io/ — お客様アプリをサーバーなしで体験できます（認証コード `123456`）。
+下の「5c. Web デモ」参照。
+
 設計ドキュメント: [architecture](docs/architecture.md) · [database](docs/database.md) · [i18n](docs/i18n.md) ·
 [screens](docs/screens.md) · [api](docs/api.md) · [development-plan](docs/development-plan.md) · [design-review](docs/design-review.md)
 
@@ -188,7 +191,7 @@ Backend テスト範囲（PHPUnit 179 tests + Vitest 29 tests）:
 cd customer-app
 flutter pub get
 flutter run --dart-define=API_BASE_URL=http://10.0.2.2:8000/api   # Android エミュレータ
-flutter test                                                       # 41 tests
+flutter test                                                       # 45 tests
 ```
 
 ## 5b. Rider App（Flutter）
@@ -203,6 +206,17 @@ flutter test                                                       # 15 tests
 詳細は [driver-app/README.md](driver-app/README.md)。共通パッケージは `cd packages/bento_core && flutter test`（9 tests）。
 
 詳細は [customer-app/README.md](customer-app/README.md)。アプリの翻訳追加は `lib/l10n/app_en.arb` をコピーして `app_<code>.arb` を作成 → `flutter gen-l10n`。
+
+## 5c. Web デモ（GitHub Pages）
+
+`https://ymaeda0409.github.io/`（トップ）→ `/app/`（お客様アプリ）。GitHub Pages がこのブランチのルートをそのまま配信します（`.nojekyll`）。
+
+* `--dart-define=DEMO_MODE=true` でビルドしたお客様アプリ。API 呼び出しは `customer-app/lib/demo/demo_backend.dart` がブラウザ内で応答します
+  （本物の API と同じ封筒形式・エンドポイント。商品データは本物の API から取得した `assets/demo/*.json`）。画面・リポジトリ・JSON 解析は本番と同じコード。
+* 注文は時間で自動進行（受付 6 秒 → 調理 15 秒 → … → 配達完了 約 2 分）。Mobile Money は数秒で支払い完了（末尾 `0000` で失敗、`9999` で保留）。
+* 「現在地」は常にリロングウェ（Area 47）。データは閲覧者のブラウザ（localStorage）だけに保存。画面右上に「DEMO / デモ」表示。
+* 更新手順: `./scripts/build-web-demo.sh` → `app/` と `index.html` をコミット・push（数分で反映）。
+* 含まれないもの: キッチン画面・配達員アプリ・管理画面（サーバーが必要）。
 
 ---
 

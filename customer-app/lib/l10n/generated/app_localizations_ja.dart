@@ -557,4 +557,11 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get error_payment_not_required => 'この注文はオンライン決済の必要がありません。';
+
+  @override
+  String get demo_banner => 'デモ';
+
+  @override
+  String get demo_otp_hint =>
+      'デモ版です。123456 を入力してください。SMS は送られず、実際の注文や支払いも発生しません。';
 }

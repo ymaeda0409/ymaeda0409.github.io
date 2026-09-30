@@ -1131,6 +1131,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'This order does not need an online payment.'**
   String get error_payment_not_required;
+
+  /// Canonical key: demo.banner
+  ///
+  /// In en, this message translates to:
+  /// **'DEMO'**
+  String get demo_banner;
+
+  /// Canonical key: demo.otp_hint
+  ///
+  /// In en, this message translates to:
+  /// **'Demo: enter 123456. No SMS is sent and no real orders or payments are made.'**
+  String get demo_otp_hint;
 }
 
 class _AppLocalizationsDelegate

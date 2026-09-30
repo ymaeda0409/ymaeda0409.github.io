@@ -171,5 +171,7 @@
   "payment_status_paid": "Zalipiridwa",
   "payment_status_failed": "Kulipira sikunatheke",
   "payment_status_refunded": "Ndalama zabwezedwa",
-  "error_payment_not_required": "Oda iyi sifunika kulipiridwa pa intaneti."
+  "error_payment_not_required": "Oda iyi sifunika kulipiridwa pa intaneti.",
+  "demo_banner": "CHITSANZO",
+  "demo_otp_hint": "Chitsanzo: lembani 123456. Palibe SMS yotumizidwa, ndipo palibe oda kapena malipiro enieni."
 }
