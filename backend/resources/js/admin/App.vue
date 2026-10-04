@@ -15,6 +15,7 @@ import CustomersView from './views/CustomersView.vue';
 import TranslationsView from './views/TranslationsView.vue';
 import SettingsView from './views/SettingsView.vue';
 import AuditLogView from './views/AuditLogView.vue';
+import LiveMapView from './views/LiveMapView.vue';
 
 const props = defineProps({ router: { type: Object, default: null } });
 
@@ -27,6 +28,7 @@ const VIEWS = {
     translations: TranslationsView,
     settings: SettingsView,
     audit_logs: AuditLogView,
+    live_map: LiveMapView,
 };
 
 const { locale, t } = useI18n();

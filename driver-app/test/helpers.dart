@@ -181,7 +181,7 @@ class FakeLocationSource implements LocationSource {
   Future<GeoPoint> current() async => GeoPoint(-13.96, 33.77, DateTime.now());
 
   @override
-  Stream<GeoPoint> watch() => controller.stream;
+  Stream<GeoPoint> watch({BackgroundNotice? notice}) => controller.stream;
 }
 
 Future<ProviderContainer> pumpRider(

@@ -413,5 +413,13 @@
   "vehicle_car": "Car",
   "@vehicle_car": {
     "description": "Canonical key: vehicle.car"
+  },
+  "driver_gps_notice_title": "Sharing your location",
+  "@driver_gps_notice_title": {
+    "description": "Canonical key: driver.gps_notice_title"
+  },
+  "driver_gps_notice_text": "Only while you are online. Go offline to stop.",
+  "@driver_gps_notice_text": {
+    "description": "Canonical key: driver.gps_notice_text"
   }
 }

@@ -7,6 +7,7 @@ import 'package:malawi_bento_customer/features/checkout/order_repository.dart';
 import 'package:malawi_bento_customer/features/location/address.dart';
 import 'package:malawi_bento_customer/features/location/address_repository.dart';
 import 'package:malawi_bento_customer/features/orders/order.dart';
+import 'package:flutter_map/flutter_map.dart';
 import 'package:malawi_bento_customer/features/orders/tracking.dart';
 import 'package:malawi_bento_customer/features/payment/payment.dart';
 import 'package:malawi_bento_customer/features/payment/payment_screen.dart';
@@ -288,6 +289,32 @@ void main() {
     expect(find.text('配達状況'), findsOneWidget);
     expect(find.textContaining('バイク'), findsOneWidget);
     expect(find.textContaining('あと 1.0 km'), findsOneWidget);
+    // 1.0 km × 1.3 at 25 km/h ≈ 3.1 → 4 minutes.
+    expect(find.text('あと約 4 分で到着'), findsOneWidget);
+    expect(find.byType(FlutterMap), findsOneWidget);
+
+    // The rider moves; the card refreshes on its own every 10 seconds.
+    orders.rider = {...orders.rider!, 'latitude': -13.9655};
+    await tester.pump(const Duration(seconds: 11));
+    await tester.pumpAndSettle();
+    expect(find.textContaining('あと 0.5 km'), findsOneWidget);
+  });
+
+  test('arrival estimate depends on vehicle and only shows on the way', () {
+    Tracking at(String status, String vehicle) => Tracking.fromJson({
+      'status': status,
+      'pickup': {'latitude': -13.9626, 'longitude': 33.7741},
+      'dropoff': {'latitude': -13.97, 'longitude': 33.78},
+      'driver': {
+        'vehicle_type': vehicle,
+        'latitude': -13.9610,
+        'longitude': 33.7800,
+      },
+    });
+    expect(at('ON_THE_WAY', 'MOTORBIKE').etaMinutes, 4);
+    expect(at('ON_THE_WAY', 'BICYCLE').etaMinutes, 7);
+    expect(at('RIDER_ASSIGNED', 'MOTORBIKE').etaMinutes, isNull);
+    expect(at('ON_THE_WAY', 'MOTORBIKE').pickupLat, -13.9626);
   });
 
   testWidgets('mobile money: order → approve on phone → paid → PIN shown', (

@@ -36,6 +36,7 @@
             "kitchens": "キッチン",
             "delivery_zones": "配送エリア",
             "drivers": "配達員",
+            "live_map": "配達員マップ",
             "franchises": "フランチャイズ",
             "staff": "スタッフ",
             "customers": "顧客",
@@ -268,6 +269,23 @@
             "user": "実行者",
             "before": "変更前",
             "after": "変更後"
+        },
+        "live": {
+            "auto_refresh": "{n} 秒ごとに自動更新",
+            "fit_all": "全体を表示",
+            "map_label": "配達員・店舗・配達員待ちの注文を示す地図",
+            "riders": "配達員（{n} 人）",
+            "no_riders": "現在オンラインの配達員はいません。",
+            "waiting_orders": "配達員待ちの注文（{n} 件）",
+            "store": "店舗",
+            "waiting_order": "配達員待ちの注文",
+            "state_delivering": "配達中",
+            "state_free": "待機中（注文待ち）",
+            "state_stale": "{n} 分以上 GPS なし",
+            "state_no_gps": "GPS 未取得",
+            "no_gps": "GPS なし",
+            "just_now": "たった今",
+            "minutes_ago": "{n} 分前"
         }
     },
     "errors": {

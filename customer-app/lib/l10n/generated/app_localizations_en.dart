@@ -586,4 +586,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String product_option_extra(String price) {
     return '+$price';
   }
+
+  @override
+  String tracking_eta(int minutes) {
+    return 'Arriving in about $minutes min';
+  }
+
+  @override
+  String get tracking_map_label =>
+      'Map showing your rider, the store and your address';
 }

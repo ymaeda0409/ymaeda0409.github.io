@@ -316,4 +316,11 @@ class AppLocalizationsNy extends AppLocalizations {
 
   @override
   String get vehicle_car => 'Galimoto';
+
+  @override
+  String get driver_gps_notice_title => 'Tikugawana malo anu';
+
+  @override
+  String get driver_gps_notice_text =>
+      'Pokhapokha muli pa intaneti. Tulukani pa intaneti kuti muyimitse.';
 }

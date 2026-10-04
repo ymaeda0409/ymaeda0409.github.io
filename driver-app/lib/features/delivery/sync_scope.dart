@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../core/ui/widgets.dart';
 import 'driver_controller.dart';
 import 'location_source.dart';
 
@@ -45,7 +46,12 @@ class _DriverSyncScopeState extends ConsumerState<DriverSyncScope> {
     if (online && _gps == null) {
       _gps = ref
           .read(locationSourceProvider)
-          .watch()
+          .watch(
+            notice: BackgroundNotice(
+              title: context.l10n.driver_gps_notice_title,
+              text: context.l10n.driver_gps_notice_text,
+            ),
+          )
           .listen(
             (p) =>
                 ref.read(driverControllerProvider.notifier).recordPosition(p),

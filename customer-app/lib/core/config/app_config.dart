@@ -18,6 +18,13 @@ class AppConfig {
   /// (`--dart-define=DEMO_MODE=true`). Never enabled for store builds.
   static const demoMode = bool.fromEnvironment('DEMO_MODE');
 
+  /// Map tiles for live tracking (no API key). OpenStreetMap's public servers suit
+  /// low traffic only; production should point this at a tile provider.
+  static const mapTileUrl = String.fromEnvironment(
+    'MAP_TILE_URL',
+    defaultValue: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+  );
+
   /// Country calling code shown in front of the phone field (data, not UI text).
   static const phoneCountryCode = '+265';
 }

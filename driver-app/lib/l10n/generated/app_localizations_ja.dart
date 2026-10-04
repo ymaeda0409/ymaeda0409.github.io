@@ -306,4 +306,10 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get vehicle_car => '車';
+
+  @override
+  String get driver_gps_notice_title => '位置情報を共有しています';
+
+  @override
+  String get driver_gps_notice_text => 'オンラインの間だけ共有します。オフラインにすると止まります。';
 }

@@ -584,4 +584,13 @@ class AppLocalizationsNy extends AppLocalizations {
   String product_option_extra(String price) {
     return '+$price';
   }
+
+  @override
+  String tracking_eta(int minutes) {
+    return 'Afika pafupifupi mphindi $minutes';
+  }
+
+  @override
+  String get tracking_map_label =>
+      'Mapu yosonyeza wobweretsa, sitolo ndi adilesi yanu';
 }

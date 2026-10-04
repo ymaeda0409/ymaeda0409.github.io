@@ -174,5 +174,7 @@
   "error_payment_not_required": "Oda iyi sifunika kulipiridwa pa intaneti.",
   "demo_banner": "CHITSANZO",
   "demo_otp_hint": "Chitsanzo: lembani 123456. Palibe SMS yotumizidwa, ndipo palibe oda kapena malipiro enieni.",
-  "product_option_extra": "+{price}"
+  "product_option_extra": "+{price}",
+  "tracking_eta": "Afika pafupifupi mphindi {minutes}",
+  "tracking_map_label": "Mapu yosonyeza wobweretsa, sitolo ndi adilesi yanu"
 }

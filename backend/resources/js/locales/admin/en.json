@@ -36,6 +36,7 @@
             "kitchens": "Kitchens",
             "delivery_zones": "Delivery zones",
             "drivers": "Riders",
+            "live_map": "Rider map",
             "franchises": "Franchises",
             "staff": "Staff",
             "customers": "Customers",
@@ -268,6 +269,23 @@
             "user": "By",
             "before": "Before",
             "after": "After"
+        },
+        "live": {
+            "auto_refresh": "Updates every {n} seconds",
+            "fit_all": "Show everything",
+            "map_label": "Map of riders, stores and orders waiting for a rider",
+            "riders": "Riders ({n})",
+            "no_riders": "No riders online right now.",
+            "waiting_orders": "Waiting for a rider ({n})",
+            "store": "Store",
+            "waiting_order": "Order waiting for a rider",
+            "state_delivering": "On a delivery",
+            "state_free": "Free, waiting for orders",
+            "state_stale": "No GPS for over {n} min",
+            "state_no_gps": "No GPS yet",
+            "no_gps": "No GPS",
+            "just_now": "just now",
+            "minutes_ago": "{n} min ago"
         }
     },
     "errors": {

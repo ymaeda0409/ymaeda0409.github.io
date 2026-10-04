@@ -1149,6 +1149,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'+{price}'**
   String product_option_extra(String price);
+
+  /// Canonical key: tracking.eta
+  ///
+  /// In en, this message translates to:
+  /// **'Arriving in about {minutes} min'**
+  String tracking_eta(int minutes);
+
+  /// Canonical key: tracking.map_label
+  ///
+  /// In en, this message translates to:
+  /// **'Map showing your rider, the store and your address'**
+  String get tracking_map_label;
 }
 
 class _AppLocalizationsDelegate

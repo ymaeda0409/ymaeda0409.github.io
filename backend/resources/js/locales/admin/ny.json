@@ -36,6 +36,7 @@
             "kitchens": "Makhitchini",
             "delivery_zones": "Madera obweretsera",
             "drivers": "Obweretsa",
+            "live_map": "Mapu ya obweretsa",
             "franchises": "Ma franchise",
             "staff": "Ogwira ntchito",
             "customers": "Makasitomala",
@@ -268,6 +269,23 @@
             "user": "Wochita",
             "before": "Kale",
             "after": "Pambuyo"
+        },
+        "live": {
+            "auto_refresh": "Imasintha masekondi {n} aliwonse",
+            "fit_all": "Onetsani zonse",
+            "map_label": "Mapu yosonyeza obweretsa, masitolo ndi maoda odikira wobweretsa",
+            "riders": "Obweretsa ({n})",
+            "no_riders": "Palibe wobweretsa pa intaneti pano.",
+            "waiting_orders": "Akudikira wobweretsa ({n})",
+            "store": "Sitolo",
+            "waiting_order": "Oda yodikira wobweretsa",
+            "state_delivering": "Akubweretsa oda",
+            "state_free": "Ali omasuka, akudikira maoda",
+            "state_stale": "Palibe GPS kwa mphindi zoposa {n}",
+            "state_no_gps": "Palibe GPS pano",
+            "no_gps": "Palibe GPS",
+            "just_now": "pompano",
+            "minutes_ago": "mphindi {n} zapitazo"
         }
     },
     "errors": {

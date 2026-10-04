@@ -8,6 +8,12 @@
 		<string>ny</string>
 		<string>ja</string>
 	</array>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>location</string>
+	</array>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Your location is shared with the store and the customer while you are online and delivering, also with the screen locked.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Your location is shared with the store and the customer while you are online and delivering.</string>
 	<key>LSApplicationQueriesSchemes</key>

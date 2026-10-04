@@ -777,5 +777,18 @@
         "type": "String"
       }
     }
+  },
+  "tracking_eta": "Arriving in about {minutes} min",
+  "@tracking_eta": {
+    "description": "Canonical key: tracking.eta",
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "tracking_map_label": "Map showing your rider, the store and your address",
+  "@tracking_map_label": {
+    "description": "Canonical key: tracking.map_label"
   }
 }

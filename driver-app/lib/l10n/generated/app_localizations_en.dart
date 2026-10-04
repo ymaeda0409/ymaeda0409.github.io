@@ -319,4 +319,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get vehicle_car => 'Car';
+
+  @override
+  String get driver_gps_notice_title => 'Sharing your location';
+
+  @override
+  String get driver_gps_notice_text =>
+      'Only while you are online. Go offline to stop.';
 }

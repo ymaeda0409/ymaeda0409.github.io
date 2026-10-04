@@ -90,5 +90,7 @@
   "order_status_unknown": "Sizikudziwika",
   "vehicle_motorbike": "Njinga yamoto",
   "vehicle_bicycle": "Njinga",
-  "vehicle_car": "Galimoto"
+  "vehicle_car": "Galimoto",
+  "driver_gps_notice_title": "Tikugawana malo anu",
+  "driver_gps_notice_text": "Pokhapokha muli pa intaneti. Tulukani pa intaneti kuti muyimitse."
 }

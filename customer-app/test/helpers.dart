@@ -7,6 +7,7 @@ import 'package:malawi_bento_customer/core/providers.dart';
 import 'package:malawi_bento_customer/features/catalog/catalog_repository.dart';
 import 'package:malawi_bento_customer/features/catalog/models.dart';
 import 'package:malawi_bento_customer/features/language/language_repository.dart';
+import 'package:malawi_bento_customer/features/orders/tracking.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// Localized fixtures, as the API would return them for each Accept-Language.
@@ -110,6 +111,7 @@ Future<ProviderContainer> pumpApp(
   final container = ProviderContainer(
     retry: (_, _) => null,
     overrides: [
+      mapTilesEnabledProvider.overrideWithValue(false),
       sharedPreferencesProvider.overrideWithValue(sharedPrefs),
       tokenStoreProvider.overrideWithValue(MemoryTokenStore(token)),
       initialTokenProvider.overrideWithValue(token),

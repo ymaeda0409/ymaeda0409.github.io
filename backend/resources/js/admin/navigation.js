@@ -17,6 +17,7 @@ export const PAGES = [
     { id: 'kitchens', group: 'operations', permission: RESOURCES.kitchens.view, resource: 'kitchens' },
     { id: 'delivery_zones', group: 'operations', permission: RESOURCES.delivery_zones.view, resource: 'delivery_zones' },
     { id: 'drivers', group: 'operations', permission: RESOURCES.drivers.view, resource: 'drivers' },
+    { id: 'live_map', group: 'operations', permission: 'drivers.manage' },
     { id: 'franchises', group: 'business', permission: RESOURCES.franchises.view, resource: 'franchises' },
     { id: 'staff', group: 'business', permission: RESOURCES.staff.view, resource: 'staff' },
     { id: 'customers', group: 'business', permission: 'customers.view' },

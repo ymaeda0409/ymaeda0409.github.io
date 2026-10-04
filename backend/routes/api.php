@@ -97,6 +97,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:sanctum', 'role:staff'
     Route::apiResource('languages', Admin\LanguageController::class)->only(['index', 'store', 'update']);
     Route::get('audit-logs', [Admin\AuditLogController::class, 'index']);
 
+    Route::get('drivers/live', [Admin\DriverController::class, 'live']);
     Route::apiResource('drivers', Admin\DriverController::class)->except('destroy');
     Route::get('dashboard', Admin\DashboardController::class);
     Route::get('sales', [Admin\SalesController::class, 'index']);

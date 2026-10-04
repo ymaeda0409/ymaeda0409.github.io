@@ -11,6 +11,13 @@ import 'offline_queues.dart';
 final locationBufferProvider = Provider<LocationBuffer>(
   (ref) => LocationBuffer(ref.watch(sharedPreferencesProvider)),
 );
+
+/// A stationary rider produces no movement updates; send a fix at least this often
+/// so dispatch (which only offers to riders with recent GPS) keeps seeing them.
+final gpsHeartbeatProvider = Provider<Duration>(
+  (ref) => const Duration(seconds: 60),
+);
+
 final actionOutboxProvider = Provider<ActionOutbox>(
   (ref) => ActionOutbox(ref.watch(sharedPreferencesProvider)),
 );
@@ -67,8 +74,12 @@ class DriverController extends Notifier<DriverState> {
     );
   }
 
-  /// Periodic sync (driven by the home screen): replay offline work, then fetch state.
+  DateTime? _lastFixAt;
+
+  /// Periodic sync (driven by the home screen): GPS heartbeat, replay offline work,
+  /// then fetch state.
   Future<void> tick() async {
+    if (state.online) await _heartbeat();
     final queued = !await ref.read(actionOutboxProvider).flush(_repo);
     final buffered = !await ref.read(locationBufferProvider).flush(_repo);
     state = state.copyWith(pendingSync: queued || buffered);
@@ -140,7 +151,21 @@ class DriverController extends Notifier<DriverState> {
     await _setActive(null);
   }
 
+  Future<void> _heartbeat() async {
+    final last = _lastFixAt;
+    if (last != null &&
+        DateTime.now().difference(last) < ref.read(gpsHeartbeatProvider)) {
+      return;
+    }
+    try {
+      await recordPosition(await ref.read(locationSourceProvider).current());
+    } catch (_) {
+      // No fix right now (indoors, permission): the movement stream may still deliver.
+    }
+  }
+
   Future<void> recordPosition(GeoPoint point) async {
+    _lastFixAt = DateTime.now();
     await ref
         .read(locationBufferProvider)
         .add(

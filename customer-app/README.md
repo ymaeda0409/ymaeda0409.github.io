@@ -17,9 +17,13 @@ flutter run --dart-define=MAPS_ENABLED=true
 | dart-define | 既定 | 説明 |
 |---|---|---|
 | `API_BASE_URL` | `http://10.0.2.2:8000/api` | Laravel API |
+| `MAP_TILE_URL` | `https://tile.openstreetmap.org/{z}/{x}/{y}.png` | 配達追跡マップのタイル URL（API キー不要）。OSM 公式タイルは少量利用のみ可のため、本番は MapTiler 等のタイル提供元に差し替え |
 | `MAPS_ENABLED` | `false` | Google Maps のピン選択を有効化（無効時は GPS + 保存済み住所） |
 
 Google Maps キー: Android は `android/local.properties` に `MAPS_API_KEY=...`、iOS は `ios/Runner/AppDelegate.swift` で `GMSServices.provideAPIKey` を設定。
+
+配達追跡（注文詳細）: 配達員が割り当てられると OpenStreetMap の地図に配達員・お店・お届け先を表示し、10 秒ごとに更新。
+配達中は直線距離 × 1.3 と車両別の速度（バイク 25 / 車 20 / 自転車 12 km/h）で到着予定（分）を表示。
 
 ## Web デモ（DEMO_MODE）
 

@@ -40,13 +40,18 @@ flutter run --dart-define=API_BASE_URL=http://10.0.2.2:8000/api   # Android エ�
 * **受取・到着は送信キュー**（`ActionOutbox`）: 圏外なら端末上で先に進め、復帰後に再送。サーバーで適用済みなら破棄。
   PIN 確認はサーバー照合が必要なためオンライン必須。
 * **GPS バッファ**（`LocationBuffer`）: 最大 500 点を端末に保持し、端末時刻付きで一括送信。
+* **バックグラウンド GPS**: オンライン中は画面ロック・別アプリ表示中も位置を送信。
+  Android は常駐通知付きのフォアグラウンドサービス（`FOREGROUND_SERVICE_LOCATION`、Android 13+ は通知許可が必要）、
+  iOS は `UIBackgroundModes: location` と青い位置情報インジケーター。オフラインにすると停止。
+  ストア審査では「バックグラウンド位置情報を配達中の追跡に使う」旨の説明（Google Play の位置情報申告、App Store の用途説明）が必要。
+* **GPS ハートビート**: 30 m 以上動かない待機中も 60 秒ごとに 1 点送信し、位置が古くなって割当対象から外れるのを防ぐ。
 * 10 秒ごとの同期（依頼の取得・キャンセル検知・キュー再送）は Home 画面表示中のみ動作。
 
 ## テスト
 
 ```bash
 flutter analyze
-flutter test   # 15 tests
+flutter test   # 18 tests
 ```
 
 | テスト | 内容 |

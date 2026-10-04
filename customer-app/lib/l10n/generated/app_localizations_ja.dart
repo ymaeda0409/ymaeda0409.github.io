@@ -569,4 +569,12 @@ class AppLocalizationsJa extends AppLocalizations {
   String product_option_extra(String price) {
     return '+$price';
   }
+
+  @override
+  String tracking_eta(int minutes) {
+    return 'あと約 $minutes 分で到着';
+  }
+
+  @override
+  String get tracking_map_label => '配達員・お店・お届け先を示す地図';
 }

@@ -645,6 +645,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Car'**
   String get vehicle_car;
+
+  /// Canonical key: driver.gps_notice_title
+  ///
+  /// In en, this message translates to:
+  /// **'Sharing your location'**
+  String get driver_gps_notice_title;
+
+  /// Canonical key: driver.gps_notice_text
+  ///
+  /// In en, this message translates to:
+  /// **'Only while you are online. Go offline to stop.'**
+  String get driver_gps_notice_text;
 }
 
 class _AppLocalizationsDelegate

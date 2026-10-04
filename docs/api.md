@@ -272,6 +272,7 @@ READY_FOR_PICKUP になった注文を、同じ FC の配達員のうち
 | Method | Path | Permission | 説明 |
 |---|---|---|---|
 | GET | /admin/drivers?online= | drivers.manage | スコープ内の配達員 |
+| GET | /admin/drivers/live | drivers.manage | 配達員マップ用。`{ drivers: [{ id, name, phone, vehicle_type, is_online, latitude, longitude, location_updated_at, location_fresh, delivery: { order_id, order_number, status, pickup, dropoff } \| null }], waiting_orders: [{ order_id, order_number, ready_at, pickup, dropoff }], stores: [{ id, name, latitude, longitude }], fresh_minutes }`。オンラインまたは配達中の配達員のみ。location_fresh = 最終 GPS が `bento.dispatch.location_max_age_minutes` 以内 |
 | POST | /admin/drivers | drivers.manage | `{ phone, name, vehicle_type, vehicle_number?, store_id?, preferred_language?, franchise_id(SAのみ) }` → DRIVER ユーザー + プロフィール作成 |
 | PUT | /admin/drivers/{id} | drivers.manage | 車両・所属店舗・状態（SUSPENDED で強制オフライン） |
 
