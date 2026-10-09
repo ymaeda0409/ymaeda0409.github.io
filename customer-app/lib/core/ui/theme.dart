@@ -16,8 +16,8 @@ class AppTheme {
     final base = ThemeData(
       colorScheme: scheme,
       useMaterial3: true,
-      // Bundled subset with the Japanese characters the app itself shows, so
-      // the web build renders them at once instead of downloading fonts.
+      // Bundled Japanese subset (kana, common kanji, the app's own strings), so
+      // the web build renders it at once instead of downloading fonts.
       fontFamilyFallback: const ['NotoSansJP'],
     );
     return base.copyWith(
@@ -31,7 +31,11 @@ class AppTheme {
         style: FilledButton.styleFrom(
           // Height grows with text (translations vary in length); only a minimum is set.
           minimumSize: const Size.fromHeight(52),
-          textStyle: const TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
+          textStyle: const TextStyle(
+            fontSize: 17,
+            fontWeight: FontWeight.w600,
+            fontFamilyFallback: ['NotoSansJP'],
+          ),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(14),
           ),

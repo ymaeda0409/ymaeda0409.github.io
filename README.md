@@ -220,6 +220,10 @@ flutter test                                                       # 15 tests
 
 ---
 
+## 5d. テストサーバー（Ubuntu 24.04）
+
+`deploy/server-setup.sh` 1 本で API・キッチン・管理画面・お客様/配達員 Web アプリを HTTPS で構築。手順は [deploy/README.md](deploy/README.md)。
+
 ## 6. 開発フェーズ
 
 [docs/development-plan.md](docs/development-plan.md) 参照。現在 **PHASE 6 完了**（PHASE 1: Backend 基盤 / PHASE 2: Customer App / PHASE 3: 注文・厨房 / PHASE 4: 配達員アプリ・割当・GPS・Delivery PIN・配送追跡 / PHASE 5: 決済・多言語通知 / PHASE 6: 管理画面・売上・FC・翻訳管理）。

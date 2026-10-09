@@ -13,13 +13,22 @@ class AppTheme {
       primary: green,
       secondary: accent,
     );
-    final base = ThemeData(colorScheme: scheme, useMaterial3: true);
+    final base = ThemeData(
+      colorScheme: scheme,
+      useMaterial3: true,
+      // Bundled Japanese subset: the web build cannot use system fonts.
+      fontFamilyFallback: const ['NotoSansJP'],
+    );
     return base.copyWith(
       scaffoldBackgroundColor: const Color(0xFFF4F5F2),
       filledButtonTheme: FilledButtonThemeData(
         style: FilledButton.styleFrom(
           minimumSize: const Size.fromHeight(60),
-          textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+          textStyle: const TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.w700,
+            fontFamilyFallback: ['NotoSansJP'],
+          ),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),

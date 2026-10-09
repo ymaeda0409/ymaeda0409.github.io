@@ -175,11 +175,13 @@ server {
     # Rider web app.
     location /driver/ {
         root $APP_DIR/deploy/web;
+        index index.html;
         try_files \$uri \$uri/ /driver/index.html;
     }
     # Customer web app.
     location / {
         root $APP_DIR/deploy/web/customer;
+        index index.html;
         try_files \$uri \$uri/ /index.html;
     }
 
@@ -202,12 +204,24 @@ if certbot --nginx -d "$DOMAIN" --non-interactive --agree-tos --redirect "${emai
     SCHEME=https
 else
     SCHEME=http
-    echo "!! Certificate failed; the site works over HTTP, but browsers block GPS without HTTPS." >&2
+    echo "!! Certificate failed (is port 80 reachable from the internet?). Without HTTPS, browsers" >&2
+    echo "!! block GPS and the web apps cannot sign in. Fix it and re-run this script." >&2
     sed -i "s|^APP_URL=.*|APP_URL=http://$DOMAIN|" .env
     artisan optimize >/dev/null
 fi
 
 URL="$SCHEME://$DOMAIN"
+# Visitors who type the bare IP address land on the real site name.
+cat > /etc/nginx/sites-available/malawi-bento-default <<NGINX
+server {
+    listen 80 default_server;
+    server_name _;
+    location /.well-known/acme-challenge/ { root /var/www/html; }
+    location / { return 301 $URL\$request_uri; }
+}
+NGINX
+ln -sf /etc/nginx/sites-available/malawi-bento-default /etc/nginx/sites-enabled/malawi-bento-default
+nginx -t && systemctl reload nginx
 log "Done"
 cat <<DONE
   Customer app : $URL/

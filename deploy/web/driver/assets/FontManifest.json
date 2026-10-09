@@ -1,1 +1,1 @@
-[{"family":"MaterialIcons","fonts":[{"asset":"fonts/MaterialIcons-Regular.otf"}]},{"family":"Roboto","fonts":[{"asset":"fonts/fallback/Roboto-Regular.ttf"}]}]
+[{"family":"MaterialIcons","fonts":[{"asset":"fonts/MaterialIcons-Regular.otf"}]},{"family":"NotoSansJP","fonts":[{"asset":"assets/fonts/NotoSansJP-Regular.ttf"},{"weight":700,"asset":"assets/fonts/NotoSansJP-Bold.ttf"}]},{"family":"Roboto","fonts":[{"asset":"fonts/fallback/Roboto-Regular.ttf"}]}]
