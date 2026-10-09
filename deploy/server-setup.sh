@@ -143,10 +143,12 @@ systemctl restart malawi-bento-queue
 artisan queue:restart >/dev/null
 
 log "nginx ($DOMAIN)"
+LISTEN_V6=""
+[ -s /proc/net/if_inet6 ] && LISTEN_V6="listen [::]:80;"
 cat > /etc/nginx/sites-available/malawi-bento <<NGINX
 server {
     listen 80;
-    listen [::]:80;
+    $LISTEN_V6
     server_name $DOMAIN;
     root $APP_DIR/backend/public;
     index index.php;
