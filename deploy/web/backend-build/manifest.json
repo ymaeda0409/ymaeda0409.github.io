@@ -1,0 +1,59 @@
+{
+  "_LanguageSwitcher-lR8raTTg.js": {
+    "file": "assets/LanguageSwitcher-lR8raTTg.js",
+    "name": "LanguageSwitcher"
+  },
+  "node_modules/leaflet/dist/images/layers-2x.png": {
+    "file": "assets/layers-2x-Bpkbi35X.png",
+    "src": "node_modules/leaflet/dist/images/layers-2x.png"
+  },
+  "node_modules/leaflet/dist/images/layers.png": {
+    "file": "assets/layers-BWBAp2CZ.png",
+    "src": "node_modules/leaflet/dist/images/layers.png"
+  },
+  "node_modules/leaflet/dist/images/marker-icon.png": {
+    "file": "assets/marker-icon-hN30_KVU.png",
+    "src": "node_modules/leaflet/dist/images/marker-icon.png"
+  },
+  "resources/css/app.css": {
+    "file": "assets/app-BhuYDLZJ.css",
+    "name": "app",
+    "names": [
+      "app.css"
+    ],
+    "src": "resources/css/app.css",
+    "isEntry": true
+  },
+  "resources/js/admin/main.js": {
+    "file": "assets/main-ri7z0ZUq.js",
+    "name": "main",
+    "src": "resources/js/admin/main.js",
+    "isEntry": true,
+    "imports": [
+      "_LanguageSwitcher-lR8raTTg.js"
+    ],
+    "css": [
+      "assets/main-1DTFk8zz.css"
+    ],
+    "assets": [
+      "assets/layers-BWBAp2CZ.png",
+      "assets/layers-2x-Bpkbi35X.png",
+      "assets/marker-icon-hN30_KVU.png"
+    ]
+  },
+  "resources/js/app.js": {
+    "file": "assets/app-BvRk9kiK.js",
+    "name": "app",
+    "src": "resources/js/app.js",
+    "isEntry": true
+  },
+  "resources/js/kitchen/main.js": {
+    "file": "assets/main-BWawi8C1.js",
+    "name": "main",
+    "src": "resources/js/kitchen/main.js",
+    "isEntry": true,
+    "imports": [
+      "_LanguageSwitcher-lR8raTTg.js"
+    ]
+  }
+}

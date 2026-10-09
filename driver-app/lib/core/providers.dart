@@ -80,7 +80,13 @@ class SessionController extends Notifier<String?> {
 
 // ---------------------------------------------------------------- API
 
-final apiBaseUrlProvider = Provider<String>((ref) => AppConfig.apiBaseUrl);
+/// A path such as `/api` (web build served next to the API) resolves against the
+/// page's own origin, so one web bundle works on any host.
+final apiBaseUrlProvider = Provider<String>(
+  (ref) => AppConfig.apiBaseUrl.startsWith('/')
+      ? Uri.base.resolve(AppConfig.apiBaseUrl).toString()
+      : AppConfig.apiBaseUrl,
+);
 
 final apiClientProvider = Provider<ApiClient>((ref) {
   return ApiClient(

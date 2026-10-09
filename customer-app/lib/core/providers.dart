@@ -115,7 +115,13 @@ class SessionController extends Notifier<Session> {
 
 // ---------------------------------------------------------------- API
 
-final apiBaseUrlProvider = Provider<String>((ref) => AppConfig.apiBaseUrl);
+/// A path such as `/api` (web build served next to the API) resolves against the
+/// page's own origin, so one web bundle works on any host.
+final apiBaseUrlProvider = Provider<String>(
+  (ref) => AppConfig.apiBaseUrl.startsWith('/')
+      ? Uri.base.resolve(AppConfig.apiBaseUrl).toString()
+      : AppConfig.apiBaseUrl,
+);
 
 /// Custom Dio (e.g. the in-browser demo backend); null = the real network.
 final dioProvider = Provider<Dio?>((ref) => null);
